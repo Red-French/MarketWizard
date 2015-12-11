@@ -17,14 +17,14 @@ app.config(['$routeProvider',  // this is like entry.js
       //   templateUrl: 'partials/filter.html',
       //   controller: 'FilterCtrl'
       // })
-      // .when('/login', {
-      // templateUrl: 'partials/login.html',
-      // controller: 'logInOff'
-      // })
-      .when('/dataDump', {
-      templateUrl: 'partials/main.html',
-      controller: 'dataDump'
+      .when('/login', {
+      templateUrl: 'partials/login.html',
+      controller: 'logInOut'
       })
+      // .when('/dataDump', {
+      // templateUrl: 'partials/main.html',
+      // controller: 'dataDump'
+      // })
      // .otherwise('/songs/list'); // catchall
      .otherwise({ redirectTo: '/main' });
  }]);

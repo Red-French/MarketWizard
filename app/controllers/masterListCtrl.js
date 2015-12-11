@@ -5,12 +5,29 @@ app.controller('masterListCtrl', ["$scope", "$firebaseArray",
   // $scope.searchText = "";
 
 // Just like in the RequireJS version of Music History, make a reference
-    var ref = new Firebase("https://market-wizard.firebaseio.com/stocks");
-// console.log(ref);
-  // Instead of snapshot.val(), use this syntax to get songs
-    $scope.stocks = $firebaseArray(ref);
+    // var ref = new Firebase("https://market-wizard.firebaseio.com/stocks");
 
-    console.log("stocks = ", $scope.stocks);
+    // var stocks;
+    // var stocks = $firebaseArray(ref);
+
+    // stocks.$loaded()
+    // .then(function(data) {
+    //   $scope.stocks = data[0]
+    //   console.log($scope.stocks)
+    // })
+
+
+    var dataRef = new Firebase("https://market-wizard.firebaseio.com/EODData");
+    var data;
+    var data = $firebaseArray(dataRef);
+
+    data.$loaded()
+    .then(function(data) {
+      $scope.data = data[0]
+      console.log($scope.data)
+    })
+
+
   }
 ]);
 

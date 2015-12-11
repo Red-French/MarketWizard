@@ -73,7 +73,6 @@ nav {
 }
 
 p {
-  /*color: white;*/
   color: black;
 }
 
@@ -116,6 +115,7 @@ a {
 
 #my-header {
   margin-bottom: 7%;
+  visibility: hidden;
 }
 
 #my-header > .navigation {
@@ -131,7 +131,7 @@ a {
 }
 
 table tr td {
-  color: white;
+  color: black;
 }
 
 footer {

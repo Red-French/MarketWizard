@@ -1,38 +1,55 @@
 <div id="background"> <!-- begin top -->
+  <div> <!-- begin content -->
   <header id="my-header">
-<!--     <nav>
-      <div class="inline">Home</div>
-      <div class="inline">About</div>
-      <div class="inline">Products</div>
-      <div class="inline">Careers</div>
-      <div><a href="#/login">Log in</a></div>
-    </nav> -->
+    <nav>
+      <div><a href="/login">Log in</a></div>
+    </nav>
   </header>
 
-  <div> <!-- begin content -->
-    <section><!-- begin Today's Intraday Market -->
-      <!-- <h1 id="blog-title" class="margin-bottom">Today's Market</h1> -->
-      
+<!--     <div id="options">
+      <p id="naz">Naz 100: {{data.repeatSelect}}
+        <select ng-model="nazModel" name="naz">
+          <option></option>
+          <option ng-repeat="thing in stocks">{{thing.symbol}}</option>
+        </select>
+      </p>
+    </div> -->
 
-      <p ng-repeat="thing in stocks">thing[1]: {{thing[1]}}</p>
+  <div class="navbar transparent navbar-inverse navbar-fixed-top">
+     <nav class="navbar-inner">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <!-- <a class="navbar-brand" href="#">Market Wizard</a> -->
+      </div>
+      <div><a href="#/login">Log in</a>
+        <ul class="nav navbar-nav">
+          <!-- <li class="active"><a href="/#/songs/list">To Nothing</a></li> -->
+          <!-- <li><a href="/#/songs/form">To Nothing</a></li> -->
+          <li><input ng-model="query" id="searchBox" type="text" class="form-control" placeholder="Search"></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </div>
+  <table>
+    <tr>
+      <td>Symbol</td>
+      <td>Last</td>
+      <td>High</td>
+      <td>Low</td>
+      <td>Volume</td>
+    </tr>
+    <tr ng-repeat="thing in data | filter: query">
+      <td><em>{{thing.symbol}}</em></td>
+      <td>{{thing.lastPrice}}</td>
+      <td>{{thing.high}}</td>
+      <td>{{thing.low}}</td>
+      <td>{{thing.volume}}</td>
+    </tr>
+  </table>
 
-      <p ng-repeat="thing in stocks">thing.symbol: {{thing.symbol}}</p>
-
-      <p ng-repeat="thing in stocks">thing.name: {{thing.name}}</p>
-
-      <p ng-repeat="thing in stocks">{{thing}}</p>
 
 
-
-    </section> <!-- end Today's Intraday Market -->
-
-    <section> <!-- begin Market History -->
-<!--       <p>Today's market history chart:
-      <br>
-        <a href="http://1.bp.blogspot.com/_RZ_mL2cRGpk/TCoWI6j5y5I/AAAAAAAADew/IImMoAa1lhk/s1600/dow+1930s+%231.png" target="_blank">1929-1930 chart</a>
-      </p> -->
-      <!-- <p class="banner_text">Market Wizard</p> -->
-    </section> <!-- end Market History -->
   </div> <!-- end content -->
 </div> <!-- end top -->
 

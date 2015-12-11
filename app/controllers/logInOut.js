@@ -1,6 +1,6 @@
 // This module lets user register, log in, and log out with email & password //
 
-app.controller('logInOff', ["$scope", "Auth", "$location",
+app.controller('logInOut', ["$scope", "Auth", "$location",
   function($scope, Auth, $location) {
   	console.log("I see login!!");
     $scope.createUser = function() {
