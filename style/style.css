@@ -1,7 +1,7 @@
 /* Da Bull background*/
 #background {
   height: 750px;
-  /*background-image: url("http://www.motherjones.com/files/wall_st_bull_0.jpg");*/
+  background-image: url("http://www.motherjones.com/files/wall_st_bull_0.jpg");
   background-size: cover;
   /*background-attachment :fixed;*/
 }
