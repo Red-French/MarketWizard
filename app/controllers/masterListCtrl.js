@@ -2,19 +2,21 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
   function($scope, $http, $firebaseArray) {
    console.log("inside masterList.Ctrl"); 
 
-  // $scope.searchText = "";
+  $scope.searchText = "";
 
+// Grab data:
 // Just like in the RequireJS version of Music History, make a reference
-    // var ref = new Firebase("https://market-wizard.firebaseio.com/stocks");
+    var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
+    var data;
+    var data = $firebaseArray(dataRef);
 
-    // var stocks;
-    // var stocks = $firebaseArray(ref);
+    data.$loaded()
+    .then(function(data) {  // promise
+      $scope.data = data[0]
+      console.log($scope.data)
+    })
+ 
 
-    // stocks.$loaded()
-    // .then(function(data) {
-    //   $scope.stocks = data[0]
-    //   console.log($scope.stocks)
-    // })
 
 // update data via API call on user click of 'update'
 $scope.update = function() {
@@ -27,7 +29,7 @@ $scope.update = function() {
     // when the response is available
     console.log("successful response for red ", response.data.results);
 
-    var testRef = new Firebase("https://market-wizard.firebaseio.com/EODData");
+    var testRef = new Firebase("https://market-wizard.firebaseio.com/data");
     
     var monthArray = ["jan", "feb", "mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
@@ -38,9 +40,11 @@ $scope.update = function() {
 
     var full = month + dayNum + year;
 
-    testRef.child(full).push(
-      response.data.results
-    );
+    // testRef.child(full).push(
+    //   response.data.results
+    // );
+
+    testRef.push(response.data.results);
 
   }, function errorCallback(response) {
     // called asynchronously if an error occurs
@@ -49,20 +53,10 @@ $scope.update = function() {
 }
 
 
-// grabbing data (test)
-    var dataRef = new Firebase("https://market-wizard.firebaseio.com/EODData");
-    var data;
-    var data = $firebaseArray(dataRef);
-
-    data.$loaded()
-    .then(function(data) {  // promise
-      $scope.data = data[0]
-      console.log($scope.data)
-    })
-
 
   }
 ]);
+
 
 
   // var ref = new Firebase("https://market-wizard.firebaseio.com/");  // reference database and get current user ID

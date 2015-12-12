@@ -1,15 +1,20 @@
-<div><a><button ng-click="update()">Update</button></a></div>
+<div>
+  <a><button ng-model="newestData" ng-click="newWatch()">New Watchlist</button></a>
+  <a><button ng-model="newestData" ng-click="update()">Update</button></a></div>
 <table>
 <tr>
   <td>Symbol</td>
   <td>Last</td>
+  <td>Close</td>
   <td>High</td>
   <td>Low</td>
   <td>Volume</td>
 </tr>
-<tr ng-repeat="thing in data | filter: query">
+
+<tr ng-repeat="thing in data track by $index">
   <td><em>{{thing.symbol}}</em></td>
   <td>{{thing.lastPrice}}</td>
+  <td>{{thing.close}}</td>
   <td>{{thing.high}}</td>
   <td>{{thing.low}}</td>
   <td>{{thing.volume}}</td>
