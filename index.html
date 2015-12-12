@@ -9,8 +9,33 @@
   </head>
 
   <body ng-app="MarketApp">
+  <div> <!-- begin content -->
+  <header id="my-header">
+    <nav>
+      <div><a href="/login">Log In</a>/<a href="/logout">Log Out</a></div>
+    </nav>
+  </header>
 
-    <div ng-view></div>
+  <div class="navbar transparent navbar-inverse navbar-fixed-top">
+     <nav class="navbar-inner">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <!-- <a class="navbar-brand" href="#">Market Wizard</a> -->
+      </div>
+      <div><a href="#/login">Log in /</a><a href="#/logout"> Log Out</a>
+        <ul class="nav navbar-nav">
+          <!-- <li class="active"><a href="/#/songs/list">To Nothing</a></li> -->
+          <!-- <li><a href="/#/songs/form">To Nothing</a></li> -->
+          <li><input ng-model="query" id="searchBox" type="text" class="form-control" placeholder="Search"></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  </div>
+
+  </div> <!-- end content -->
+
+    <div ng-view id="results"></div>
   
     <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -23,7 +48,7 @@
     <script src="app/app.js"></script>
     <script src="app/controllers/masterListCtrl.js"></script>
 <!--    <script src="app/controllers/watchlists.js"></script>  -->
-   <script src="app/controllers/logInOut.js"></script>
+   <script src="app/controllers/logInCtrl.js"></script>
 <!--   <script src="app/controllers/dataDump.js"></script>  -->
 
   </body>

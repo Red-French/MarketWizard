@@ -118,17 +118,17 @@ a {
   visibility: hidden;
 }
 
-#my-header > .navigation {
-}
+/*#my-header > .navigation {
+}*/
 
 /* target first div child */
-#my-header + div {
-}
+/*#my-header + div {
+}*/
 
 /* target all div siblings */
-#my-header ~ div {
+/*#my-header ~ div {
   color: white;
-}
+}*/
 
 table tr td {
   color: black;
@@ -137,3 +137,4 @@ table tr td {
 footer {
   color: white;
 }
+

@@ -19,7 +19,15 @@ app.config(['$routeProvider',  // this is like entry.js
       // })
       .when('/login', {
       templateUrl: 'partials/login.html',
-      controller: 'logInOut'
+      controller: 'logIn'
+      })
+      .when('/logout', {
+      templateUrl: 'partials/splash.html',
+      controller: 'logIn'
+      })
+      .when('/controlPanel', {
+      templateUrl: 'partials/controlPanel.html',
+      controller: 'masterListCtrl'
       })
       // .when('/dataDump', {
       // templateUrl: 'partials/main.html',
