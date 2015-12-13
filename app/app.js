@@ -1,5 +1,5 @@
 var app = angular.module("MarketApp", ["firebase", "ngRoute"]);  // this is like require
-  // global 'angular' object has a function, 'module', that takes a name ('MusicApp') and
+  // global 'angular' object has a function, 'module', that takes a name ('MarketApp') and
   // also takes an array of dependencies.
 
 app.config(['$routeProvider',  // this is like entry.js
@@ -29,10 +29,7 @@ app.config(['$routeProvider',  // this is like entry.js
       templateUrl: 'partials/controlPanel.html',
       controller: 'masterListCtrl'
       })
-      // .when('/dataDump', {
-      // templateUrl: 'partials/main.html',
-      // controller: 'dataDump'
-      // })
-     // .otherwise('/songs/list'); // catchall
-     .otherwise({ redirectTo: '/main' });
+     .otherwise('/main'); // catchall
+     // .otherwise({ redirectTo: '/main' });
  }]);
+
