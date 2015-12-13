@@ -69,7 +69,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // console.log("newList = ", newList.user);
       var listName = $scope.watchName;
       console.log("listName = ", listName);
-      listRef.child(listName).push("GM");
+      var newStock = $scope.addTicker;
+      console.log("stock = ", newStock);
+      listRef.child(listName).push(newStock);
 
       }
 
