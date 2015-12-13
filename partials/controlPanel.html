@@ -1,5 +1,12 @@
-<div><input type="text" ng-model="watchName"><a><button ng-click="newWatchlist()" ngvalue>New Watchlist</button></a></div>
+<div><input type="text" ng-model="watchName"><a><button ng-click="newWatchlist()">New Watchlist</button></a></div>
+<div><input type="text" ng-model="addName"><a><button ng-click="add()">Add to Watchlist</button></a></div>
 <div><a><button ng-click="update()">Update</button></a></div>
+<div>
+
+<select ng-model="symbolModel">
+  <option></option>
+  <option ng-repeat="thing in data track by $index">{{thing.lastPrice}}</option>  <!-- SPECIAL NOTE: 'value' attribute as well as spaces outside curly brackets break the code!! -->
+</select>
 
 <table>
 <tr>
@@ -20,3 +27,4 @@
   <td>{{thing.volume}}</td>
 </tr>
 </table>
+

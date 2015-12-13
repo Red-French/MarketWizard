@@ -18,7 +18,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
  
 
 
-  // update data via API call on user click of 'update'
+// update data via API call on user click of 'update'
   $scope.update = function() {
     console.log("inside update function");
     $http({
@@ -46,20 +46,19 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
       dataRef.push(response.data.results);
 
-    }, function errorCallback(response) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
+    }, function errorCallback(response) {  // called asynchronously if an error occurs
+                                          // or server returns response with an error status.
     });
   }
 
-
+// Creates new watchlist for user
   $scope.newWatchlist = function() {
     console.log("inside newWatchlist function");
-    console.log("user watchlist value = ", $scope.watchName);
+    console.log("user watchlist input field value = ", $scope.watchName);
 
-      var ref = new Firebase("https://market-wizard.firebaseio.com/");
+      var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
       console.log("ref", ref);
-      var currentAuth = ref.getAuth().uid;
+      var currentAuth = ref.getAuth().uid;  // get current user's ID
       console.log("currentAuth = ", currentAuth);
       var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
       // var newList = {
@@ -68,8 +67,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // };
       // console.log("newList = ", newList.name);
       // console.log("newList = ", newList.user);
-
-      listRef.child("Buy").push("F");
+      var listName = $scope.watchName;
+      console.log("listName = ", listName);
+      listRef.child(listName).push("GM");
 
       }
 
@@ -78,7 +78,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // );
       // watchlistRef.push(object);
 
-    }
+
+  
+  }  // end of controller function (all functionality goes inside this function)
 ]);
 
 
