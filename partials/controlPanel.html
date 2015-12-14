@@ -64,13 +64,26 @@
          <span class="sortorder" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
      </td>
     </tr>
-    <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
+
+
+    <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
+    <!-- MOVE BELOW INTO ITS OWN MODULE -->
+<!--     <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
       <td>{{thing.symbol}}</td>
       <td>{{thing.lastPrice}}</td>
       <td>{{thing.close}}</td>
       <td>{{thing.high}}</td>
       <td>{{thing.low}}</td>
       <td>{{thing.volume}}</td>
+    </tr> -->
+<!--     <tr><td>BREAK</td></tr> -->
+    <tr ng-repeat="thing in listToWatch">
+      <td>{{thing}}</td>
+<!--       <td>{{thing.lastPrice}}</td>
+      <td>{{thing.close}}</td>
+      <td>{{thing.high}}</td>
+      <td>{{thing.low}}</td>
+      <td>{{thing.volume}}</td> -->
     </tr>
   </table>
 </div>

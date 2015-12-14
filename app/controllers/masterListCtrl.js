@@ -4,18 +4,22 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
   $scope.searchText = "";
 
-// GET DATA FROM FIREBASE:
-// Just like in the RequireJS version of Music History, make a reference
+// REFERENCE DATA IN FIREBASE AND USE PROMISE TO CONFIRM IT IS LOADED
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
-    var data;
     var data = $firebaseArray(dataRef);
 
     data.$loaded()
-    .then(function(data) {  // promise
-      $scope.data = data[0]
-      console.log($scope.data)
+      .then(function(data) {  // promise
+        $scope.data = data[0];
+        // console.log($scope.data)
     })
- 
+
+
+// PUT WATCHLISTS ON $SCOPE
+    var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists"); // grab data from Firebase
+    var listToWatch = $firebaseArray(watchRef);
+    $scope.listToWatch = listToWatch;
+    console.log($scope.listToWatch)
 
 
 // UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE'
@@ -51,6 +55,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     });
   }
 
+
 // CREATES NEW WATCHLIST FOR USER
   $scope.newWatchlist = function() {
     console.log("inside newWatchlist function");
@@ -78,34 +83,37 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // listRef.child(listName).push(newStock);
 
       }
+
+
 // ADDS NEW TICKER TO USER'S CHOSEN WATCHLIST
   $scope.newTicker = function() {
     console.log("inside newTicker function");
     console.log("user 'add to watchlist' input field value = ", $scope.addTicker);
 
       var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-      console.log("ref", ref);
+      // console.log("ref", ref);
       var currentAuth = ref.getAuth().uid;  // get current user's ID
-      console.log("currentAuth = ", currentAuth);
+      // console.log("currentAuth = ", currentAuth);
       var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
-      console.log("listRef", listRef);
-      // var newList = {
-      //   "user": currentAuth,
-      //   "name": "Red"
+      // console.log("listRef", listRef);
+      var watchlistRef = $firebaseArray(listRef);  // move watchlists into an array
+      console.log("watchlistRef = ", watchlistRef);
+      // var newTicker = {
+      //   "ticker": $scope.ticker
       // };
       // console.log("newList = ", newList.name);
       // console.log("newList = ", newList.user);
-      var listName = $scope.watchName;
-      // console.log("listName = ", listName);
-      // listRef.child(listName).push(newStock);
+      var watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
+      // console.log("watchlistRef = ", watchlistRef);
+      // listRef.child(watchlistRef).push(newStock);
 
-      var newStock = $scope.addTicker;
-      console.log("stock = ", newStock);
-      listRef.child(listName).push(newStock);
+      var newTicker = $scope.addTicker;  // obtain ticker from input field
+      console.log("newTicker = ", newTicker);
+      listRef.child(watchlistRef).push(newTicker);
 
       }
 
-// STOCK LIST CONTROL
+// LIST OF STOCKS CONTROL
     $scope.predicate = 'lastPrice';  // initially, list is sorted by 'last price'
     $scope.reverse = true;  // for sort functionality
     $scope.order = function(predicate) {
@@ -113,21 +121,37 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       $scope.predicate = predicate;
     };
 
+
 // GET CURRENT USER'S WATCHLISTS
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     console.log("current user = ", currentAuth);
     var ref = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
     ref.orderByKey().on("child_added", function(snapshot) {
-    var userWatchlists = snapshot.key();
-    console.log("userWatchlists = ", userWatchlists);
-});
+      var userWatchlists = snapshot.key();
+      console.log("userWatchlists = ", userWatchlists);
+      });
+
+
+
+// GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST:
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // console.log("current user = ", currentAuth);
+    var stocksRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
+    // console.log("stocksRef = ", stocksRef);
+    var stocks = $firebaseArray(stocksRef);
+
+    // console.log(stocks)
+
+    stocks.$loaded()
+    .then(function(stocks) {  // promise
+      $scope.stocks = stocks;
+      console.log("user's stocks = ", $scope.stocks);
+    });
 
 
 
   }  // end of controller function (all functionality goes inside this function)
 ]);
-
-
-
 
