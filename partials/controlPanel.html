@@ -1,13 +1,34 @@
-<div><input type="text" ng-model="watchName"><a><button ng-click="newWatchlist()">New Watchlist</button></a></div>
-<div><input type="text" ng-model="addTicker"><a><button ng-click="newWatchlist()">Add to Watchlist</button></a></div>
-<div><a><button ng-click="update()">Update</button></a></div>
+<!-- <div>Add New Watchlist:</div> -->
+<!-- <div>
+  <input type="text" ng-model="watchName" placeholder="New Watchlist">
+  <a><button ng-click="newWatchlist()">New Watchlist</button></a>
+</div> -->
+<!-- <div>Add Ticker to Watchlist:</div> -->
 <div>
-  <select ng-model="symbolModel">
-    <option></option>
-    <option ng-repeat="thing in data track by $index">{{thing.lastPrice}}</option>  <!-- SPECIAL NOTE: 'value' attribute as well as spaces outside curly brackets break the code!! -->
-  </select>
-   <button ng-click="predicate=''">Unsort</button>
+  <input type="text" ng-model="addTicker" placeholder="Add Ticker">
+    <a><button ng-click="newTicker()">Add</button></a> to 
+    <select ng-model="symbolModel">
+      <option></option>
+      <option ng-repeat="thing in data">{{thing.lastPrice}}</option>  <!-- SPECIAL NOTE: 'value' attribute as well as spaces outside curly brackets break the code!! -->
+    </select><input ng-model="watchName" type="text" placeholder="New or Existing Watchlist">
 </div>
+
+<!--   <label>Watchlist:
+    <select ng-model="watchList" ng-options="thing.symbol for thing in data"></select>
+  </label> -->
+
+<label>WatchList:
+  <select ng-model="watchList" ng-options="thing.symbol for thing in data"></select>
+<!--   <select ng-model="symbolModel">
+    <option></option>
+    <option ng-repeat="thing in data track by $index">{{thing.lastPrice}}</option>
+  </select> -->{{ watchList.symbol }}
+  <!-- <div>{{ watchList.symbol }}</div> -->
+  <div></div>
+  <a><button ng-click="update()">Update</button></a>
+  <button ng-click="predicate=''">Unsort</button>
+</label>
+
 <div>
   <table class="list">
     <tr>

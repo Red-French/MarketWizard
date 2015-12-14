@@ -1,4 +1,11 @@
-/* Da Bull background*/
+$font-stack: Helvetica, sans-serif; 
+$primary-color: #333;
+
+body { 
+	font: 100% $font-stack; 
+	color: $primary-color; 
+}
+
 #background {
   height: 750px;
   background-image: url("http://www.motherjones.com/files/wall_st_bull_0.jpg");
@@ -7,7 +14,7 @@
 }
 
 .banner_text{
-  color: ##B4D7FF;
+  color: #B4D7FF;
   font-weight: 900;
   font-size: 13rem;
   letter-spacing: -.9rem;

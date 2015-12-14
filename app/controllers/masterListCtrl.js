@@ -54,13 +54,14 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 // Creates new watchlist for user
   $scope.newWatchlist = function() {
     console.log("inside newWatchlist function");
-    console.log("user watchlist input field value = ", $scope.watchName);
+    console.log("user 'new watchlist' input field value = ", $scope.watchName);
 
       var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
       console.log("ref", ref);
       var currentAuth = ref.getAuth().uid;  // get current user's ID
       console.log("currentAuth = ", currentAuth);
       var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
+      console.log("listRef", listRef);
       // var newList = {
       //   "user": currentAuth,
       //   "name": "Red"
@@ -69,22 +70,42 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // console.log("newList = ", newList.user);
       var listName = $scope.watchName;
       console.log("listName = ", listName);
+      listRef.child(listName)
+      listRef.child(listName).push("");
+
+      // var newStock = $scope.addTicker;
+      // console.log("stock = ", newStock);
+      // listRef.child(listName).push(newStock);
+
+      }
+
+  $scope.newTicker = function() {
+    console.log("inside newTicker function");
+    console.log("user 'add to watchlist' input field value = ", $scope.addTicker);
+
+      var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+      console.log("ref", ref);
+      var currentAuth = ref.getAuth().uid;  // get current user's ID
+      console.log("currentAuth = ", currentAuth);
+      var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
+      console.log("listRef", listRef);
+      // var newList = {
+      //   "user": currentAuth,
+      //   "name": "Red"
+      // };
+      // console.log("newList = ", newList.name);
+      // console.log("newList = ", newList.user);
+      var listName = $scope.watchName;
+      // console.log("listName = ", listName);
+      // listRef.child(listName).push(newStock);
+
       var newStock = $scope.addTicker;
       console.log("stock = ", newStock);
       listRef.child(listName).push(newStock);
 
       }
 
-      // dataRef.child(full).push(
-      //   response.data.results
-      // );
-      // watchlistRef.push(object);
-  // $scope.friends =
-  //     [{name:'John', phone:'555-1212', age:10},
-  //      {name:'Mary', phone:'555-9876', age:19},
-  //      {name:'Mike', phone:'555-4321', age:21},
-  //      {name:'Adam', phone:'555-5678', age:35},
-  //      {name:'Julie', phone:'555-8765', age:29}];
+
   $scope.predicate = 'lastPrice';
   $scope.reverse = true;
   $scope.order = function(predicate) {
@@ -92,6 +113,15 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     $scope.predicate = predicate;
   };
 
+
+    $scope.colors = [
+      {name:'black', shade:'dark'},
+      {name:'white', shade:'light', notAnOption: true},
+      {name:'red', shade:'dark'},
+      {name:'blue', shade:'dark', notAnOption: true},
+      {name:'yellow', shade:'light', notAnOption: false}
+    ];
+    $scope.myColor = $scope.colors[2]; // red
   
   }  // end of controller function (all functionality goes inside this function)
 ]);

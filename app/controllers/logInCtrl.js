@@ -1,12 +1,12 @@
-// This module lets user register, log in, and log out with email & password //
+// This module lets user's register, log in, and log out with email & password //
 
 app.controller('logIn', ["$scope", "$location", 
   function($scope, $location) {
   	console.log("inside login.js");
 
-// register user
+// REGISTER USER
 $scope.createUser = function() {
-var ref = new Firebase("https://market-wizard.firebaseio.com");
+var ref = new Firebase("https://market-wizard.firebaseio.com"); // reference database
 ref.createUser({
   email    : $scope.email,
   password : $scope.password
@@ -15,30 +15,29 @@ ref.createUser({
     console.log("Error creating user:", error);
   } else {
     console.log("Successfully created user account with uid:", userData.uid);
-    var newUser = new Firebase("https://market-wizard.firebaseio.com/users/" + userData.uid);
+    var newUser = new Firebase("https://market-wizard.firebaseio.com/users/" + userData.uid); // reference the logged-in user's ID(uid)
     var userData = {
       "user": userData.uid,
       "email": $scope.email,
       "password": $scope.password
     };
-    // sets the new user data object to the firebase database //
-    newUser.set(userData);
+    newUser.set(userData);  // sets the new user's data object to user's location in firebase database
   }
 });
 }
 
 
-// log user in
+// LOG USER IN
 $scope.login = function() {
-var ref = new Firebase("https://market-wizard.firebaseio.com");
-ref.authWithPassword({
+var ref = new Firebase("https://market-wizard.firebaseio.com");  // reference database
+ref.authWithPassword({  // method that authenticates user with email/password combination
   email    : $scope.email,
   password : $scope.password
 }, function(error, authData) {
   if (error) {
     console.log("Login Failed!", error);
   } else {
-    $location.path("/controlPanel");
+    $location.path("/controlPanel");  // on successful login, take user to this location
     $scope.$apply();
     console.log("Authenticated successfully with payload:", authData);
   }
@@ -57,7 +56,7 @@ $scope.logout = function() {
   userRef.unauth();
   console.log("authData", authData);
   $location.path("partials/splash.html");
-  $scope.$apply();
+  $scope.$apply();  // used to call the digest() method to listen for DOM event
   }
 
 
