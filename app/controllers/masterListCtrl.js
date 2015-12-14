@@ -4,7 +4,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
   $scope.searchText = "";
 
-// Grab data:
+// GET DATA FROM FIREBASE:
 // Just like in the RequireJS version of Music History, make a reference
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data;
@@ -18,7 +18,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
  
 
 
-// update data via API call on user click of 'update'
+// UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE'
   $scope.update = function() {
     console.log("inside update function");
     $http({
@@ -29,9 +29,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // when the response is available
       console.log("successful response for red ", response.data.results);
 
-      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");
+      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
       
-      var monthArray = ["jan", "feb", "mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+      var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
       var today = new Date();
       var dayNum = today.getDay().toString();
@@ -51,7 +51,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     });
   }
 
-// Creates new watchlist for user
+// CREATES NEW WATCHLIST FOR USER
   $scope.newWatchlist = function() {
     console.log("inside newWatchlist function");
     console.log("user 'new watchlist' input field value = ", $scope.watchName);
@@ -78,7 +78,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // listRef.child(listName).push(newStock);
 
       }
-
+// ADDS NEW TICKER TO USER'S CHOSEN WATCHLIST
   $scope.newTicker = function() {
     console.log("inside newTicker function");
     console.log("user 'add to watchlist' input field value = ", $scope.addTicker);
@@ -105,24 +105,26 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
       }
 
+// STOCK LIST CONTROL
+    $scope.predicate = 'lastPrice';  // initially, list is sorted by 'last price'
+    $scope.reverse = true;  // for sort functionality
+    $scope.order = function(predicate) {
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;  // sort functionality
+      $scope.predicate = predicate;
+    };
 
-  $scope.predicate = 'lastPrice';
-  $scope.reverse = true;
-  $scope.order = function(predicate) {
-    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-    $scope.predicate = predicate;
-  };
+// GET CURRENT USER'S WATCHLISTS
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    console.log("current user = ", currentAuth);
+    var ref = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
+    ref.orderByKey().on("child_added", function(snapshot) {
+    var userWatchlists = snapshot.key();
+    console.log("userWatchlists = ", userWatchlists);
+});
 
 
-    $scope.colors = [
-      {name:'black', shade:'dark'},
-      {name:'white', shade:'light', notAnOption: true},
-      {name:'red', shade:'dark'},
-      {name:'blue', shade:'dark', notAnOption: true},
-      {name:'yellow', shade:'light', notAnOption: false}
-    ];
-    $scope.myColor = $scope.colors[2]; // red
-  
+
   }  // end of controller function (all functionality goes inside this function)
 ]);
 
