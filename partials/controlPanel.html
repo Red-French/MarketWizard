@@ -68,22 +68,22 @@
 
     <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
     <!-- MOVE BELOW INTO ITS OWN MODULE -->
-<!--     <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
+    <tr><td>THING IN DATA</td></tr>
+    <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
       <td>{{thing.symbol}}</td>
       <td>{{thing.lastPrice}}</td>
       <td>{{thing.close}}</td>
       <td>{{thing.high}}</td>
       <td>{{thing.low}}</td>
       <td>{{thing.volume}}</td>
-    </tr> -->
-<!--     <tr><td>BREAK</td></tr> -->
-    <tr ng-repeat="thing in listToWatch">
+    </tr>
+    <tr><td>THING IN STOCKS[0]</td></tr>
+    <tr ng-repeat="thing in stocks[0]">
+      <td>{{thing.symbol}}  {{thing.name}}</td>
+    </tr>
+    <tr><td>THING IN LISTTOWATCH[0]</td></tr>
+    <tr ng-repeat="thing in listToWatch[0]">
       <td>{{thing}}</td>
-<!--       <td>{{thing.lastPrice}}</td>
-      <td>{{thing.close}}</td>
-      <td>{{thing.high}}</td>
-      <td>{{thing.low}}</td>
-      <td>{{thing.volume}}</td> -->
     </tr>
   </table>
 </div>

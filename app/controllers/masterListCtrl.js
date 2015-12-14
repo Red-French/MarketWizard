@@ -4,7 +4,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
   $scope.searchText = "";
 
-// REFERENCE DATA IN FIREBASE AND USE PROMISE TO CONFIRM IT IS LOADED
+// REFERENCE 'DATA' IN FIREBASE AND USE PROMISE TO CONFIRM IT IS LOADED
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data = $firebaseArray(dataRef);
 
@@ -15,14 +15,21 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     })
 
 
-// PUT WATCHLISTS ON $SCOPE
+// PUT 'WATCHLISTS' IN FIREBASE ON $SCOPE
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
     console.log("ref", ref);
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
     var listToWatch = $firebaseArray(watchRef);
     $scope.listToWatch = listToWatch;
-    console.log($scope.listToWatch)
+    console.log("listToWatch = ", $scope.listToWatch)
+
+
+// PUT 'STOCKS' IN FIREBASE ON $SCOPE
+    var stocksRef = new Firebase("https://market-wizard.firebaseio.com/stocks/"); // grab data from Firebase
+    var stocks = $firebaseArray(stocksRef);
+    $scope.stocks = stocks;
+    console.log("stocks = ", $scope.stocks)
 
 
 // UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE'
@@ -38,14 +45,14 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
       var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
       
-      var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+      // var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
-      var today = new Date();
-      var dayNum = today.getDay().toString();
-      var month = monthArray[today.getMonth()];
-      var year = today.getFullYear();
+      // var today = new Date();
+      // var dayNum = today.getDay().toString();
+      // var month = monthArray[today.getMonth()];
+      // var year = today.getFullYear();
 
-      var full = month + dayNum + year;
+      // var full = month + dayNum + year;
 
       // dataRef.child(full).push(
       //   response.data.results
@@ -116,6 +123,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
       }
 
+
 // LIST OF STOCKS CONTROL
     $scope.predicate = 'lastPrice';  // initially, list is sorted by 'last price'
     $scope.reverse = true;  // for sort functionality
@@ -133,7 +141,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     ref.orderByKey().on("child_added", function(snapshot) {
       var userWatchlists = snapshot.key();
       console.log("userWatchlists = ", userWatchlists);
-      });
+      });listToWatch
 
 
 
@@ -143,14 +151,14 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     // console.log("current user = ", currentAuth);
     var stocksRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
     // console.log("stocksRef = ", stocksRef);
-    var stocks = $firebaseArray(stocksRef);
+    var userStocks = $firebaseArray(stocksRef);
 
-    // console.log(stocks)
+    // console.log(userStocks)
 
-    stocks.$loaded()
-    .then(function(stocks) {  // promise
-      $scope.stocks = stocks;
-      console.log("user's stocks = ", $scope.stocks);
+    userStocks.$loaded()
+    .then(function(userStocks) {  // promise
+      $scope.userStocks = userStocks;
+      console.log("userStocks = ", $scope.userStocks);
     });
 
 
