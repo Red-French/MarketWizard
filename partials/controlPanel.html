@@ -17,13 +17,19 @@
     <select ng-model="watchList" ng-options="thing.symbol for thing in data"></select>
   </label> -->
 
-<label>WatchList:
-  <select ng-model="watchList" ng-options="thing.symbol for thing in data"></select>
+<label>StockList:
+  <select ng-model="stockList" ng-options="thing.symbol for thing in data"></select>
 <!--   <select ng-model="symbolModel">
     <option></option>
     <option ng-repeat="thing in data track by $index">{{thing.lastPrice}}</option>
-  </select> -->{{ watchList.symbol }}
+  </select> -->{{ stockList.symbol }}
   <!-- <div>{{ watchList.symbol }}</div> -->
+  <div>
+  <label>WatchList:
+  <select ng-model="watchList" ng-options="thing.child for thing in watchlists"></select>
+{{ watchList.symbol }}
+  </label>
+  </div>
   <div></div>
   <a><button ng-click="update()">Update</button></a>
   <button ng-click="predicate=''">Unsort</button>
@@ -58,7 +64,7 @@
          <span class="sortorder" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
      </td>
     </tr>
-    <tr ng-repeat="thing in data | orderBy:predicate:reverse">
+    <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
       <td>{{thing.symbol}}</td>
       <td>{{thing.lastPrice}}</td>
       <td>{{thing.close}}</td>
