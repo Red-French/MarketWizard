@@ -22,12 +22,12 @@
 <!--   <select ng-model="symbolModel">
     <option></option>
     <option ng-repeat="thing in data track by $index">{{thing.lastPrice}}</option>
-  </select> -->{{ stockList.symbol }}
+  </select> -->{{stockList.symbol}}
   <!-- <div>{{ watchList.symbol }}</div> -->
   <div>
   <label>WatchList:
-  <select ng-model="watchList" ng-options="thing.child for thing in watchlists"></select>
-{{ watchList.symbol }}
+  <select ng-model="watchList" ng-options="name for (name, value) in listToWatch"></select>
+{{watchList}}
   </label>
   </div>
   <div></div>
