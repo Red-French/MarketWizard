@@ -16,7 +16,10 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
 
 // PUT WATCHLISTS ON $SCOPE
-    var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists"); // grab data from Firebase
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    console.log("ref", ref);
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
     var listToWatch = $firebaseArray(watchRef);
     $scope.listToWatch = listToWatch;
     console.log($scope.listToWatch)
