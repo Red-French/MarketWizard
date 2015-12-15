@@ -20,6 +20,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     // console.log("ref", ref);
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
+    $scope.watchRef = watchRef;  // place object in scope for controlPanel.html
     var listToWatch = $firebaseArray(watchRef);
     $scope.listToWatch = listToWatch;
     // console.log("listToWatch = ", $scope.listToWatch)
@@ -106,21 +107,19 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // console.log("currentAuth = ", currentAuth);
       var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
       // console.log("listRef", listRef);
-      var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
-      console.log("watchlistRef = ", watchlistRef);
-      // var newTicker = {
-      //   "ticker": $scope.ticker
-      // };
-      // console.log("newList = ", newList.name);
-      // console.log("newList = ", newList.user);
+      // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
+      // console.log("watchlistRef = ", watchlistRef);
+      var newTicker = {
+        "ticker": $scope.ticker
+      };
       var watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
       // console.log("watchlistRef = ", watchlistRef);
       // listRef.child(watchlistRef).push(newStock);
 
       var newTicker = $scope.addTicker;  // obtain ticker from input field
       console.log("newTicker = ", newTicker);
-      var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
-      listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+      // var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
+      // listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
 
       }
 
@@ -162,6 +161,11 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // console.log("userStocks = ", $scope.userStocks);
     });
 
+
+$scope.changeList = function() {
+  var watchDrop = $scope.watchList;
+  console.log("changeList!", watchDrop);
+}
 
   }  // end of controller function (all functionality goes inside this function)
 ]);

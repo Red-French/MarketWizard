@@ -29,6 +29,10 @@ app.config(['$routeProvider',  // this is like entry.js
       templateUrl: 'partials/controlPanel.html',
       controller: 'masterListCtrl'
       })
+      .when('/data', {
+      templateUrl: 'partials/data.html',
+      controller: 'masterListCtrl'
+      })
      .otherwise('/main'); // catchall
      // .otherwise({ redirectTo: '/main' });
  }]);

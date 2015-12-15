@@ -1,27 +1,3 @@
-<div>
-  <input type="text" ng-model="addTicker" placeholder="Add Ticker">
-    <a><button ng-click="newTicker()">Add</button></a> to 
-    <select ng-model="symbolModel">
-      <option></option>
-      <option ng-repeat="thing in data">{{thing.lastPrice}}</option>  <!-- SPECIAL NOTE: 'value' attribute as well as spaces outside curly brackets break the code!! -->
-    </select><input ng-model="watchName" type="text" placeholder="New or Existing Watchlist">
-</div>
-
-<label>StockList:
-  <select ng-model="stockList" ng-options="thing.symbol for thing in data"></select>
-{{stockList.symbol}}
-</label>
-
-<div>
-  <label>WatchList:
-  <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="changeList()"></select>
-  {{watchList}}
-</label>
-</div>
-
-<div></div>
-<a><button ng-click="update()">Update</button></a>
-<button ng-click="predicate=''">Unsort</button>
 
   <table class="list">
     <tr>
@@ -54,7 +30,7 @@
 
     <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
     <!-- MOVE BELOW INTO ITS OWN MODULE -->
-<!--     <tr><td>THING IN DATA</td></tr>
+    <tr><td>THING IN DATA</td></tr>
     <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
       <td>{{thing.symbol}}</td>
       <td>{{thing.lastPrice}}</td>
@@ -62,32 +38,13 @@
       <td>{{thing.high}}</td>
       <td>{{thing.low}}</td>
       <td>{{thing.volume}}</td>
-    </tr> -->
+    </tr>
 <!--     <tr><td>THING IN STOCKS[0]</td></tr>
     <tr ng-repeat="thing in stocks[0]">
       <td>{{thing.symbol}}  {{thing.name}}</td>
     </tr> -->
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN LISTTOWATCH [ ]</td></tr>
+    <tr><td>THING IN LISTTOWATCH[0]</td></tr>
     <tr ng-repeat="thing in listToWatch[0]">
       <td>{{thing}}</td>
     </tr>
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>KEY / VALUE [ ]</td></tr>
-    <tr ng-repeat="(key, value) in listToWatch">
-  <td>{{key}} / {{value}}</td>
-</tr>
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN WATCHREF { }</td></tr>
-    <tr ng-repeat="thing in watchRef">
-      <td>{{thing}}</td>
-    </tr>
-
-
-
   </table>
-
-</div>
