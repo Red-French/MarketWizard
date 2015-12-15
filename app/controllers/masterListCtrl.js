@@ -20,7 +20,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     // console.log("ref", ref);
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
-    $scope.watchRef = watchRef;  // place object in scope for controlPanel.html
     var listToWatch = $firebaseArray(watchRef);
     $scope.listToWatch = listToWatch;
     // console.log("listToWatch = ", $scope.listToWatch)
@@ -42,7 +41,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
   }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available
-      console.log("successful response for red ", response.data.results);
+      console.log("successful response from update", response.data.results);
 
       var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
       
@@ -110,18 +109,67 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
       // console.log("watchlistRef = ", watchlistRef);
       var newTicker = {
-        "ticker": $scope.ticker
+        "ticker": $scope.addTicker
       };
       var watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
       // console.log("watchlistRef = ", watchlistRef);
       // listRef.child(watchlistRef).push(newStock);
 
-      var newTicker = $scope.addTicker;  // obtain ticker from input field
+      // var newTicker = $scope.addTicker;  // obtain ticker from input field
       console.log("newTicker = ", newTicker);
       // var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
-      // listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+      listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+      // listRef.push($scope.newTicker);
 
-      }
+
+
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++ CONNECT USER'S ID TO STOCK AND RETRIEVE STOCK +++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+// ADD USER'S ID TO 'SYMBOL' IN FIREBASE 'STOCKS'
+      // var userTickers = stocksRef.orderByChild("symbol").equalTo("AAL");
+      // console.log("stocksRef", stocksRef);
+      // console.log("userTickers", userTickers);
+
+
+
+
+
+
+};
+
+// GRAB USER'S STOCKS
+
+// var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
+// refy.orderByChild("symbol").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().symbol);
+// });
+
+var tempTick = "AMZN";
+
+var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
+refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapshot) {
+  console.log("Ticker is " + snapshot.val().symbol);
+  // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + addTicker + currentAuth);
+});
+
+
+
+
+
+
+
+
+
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++ END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
 
 
 // LIST OF STOCKS (CONTROL INITIAL DISPLAY)
@@ -162,10 +210,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     });
 
 
-$scope.changeList = function() {
-  var watchDrop = $scope.watchList;
-  console.log("changeList!", watchDrop);
-}
+
+
+
 
   }  // end of controller function (all functionality goes inside this function)
 ]);

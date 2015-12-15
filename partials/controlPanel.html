@@ -69,12 +69,18 @@
     </tr> -->
 
     <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN LISTTOWATCH [ ]</td></tr>
+    <tr><td>THING IN LISTTOWATCH [ ] - BUY</td></tr>
     <tr ng-repeat="thing in listToWatch[0]">
-      <td>{{thing}}</td>
+      <td>{{thing.ticker}}</td>
     </tr>
 
     <tr><td>&nbsp;</td></tr>
+    <tr><td>THING IN LISTTOWATCH [ ] - SELL</td></tr>
+        <tr ng-repeat="thing in listToWatch[1]">
+      <td>{{thing.ticker}}</td>
+    </tr>
+
+<!--     <tr><td>&nbsp;</td></tr>
     <tr><td>KEY / VALUE [ ]</td></tr>
     <tr ng-repeat="(key, value) in listToWatch">
   <td>{{key}} / {{value}}</td>
@@ -82,9 +88,9 @@
 
     <tr><td>&nbsp;</td></tr>
     <tr><td>THING IN WATCHREF { }</td></tr>
-    <tr ng-repeat="thing in watchRef">
+    <tr ng-repeat="thing in listToWatch">
       <td>{{thing}}</td>
-    </tr>
+    </tr> -->
 
 
 
