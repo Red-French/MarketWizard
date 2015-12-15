@@ -4,7 +4,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
   $scope.searchText = "";
 
-// REFERENCE 'DATA' IN FIREBASE AND USE PROMISE TO CONFIRM IT IS LOADED
+// REFERENCE 'DATA' (IN FIREBASE) AND USE PROMISE TO CONFIRM IT IS LOADED
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data = $firebaseArray(dataRef);
 
@@ -15,17 +15,17 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     })
 
 
-// PUT 'WATCHLISTS' IN FIREBASE ON $SCOPE
+// PUT 'WATCHLISTS' (IN FIREBASE) ON $SCOPE
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    console.log("ref", ref);
+    // console.log("ref", ref);
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     var watchRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
     var listToWatch = $firebaseArray(watchRef);
     $scope.listToWatch = listToWatch;
-    console.log("listToWatch = ", $scope.listToWatch)
+    // console.log("listToWatch = ", $scope.listToWatch)
 
 
-// PUT 'STOCKS' IN FIREBASE ON $SCOPE
+// PUT 'STOCKS' (IN FIREBASE) ON $SCOPE
     var stocksRef = new Firebase("https://market-wizard.firebaseio.com/stocks/"); // grab data from Firebase
     var stocks = $firebaseArray(stocksRef);
     $scope.stocks = stocks;
@@ -106,7 +106,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // console.log("currentAuth = ", currentAuth);
       var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
       // console.log("listRef", listRef);
-      var watchlistRef = $firebaseArray(listRef);  // move watchlists into an array
+      var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
       console.log("watchlistRef = ", watchlistRef);
       // var newTicker = {
       //   "ticker": $scope.ticker
@@ -119,12 +119,13 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
       var newTicker = $scope.addTicker;  // obtain ticker from input field
       console.log("newTicker = ", newTicker);
-      listRef.child(watchlistRef).push(newTicker);
+      var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
+      listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
 
       }
 
 
-// LIST OF STOCKS CONTROL
+// LIST OF STOCKS (CONTROL INITIAL DISPLAY)
     $scope.predicate = 'lastPrice';  // initially, list is sorted by 'last price'
     $scope.reverse = true;  // for sort functionality
     $scope.order = function(predicate) {
@@ -136,11 +137,11 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 // GET CURRENT USER'S WATCHLISTS
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
     var currentAuth = ref.getAuth().uid;  // get current user's ID
-    console.log("current user = ", currentAuth);
+    // console.log("current user = ", currentAuth);
     var ref = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
     ref.orderByKey().on("child_added", function(snapshot) {
       var userWatchlists = snapshot.key();
-      console.log("userWatchlists = ", userWatchlists);
+      // console.log("userWatchlists = ", userWatchlists);
       });listToWatch
 
 
@@ -158,9 +159,8 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     userStocks.$loaded()
     .then(function(userStocks) {  // promise
       $scope.userStocks = userStocks;
-      console.log("userStocks = ", $scope.userStocks);
+      // console.log("userStocks = ", $scope.userStocks);
     });
-
 
 
   }  // end of controller function (all functionality goes inside this function)
