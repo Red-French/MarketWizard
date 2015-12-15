@@ -26,7 +26,7 @@
   <!-- <div>{{ watchList.symbol }}</div> -->
   <div>
   <label>WatchList:
-  <select ng-model="watchList" ng-options="name for (name, value) in listToWatch"></select>
+  <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch"></select>
 {{watchList}}
   </label>
   </div>
