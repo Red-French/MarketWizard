@@ -25,16 +25,17 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     //     console.log("Price Change Today", $scope.data2[0].symbol, $scope.data2[0].lastPrice - $scope.data[0].close);
     // })
 
-    data.$loaded()
-      .then(function(data) {  // promise
-        $scope.data = data[0];
-
         data2.$loaded()
           .then(function(data2) {  // promise
             $scope.data2 = data2[0];
-            console.log("ticker is ", $scope.data[0].symbol);
-            console.log("data[0].close", $scope.data[0].close)
-            console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
+
+          data.$loaded()
+            .then(function(data) {  // promise
+              $scope.data = data[0];
+
+              console.log("ticker is ", $scope.data[0].symbol);
+              console.log("data[0].close", $scope.data[0].close)
+              console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
 
           var priceChange = $scope.data2[0].lastPrice - $scope.data[0].close;
           $scope.priceChange = priceChange;
@@ -42,6 +43,34 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
         })
     })
 
+    dataRef2.once("value", function(snapshot) {
+      // The callback function will get called twice, once for "fred" and once for "barney"
+      snapshot.forEach(function(childSnapshot) {
+        // key will be "fred" the first time and "barney" the second time
+        var key = childSnapshot.key();
+
+        // childData will be the actual contents of the child
+        var childData = childSnapshot.val();
+        console.log("childData.length", childData.length);
+        console.log("childData", childData);
+
+        childData.forEach(function() {
+          // var i = 0;
+          // console.log("i");
+
+console.log("childData", childData.symbol);
+// console.log("scope.data2", $scope.data.symbol);
+          // var priceChange = $scope.data2.lastPrice - $scope.data.close;
+          // $scope.priceChange = priceChange;
+          // console.log("$scope.priceChange", $scope.priceChange);
+
+
+
+        })
+
+
+      });
+    });
 
 // LOG PAST 3 DAYS' DATA (OR HOW MANY DAYS ARE STORED IN 'DATA') FOR AAPL
     // dataRef.once("value", function(snapshot) {
