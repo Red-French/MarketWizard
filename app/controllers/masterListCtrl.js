@@ -141,19 +141,28 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
 };
 
-// GRAB USER'S STOCKS
-
+// GRAB USER'S STOCKS (THIS FUNCTIONALITY WILL GO INSIDE 'NEWTICKER' FUNCTION ABOVE)
+// 
+// brings back all stocks
 // var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
 // refy.orderByChild("symbol").on("child_added", function(snapshot) {
 //   console.log(snapshot.key() + " was " + snapshot.val().symbol);
 // });
 
-var tempTick = "AMZN";
+var wlist = "BUY";  // fake data from 'New or Existing Watchlist' input field
+var refer = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
+refer.orderByChild("currentAuth").equalTo(wlist).on("child_added", function(snapshot) {
+  console.log("Watchlist is " + snapshot.val());
+  // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + addTicker + currentAuth);
+});
 
+
+// ADD USER'S UNIQUE ID TO 'STOCKS > SYMBOL' IN FIREBASE
+var tempTick = "AMZN";  // fake data from 'Add Ticker' input field
 var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
 refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapshot) {
   console.log("Ticker is " + snapshot.val().symbol);
-  // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + addTicker + currentAuth);
+  // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + tempTick + currentAuth);
 });
 
 
@@ -210,6 +219,23 @@ refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapsho
     });
 
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//  TEMPORARY FUNCTION TO LOAD 'STOCKS' IN FIREBASE FROM 'POPULATE STOCK LIST' BUTTON
+  $scope.populateStocks = function() {
+    console.log("inside populateStocks function");
+    $http({
+    method: 'GET',
+    url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
+  }).then(function successCallback(response) {
+      console.log("successful response from populateStocks", response.data.results);
+
+      var dataRefB = new Firebase("https://market-wizard.firebaseio.com/stocks");  //  make reference to database location for data to be stored
+      dataRefB.push(response.data.results);
+
+    }, function errorCallback(response) {  // called asynchronously if an error occurs
+                                          // or server returns response with an error status.
+    });
+  }
 
 
 

@@ -1,116 +1,3 @@
-<div>
-  <input type="text" ng-model="addTicker" placeholder="Add Ticker">
-    <a><button ng-click="newTicker()">Add</button></a> to 
-    <select ng-model="symbolModel">
-      <option></option>
-      <option ng-repeat="thing in data">{{thing.lastPrice}}</option>  <!-- SPECIAL NOTE: 'value' attribute as well as spaces outside curly brackets break the code!! -->
-    </select><input ng-model="watchName" type="text" placeholder="New or Existing Watchlist">
-</div>
-
-<label>StockList:
-  <select ng-model="stockList" ng-options="thing.symbol for thing in data"></select>
-{{stockList.symbol}}
-</label>
-
-<div>
-  <label>WatchList:
-  <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="changeList()"></select>
-  {{watchList}}
-</label>
-</div>
-
-<div></div>
-<a><button ng-click="update()">Update</button></a>
-<a><button ng-click="populateStocks()">Populate Stock List</button></a>
-<button ng-click="predicate=''">Unsort</button>
-
-  <table class="list">
-    <tr>
-     <td>
-         <button ng-click="order('symbol')"><em>Symbol</em></button>
-         <span class="sortorder" ng-show="predicate === 'symbol'" ng-class="{reverse:reverse}"></span>
-     </td>
-     <td>
-         <button ng-click="order('lastPrice')">Last</button>
-         <span class="sortorder" ng-show="predicate === 'lastPrice'" ng-class="{reverse:reverse}"></span>
-     </td>
-     <td>
-     <td>
-         <button ng-click="order('close')">Close</button>
-         <span class="sortorder" ng-show="predicate === 'close'" ng-class="{reverse:reverse}"></span>
-     </td>
-     <td>
-         <button ng-click="order('high')">High</button>
-         <span class="sortorder" ng-show="predicate === 'high'" ng-class="{reverse:reverse}"></span>
-     </td>
-     <td>
-         <button ng-click="order('low')">Low</button>
-         <span class="sortorder" ng-show="predicate === 'low'" ng-class="{reverse:reverse}"></span>
-     </td>
-     <td>
-         <button ng-click="order('volume')">Volume</button>
-         <span class="sortorder" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
-     </td>
-    </tr>
-
-    <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
-    <!-- MOVE BELOW INTO ITS OWN MODULE -->
-<!--     <tr><td>THING IN DATA</td></tr>
-    <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
-      <td>{{thing.symbol}}</td>
-      <td>{{thing.lastPrice}}</td>
-      <td>{{thing.close}}</td>
-      <td>{{thing.high}}</td>
-      <td>{{thing.low}}</td>
-      <td>{{thing.volume}}</td>
-    </tr> -->
-    <tr><td>THING IN STOCKS[0]</td></tr>
-    <tr ng-repeat="thing in stocks[0]">
-      <td>{{thing.symbol}}  {{thing.name}}</td>
-    </tr>
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN LISTTOWATCH [ ] - BUY</td></tr>
-    <tr ng-repeat="thing in listToWatch[0]">
-      <td>{{thing.ticker}}</td>
-    </tr>
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN LISTTOWATCH [ ] - SELL</td></tr>
-        <tr ng-repeat="thing in listToWatch[1]">
-      <td>{{thing.ticker}}</td>
-    </tr>
-
-<!--     <tr><td>&nbsp;</td></tr>
-    <tr><td>KEY / VALUE [ ]</td></tr>
-    <tr ng-repeat="(key, value) in listToWatch">
-  <td>{{key}} / {{value}}</td>
-</tr>
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN WATCHREF { }</td></tr>
-    <tr ng-repeat="thing in listToWatch">
-      <td>{{thing}}</td>
-    </tr> -->
-  </table>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-<!-- testticker -->
-
-<div id="divMain"></div>
-
-<script type='text/javascript'>
-
 function main()
 {
   new StockTracker
@@ -121,6 +8,7 @@ function main()
   ).initialize();
 }
 
+// class
 
 function Stock(exchange, symbol, priceLast)
 {
@@ -169,17 +57,17 @@ function Stock(exchange, symbol, priceLast)
 
   Stock.prototype.update = function()
   {
-    this.updateViaYahoo();
+    this.updateUsingWebServiceYahoo();
   }
 
 
-  Stock.prototype.updateViaYahoo = function()
+  Stock.prototype.updateUsingWebServiceYahoo = function()
   {
     var requestURL = 
-      "https://finance.yahoo.com/webservice/v1/symbols/"
-      + this.symbol
-      + "/quote?format=json";
-      // "http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAPL"
+      // "https://finance.yahoo.com/webservice/v1/symbols/"
+      // + this.symbol
+      // + "/quote?format=json";
+      "http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=" + this.symbol;
 
     var request = new XMLHttpRequest();
     request.open("GET", requestURL, false);
@@ -202,7 +90,6 @@ function Stock(exchange, symbol, priceLast)
 
 }
 
-
 function StockTracker(stocksToTrack)
 {
   this.stocksToTrack = stocksToTrack;
@@ -215,7 +102,7 @@ function StockTracker(stocksToTrack)
 
   StockTracker.prototype.initialize = function()
   {
-    var millisecondsPerTimerTick = 200000;  // set update per # of seconds
+    var millisecondsPerTimerTick = 2000;
 
     setInterval
     (
@@ -237,8 +124,8 @@ function StockTracker(stocksToTrack)
     this.domElementUpdate();
   }
 
+  // dom
 
-  // DOM ELEMENTS
   StockTracker.prototype.domElementUpdate = function()
   {
     var divTracker = document.createElement("div");
@@ -247,7 +134,7 @@ function StockTracker(stocksToTrack)
     {
       var labelSymbolToAdd = document.createElement("label");
       labelSymbolToAdd.for = "inputSymbolToAdd";
-      labelSymbolToAdd.innerHTML = "Add Ticker:";
+      labelSymbolToAdd.innerHTML = "Add Stock by Symbol:";
       divTracker.appendChild(labelSymbolToAdd);
 
       var inputSymbolToAdd = document.createElement("input");
@@ -287,10 +174,10 @@ function StockTracker(stocksToTrack)
 
       divTracker.appendChild(tableQuotes);
 
-      this.domElement = divTracker;
+   <!--    this.domElement = divTracker;
       var divMain = document.getElementById("divMain");
       divMain.appendChild(this.domElement);
-    }
+    } -->
 
     var tableQuotes = document.getElementById("tableQuotes");
 
@@ -301,8 +188,8 @@ function StockTracker(stocksToTrack)
     }
   }
 
+  // events
 
-  // EVENTS
   StockTracker.prototype.buttonSymbolAdd_Click = function(e)
   {
     var inputSymbolToAdd = document.getElementById("inputSymbolToAdd");
@@ -332,16 +219,10 @@ function StockTracker(stocksToTrack)
     this.update();
   }
 
-
   StockTracker.prototype.handleEventTimerTick = function()
   {
     this.update();  
   }
 }
-
 main();
-
-</script>
-
-
 
