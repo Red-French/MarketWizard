@@ -8,11 +8,38 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data = $firebaseArray(dataRef);
 
+    var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
+    var data2 = $firebaseArray(dataRef2);
+
     data.$loaded()
       .then(function(data) {  // promise
         $scope.data = data[0];
-        // console.log($scope.data)
+        console.log("data[0].close", $scope.data[0].close)
     })
+
+    data2.$loaded()
+      .then(function(data2) {  // promise
+        $scope.data2 = data2[0];
+        console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
+        console.log("Price Change Today", $scope.data2[0].lastPrice - $scope.data[0].close);
+    })
+
+
+    dataRef.once("value", function(snapshot) {
+      // The callback function will get called twice, once for "fred" and once for "barney"
+      snapshot.forEach(function(childSnapshot) {
+        // key will be "fred" the first time and "barney" the second time
+        var key = childSnapshot.key();
+
+        // childData will be the actual contents of the child
+        var childData = childSnapshot.val();
+        console.log("childData", childData[1]);
+      });
+    });
+
+
+
+
 
 
 // PUT 'WATCHLISTS' (IN FIREBASE) ON $SCOPE
@@ -134,11 +161,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // console.log("stocksRef", stocksRef);
       // console.log("userTickers", userTickers);
 
-
-
-
-
-
 };
 
 // GRAB USER'S STOCKS (THIS FUNCTIONALITY WILL GO INSIDE 'NEWTICKER' FUNCTION ABOVE)
@@ -161,17 +183,9 @@ refer.orderByChild("currentAuth").equalTo(wlist).on("child_added", function(snap
 var tempTick = "AMZN";  // fake data from 'Add Ticker' input field
 var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
 refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapshot) {
-  console.log("Ticker is " + snapshot.val().symbol);
+  console.log("Tickers are " + snapshot.val().symbol + " " + snapshot.val().name);
   // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + tempTick + currentAuth);
 });
-
-
-
-
-
-
-
-
 
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -236,6 +250,8 @@ refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapsho
                                           // or server returns response with an error status.
     });
   }
+
+
 
 
 

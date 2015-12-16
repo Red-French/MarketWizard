@@ -60,14 +60,41 @@ function Stock(exchange, symbol, priceLast)
     this.updateUsingWebServiceYahoo();
   }
 
+  /*
+  Stock.prototype.updateUsingWebServiceGoogle = function()
+  {
+    // API deprecated in 2011 (still works as of 12/2015)
+  
+    var requestURL = 
+      "https://www.google.com/finance/info?q="
+      + this.exchange + ":" + this.symbol;
+
+    var request = new XMLHttpRequest();
+    request.open("GET", requestURL, false);
+    try
+    {
+      request.send(null);
+      var responseAsString = request.responseText;
+      responseAsString = responseAsString.substr("////".length);
+
+      var responseAsArray = JSON.parse(responseAsString);
+      var responseAsObject = responseAsArray[0];
+  
+      this.priceLast = responseAsObject["l"]; // "latest"
+    }
+    catch(e)
+    {
+      this.priceLast = "?";
+    }
+  }
+  */
 
   Stock.prototype.updateUsingWebServiceYahoo = function()
   {
     var requestURL = 
-      // "https://finance.yahoo.com/webservice/v1/symbols/"
-      // + this.symbol
-      // + "/quote?format=json";
-      "http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=" + this.symbol;
+      "https://finance.yahoo.com/webservice/v1/symbols/"
+      + this.symbol
+      + "/quote?format=json";
 
     var request = new XMLHttpRequest();
     request.open("GET", requestURL, false);
@@ -174,10 +201,10 @@ function StockTracker(stocksToTrack)
 
       divTracker.appendChild(tableQuotes);
 
-   <!--    this.domElement = divTracker;
+      this.domElement = divTracker;
       var divMain = document.getElementById("divMain");
       divMain.appendChild(this.domElement);
-    } -->
+    }
 
     var tableQuotes = document.getElementById("tableQuotes");
 
@@ -225,4 +252,3 @@ function StockTracker(stocksToTrack)
   }
 }
 main();
-

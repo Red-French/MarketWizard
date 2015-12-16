@@ -1,9 +1,10 @@
+
 <div>
   <input type="text" ng-model="addTicker" placeholder="Add Ticker">
     <a><button ng-click="newTicker()">Add</button></a> to 
-    <select ng-model="symbolModel">
+    <select ng-model="symbolModel" ng-options="thing.$id for thing in listToWatch" >
       <option></option>
-      <option ng-repeat="thing in data">{{thing.lastPrice}}</option>  <!-- SPECIAL NOTE: 'value' attribute as well as spaces outside curly brackets break the code!! -->
+      <option ng-repeat="thing in data">{{thing.lastPrice}}</option>
     </select><input ng-model="watchName" type="text" placeholder="New or Existing Watchlist">
 </div>
 
@@ -55,8 +56,8 @@
 
     <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
     <!-- MOVE BELOW INTO ITS OWN MODULE -->
-<!--     <tr><td>THING IN DATA</td></tr>
-    <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
+    <!-- <tr><td>THING IN DATA</td></tr> -->
+<!--     <tr ng-repeat="thing in data | filter: query | orderBy:predicate:reverse">
       <td>{{thing.symbol}}</td>
       <td>{{thing.lastPrice}}</td>
       <td>{{thing.close}}</td>
@@ -64,10 +65,10 @@
       <td>{{thing.low}}</td>
       <td>{{thing.volume}}</td>
     </tr> -->
-    <tr><td>THING IN STOCKS[0]</td></tr>
-    <tr ng-repeat="thing in stocks[0]">
+<!--     <tr><td>THING IN DATA</td></tr>
+    <tr ng-repeat="thing in data">
       <td>{{thing.symbol}}  {{thing.name}}</td>
-    </tr>
+    </tr> -->
 
     <tr><td>&nbsp;</td></tr>
     <tr><td>THING IN LISTTOWATCH [ ] - BUY</td></tr>
@@ -102,12 +103,7 @@
 
 
 
-
-
-
-<!-- testticker -->
-
-<div id="divMain"></div>
+<!-- <div id="divMain">
 
 <script type='text/javascript'>
 
@@ -116,11 +112,10 @@ function main()
   new StockTracker
   (
     [
-      new Stock("NASDAQ", "GOOG"),
+      new Stock("NASDAQ", "AMZN"),
     ]
   ).initialize();
 }
-
 
 function Stock(exchange, symbol, priceLast)
 {
@@ -169,17 +164,41 @@ function Stock(exchange, symbol, priceLast)
 
   Stock.prototype.update = function()
   {
-    this.updateViaYahoo();
+    this.updateViaGoogle();
   }
 
+// GOOG quote API deprecated in 2011, but still working
+  Stock.prototype.updateViaGoogle = function()
+  {
+  
+    var requestURL = 
+      "https://www.google.com/finance/info?q="
+      + this.exchange + ":" + this.symbol;
 
+    var request = new XMLHttpRequest();
+    request.open("GET", requestURL, false);
+    try
+    {
+      request.send(null);
+      var responseAsString = request.responseText;
+      responseAsString = responseAsString.substr("////".length);
+
+      var responseAsArray = JSON.parse(responseAsString);
+      var responseAsObject = responseAsArray[0];
+  
+      this.priceLast = responseAsObject["l"]; // "latest"
+    }
+    catch(e)
+    {
+      this.priceLast = "?";
+    }
+  }
+  
+// Yahoo quote API (as alternate - or for indexes)
   Stock.prototype.updateViaYahoo = function()
   {
     var requestURL = 
-      "https://finance.yahoo.com/webservice/v1/symbols/"
-      + this.symbol
-      + "/quote?format=json";
-      // "http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAPL"
+      "https://finance.yahoo.com/webservice/v1/symbols/" + this.symbol + "/quote?format=json";
 
     var request = new XMLHttpRequest();
     request.open("GET", requestURL, false);
@@ -202,7 +221,6 @@ function Stock(exchange, symbol, priceLast)
 
 }
 
-
 function StockTracker(stocksToTrack)
 {
   this.stocksToTrack = stocksToTrack;
@@ -215,7 +233,7 @@ function StockTracker(stocksToTrack)
 
   StockTracker.prototype.initialize = function()
   {
-    var millisecondsPerTimerTick = 200000;  // set update per # of seconds
+    var millisecondsPerTimerTick = 500000;
 
     setInterval
     (
@@ -237,8 +255,7 @@ function StockTracker(stocksToTrack)
     this.domElementUpdate();
   }
 
-
-  // DOM ELEMENTS
+  // output to the DOM
   StockTracker.prototype.domElementUpdate = function()
   {
     var divTracker = document.createElement("div");
@@ -270,10 +287,12 @@ function StockTracker(stocksToTrack)
       //tr.appendChild(td);
 
       var td = document.createElement("td");
+      td.width = "65px";
       td.innerHTML = "Symbol";
       tr.appendChild(td);
 
       var td = document.createElement("td");
+      td.width = "65px";
       td.innerHTML = "Price";
       tr.appendChild(td);
 
@@ -301,8 +320,7 @@ function StockTracker(stocksToTrack)
     }
   }
 
-
-  // EVENTS
+  // events
   StockTracker.prototype.buttonSymbolAdd_Click = function(e)
   {
     var inputSymbolToAdd = document.getElementById("inputSymbolToAdd");
@@ -332,16 +350,13 @@ function StockTracker(stocksToTrack)
     this.update();
   }
 
-
   StockTracker.prototype.handleEventTimerTick = function()
   {
     this.update();  
   }
 }
-
 main();
 
 </script>
-
-
-
+</div>
+ -->
