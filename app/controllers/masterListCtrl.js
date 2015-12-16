@@ -5,37 +5,56 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
   $scope.searchText = "";
 
 // REFERENCE 'DATA' (IN FIREBASE) AND USE PROMISE TO CONFIRM IT IS LOADED
+
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data = $firebaseArray(dataRef);
 
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
     var data2 = $firebaseArray(dataRef2);
 
+    // data.$loaded()
+    //   .then(function(data) {  // promise
+    //     $scope.data = data[0];
+    //     console.log("data[0].close", $scope.data[0].close)
+    // })
+
+    // data2.$loaded()
+    //   .then(function(data2) {  // promise
+    //     $scope.data2 = data2[0];
+    //     console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
+    //     console.log("Price Change Today", $scope.data2[0].symbol, $scope.data2[0].lastPrice - $scope.data[0].close);
+    // })
+
     data.$loaded()
       .then(function(data) {  // promise
         $scope.data = data[0];
-        console.log("data[0].close", $scope.data[0].close)
+
+        data2.$loaded()
+          .then(function(data2) {  // promise
+            $scope.data2 = data2[0];
+            console.log("ticker is ", $scope.data[0].symbol);
+            console.log("data[0].close", $scope.data[0].close)
+            console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
+
+          var priceChange = $scope.data2[0].lastPrice - $scope.data[0].close;
+          $scope.priceChange = priceChange;
+          console.log("$scope.priceChange", $scope.priceChange);
+        })
     })
 
-    data2.$loaded()
-      .then(function(data2) {  // promise
-        $scope.data2 = data2[0];
-        console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
-        console.log("Price Change Today", $scope.data2[0].lastPrice - $scope.data[0].close);
-    })
 
+// LOG PAST 3 DAYS' DATA (OR HOW MANY DAYS ARE STORED IN 'DATA') FOR AAPL
+    // dataRef.once("value", function(snapshot) {
+    //   // The callback function will get called twice, once for "fred" and once for "barney"
+    //   snapshot.forEach(function(childSnapshot) {
+    //     // key will be "fred" the first time and "barney" the second time
+    //     var key = childSnapshot.key();
 
-    dataRef.once("value", function(snapshot) {
-      // The callback function will get called twice, once for "fred" and once for "barney"
-      snapshot.forEach(function(childSnapshot) {
-        // key will be "fred" the first time and "barney" the second time
-        var key = childSnapshot.key();
-
-        // childData will be the actual contents of the child
-        var childData = childSnapshot.val();
-        console.log("childData", childData[1]);
-      });
-    });
+    //     // childData will be the actual contents of the child
+    //     var childData = childSnapshot.val();
+    //     console.log("childData", childData[1]);
+    //   });
+    // });
 
 
 
@@ -183,7 +202,7 @@ refer.orderByChild("currentAuth").equalTo(wlist).on("child_added", function(snap
 var tempTick = "AMZN";  // fake data from 'Add Ticker' input field
 var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
 refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapshot) {
-  console.log("Tickers are " + snapshot.val().symbol + " " + snapshot.val().name);
+  // console.log("Ticker is " + snapshot.val().symbol + " " + snapshot.val().name);
   // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + tempTick + currentAuth);
 });
 
