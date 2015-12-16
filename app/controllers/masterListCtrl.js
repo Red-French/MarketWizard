@@ -44,21 +44,21 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     })
 
     dataRef2.once("value", function(snapshot) {
-      // The callback function will get called twice, once for "fred" and once for "barney"
-      snapshot.forEach(function(childSnapshot) {
-        // key will be "fred" the first time and "barney" the second time
-        var key = childSnapshot.key();
-
-        // childData will be the actual contents of the child
-        var childData = childSnapshot.val();
+      snapshot.forEach(function(childSnapshot) {  // The callback function is called for each day's data
+        console.log("snapshot", snapshot.val());
+        var key = childSnapshot.key();  // key is the unique ID of each day's data
+        console.log("key", key);
+        var childData = childSnapshot.val();  // childData is contents of the child
         console.log("childData.length", childData.length);
-        console.log("childData", childData);
+        // console.log("childData", childData);
+        // console.log("childData.name", childData[0].name);
 
-        childData.forEach(function() {
-          // var i = 0;
-          // console.log("i");
 
-console.log("childData", childData.symbol);
+        childData.forEach(function(object) {
+        console.log("object.name", object.name);
+        console.log("object.lastPrice", object.lastPrice);
+
+// console.log("childData", childData[1].symbol);
 // console.log("scope.data2", $scope.data.symbol);
           // var priceChange = $scope.data2.lastPrice - $scope.data.close;
           // $scope.priceChange = priceChange;
@@ -71,6 +71,9 @@ console.log("childData", childData.symbol);
 
       });
     });
+
+
+
 
 // LOG PAST 3 DAYS' DATA (OR HOW MANY DAYS ARE STORED IN 'DATA') FOR AAPL
     // dataRef.once("value", function(snapshot) {
