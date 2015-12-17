@@ -1,3 +1,5 @@
+// * = note regarding issue to be addressed
+
 app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  
   function($scope, $http, $firebaseArray) {
    console.log("inside masterList.Ctrl"); 
@@ -5,74 +7,135 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
   $scope.searchText = "";
 
 // REFERENCE 'DATA' (IN FIREBASE) AND USE PROMISE TO CONFIRM IT IS LOADED
-
+// * dataRef needs to refer to latest data in 'data'
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data = $firebaseArray(dataRef);
-
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
     var data2 = $firebaseArray(dataRef2);
 
-    // data.$loaded()
-    //   .then(function(data) {  // promise
-    //     $scope.data = data[0];
-    //     console.log("data[0].close", $scope.data[0].close)
-    // })
-
-    // data2.$loaded()
-    //   .then(function(data2) {  // promise
-    //     $scope.data2 = data2[0];
-    //     console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
-    //     console.log("Price Change Today", $scope.data2[0].symbol, $scope.data2[0].lastPrice - $scope.data[0].close);
-    // })
-
-        data2.$loaded()
-          .then(function(data2) {  // promise
-            $scope.data2 = data2[0];
-
-          data.$loaded()
-            .then(function(data) {  // promise
-              $scope.data = data[0];
-
-              console.log("ticker is ", $scope.data[0].symbol);
-              console.log("data[0].close", $scope.data[0].close)
-              console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
-
-          var priceChange = $scope.data2[0].lastPrice - $scope.data[0].close;
-          $scope.priceChange = priceChange;
-          console.log("$scope.priceChange", $scope.priceChange);
-        })
+    data.$loaded()
+      .then(function(data) {  // promise
+        $scope.data = data[0];
+        console.log("yesterday's close", $scope.data[0].close)
     })
 
-    dataRef2.once("value", function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {  // The callback function is called for each day's data
-        console.log("snapshot", snapshot.val());
-        var key = childSnapshot.key();  // key is the unique ID of each day's data
+    data2.$loaded()
+      .then(function(data2) {  // promise
+        console.log("data2.length", data2.length);
+        $scope.data2 = data2[0];
+        for (var i = 0; i < 100; i++) {
+          console.log(i);
+        console.log("current price", $scope.data2[i].lastPrice)
+        console.log("Price Change Today in", $scope.data2[i].symbol, $scope.data2[i].lastPrice - $scope.data[i].close);
+      }
+    })
+
+    //     data2.$loaded()
+    //       .then(function(data2) {  // promise
+    //         $scope.data2 = data2[0];
+
+    //       data.$loaded()
+    //         .then(function(data) {  // promise
+    //           $scope.data = data[0];
+    //           console.log("ticker is ", $scope.data[0].symbol);
+    //           console.log("data[0].close", $scope.data[0].close)
+    //           console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
+
+    //       var priceChange = $scope.data2[0].lastPrice - $scope.data[0].close;
+    //       $scope.priceChange = priceChange;
+    //       console.log("$scope.priceChange", $scope.priceChange);
+    //     })
+    // })
+
+    dataRef2.once("value", function(snapshot2) {
+      snapshot2.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
+        // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
+        var key = childSnapshot2.key();  // key is the unique ID of each day's data
         console.log("key", key);
-        var childData = childSnapshot.val();  // childData is contents of the child
-        console.log("childData.length", childData.length);
-        // console.log("childData", childData);
-        // console.log("childData.name", childData[0].name);
+        var childData2 = childSnapshot2.val();  // childData2 is contents of the child
+        $scope.childData2 = childData2;
+        // console.log("childData2.length", childData2.length);
+        // console.log("date", childData2[2].serverTimestamp);
+        // console.log("childData2", childData2.lastPrice);
+          // childData2.forEach(function(object) {  // loop through data
+            // console.log("object.name", object.name);
+            // var tickerToday = object;
+            // $scope.tickerToday;
+            // console.log("object.lastPrice", object.lastPrice);
+          })
+        // })
+
+        dataRef.once("value", function(snapshot) {
+          dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+          // snapshot.forEach(function(childSnapshot) {  // The callback function is called for each day's data
+            // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
+            var key = snapshot3.key();  // key is the unique ID of each day's data
+            console.log("key", key);
+            var childData = snapshot3.val();  // childData is contents of the child
+            // console.log("childData.length", childData.length);
+            // console.log("childData2.length", $scope.childData2.length);
+            // console.log("date", childData[0].serverTimestamp);
+              $scope.childData2.forEach(function(object2) {
 
 
-        childData.forEach(function(object) {
-        console.log("object.name", object.name);
-        console.log("object.lastPrice", object.lastPrice);
+              })
+              childData.forEach(function(object) {  // loop through data
+                // console.log("object.name", object.name);
+                // console.log("object.lastPrice", object.lastPrice);
 
-// console.log("childData", childData[1].symbol);
-// console.log("scope.data2", $scope.data.symbol);
-          // var priceChange = $scope.data2.lastPrice - $scope.data.close;
-          // $scope.priceChange = priceChange;
-          // console.log("$scope.priceChange", $scope.priceChange);
+            // to access yesterday's dataset only, get number of entries with
+            // var length = childData.length;
+            // 
+            // MATH FUNCTIONALITY GOES HERE
+            // MATH FUNCTIONALITY GOES HERE
+            // MATH FUNCTIONALITY GOES HERE
 
-
-
-        })
-
-
+            // MATH FUNCTIONALITY GOES HERE
+            // MATH FUNCTIONALITY GOES HERE
+            // MATH FUNCTIONALITY GOES HERE
+          })
+            })
       });
-    });
+});
 
 
+
+
+
+
+
+
+// * FOR CALCULATING ALL PREVIOUS DAYS' DATA - UNFINISHED UNFINISHED
+// UNFINISHED UNFINISHED UNFINISHED UNFINISHED UNFINISHED UNFINISHED
+    // dataRef2.once("value", function(snapshot) {
+    //   snapshot.forEach(function(childSnapshot) {  // The callback function is called for each day's data
+    //     // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
+    //     var key = childSnapshot.key();  // key is the unique ID of each day's data
+    //     console.log("key", key);
+    //     var childData = childSnapshot.val();  // childData is contents of the child
+    //     // console.log("childData.length", childData.length);
+    //     console.log("date", childData[0].serverTimestamp);
+
+    //     childData.forEach(function(object) {  // loop through data
+    //     // console.log("object.name", object.name);
+    //     // console.log("object.lastPrice", object.lastPrice);
+
+    //   // LOOPS THROUGH ALL PREVIOUS DAYS' DATA IN 'DATA'
+    //       dataRef.once("value", function(snapshot) {
+    //         snapshot.forEach(function(yesterdayChildSnapshot) {  // The callback function is called for each day's data
+    //           // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
+    //           var key = yesterdayChildSnapshot.key();  // key is the unique ID of each day's data
+    //           console.log("key", key);
+    //           var childData = yesterdayChildSnapshot.val();  // childData is contents of the child
+    //           // console.log("childData.length", childData.length);
+    //           console.log("date", childData[0].serverTimestamp);
+
+
+    //     })
+    //   });
+    //     })
+    //   });
+    // });
 
 
 // LOG PAST 3 DAYS' DATA (OR HOW MANY DAYS ARE STORED IN 'DATA') FOR AAPL
@@ -121,7 +184,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       // when the response is available
       console.log("successful response from update", response.data.results);
 
-      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
+      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data2");  //  make reference to database location for data to be stored
       
       // var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
@@ -136,6 +199,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
       //   response.data.results
       // );
 
+// * MAKE THIS OVERWRITE PREVIOUS DATA (NEED LATEST DATA FOR COMPARISON TO PREVIOUS DAYS)
       dataRef.push(response.data.results);
 
     }, function errorCallback(response) {  // called asynchronously if an error occurs
@@ -305,6 +369,43 @@ refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapsho
 
 
 
+
+
+// EXAMPLES FROM FIREBASE
+// Get a database reference to our posts
+// var ref = new Firebase("https://docs-examples.firebaseio.com/web/saving-data/fireblog/posts");
+
+// // Attach an asynchronous callback to read the data at our posts reference
+// ref.on("value", function(snapshot) {
+//   console.log(snapshot.val());
+// }, function (errorObject) {
+//   console.log("The read failed: " + errorObject.code);
+// });
+// // Retrieve new posts as they are added to our database
+// ref.on("child_added", function(snapshot, prevChildKey) {
+//   var newPost = snapshot.val();
+//   console.log("Author: " + newPost.author);
+//   console.log("Title: " + newPost.title);
+//   console.log("Previous Post ID: " + prevChildKey);
+// });
+// // Get the data on a post that has changed
+// ref.on("child_changed", function(snapshot) {
+//   var changedPost = snapshot.val();
+//   console.log("The updated post title is " + changedPost.title);
+// });
+// // Get the data on a post that has been removed
+// ref.on("child_removed", function(snapshot) {
+//   var deletedPost = snapshot.val();
+//   console.log("The blog post titled '" + deletedPost.title + "' has been deleted");
+// });
+
+// SORT DATA
+var sortData = new Firebase("https://market-wizard.firebaseio.com/data2/");
+sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
+  snapshot.forEach(function(data) {
+    // console.log("The " + data.key() + " dinosaur's score is " + data.close);
+  });
+});
 
 
   }  // end of controller function (all functionality goes inside this function)
