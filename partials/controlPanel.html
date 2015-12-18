@@ -20,14 +20,16 @@
 </label>
 
   <label>Scan Market:
-  <select ng-model="scan" ng-options="thing.$id for thing in listToWatch" ng-change="changeList()"></select>
+  <select ng-model="scan" ng-change="changeList()"></select>
+    <options>Price Change Today</options>
 </label>
 </div>
 
 <div></div>
 <a><button ng-click="update()">Update</button></a>
-<a><button ng-click="populateStocks()">Populate Stock List</button></a>
+<!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
 <button ng-click="predicate=''">Unsort</button>
+<a><button ng-click="priceChange()">Price Change Today</button></a>
 
   <table class="list">
     <tr>
@@ -76,21 +78,31 @@
 
     <tr><td>&nbsp;</td></tr>
     <tr><td>WATCHLIST (LONGS)</td></tr>
-    <tr ng-repeat="thing in listToWatch[0]">
-      <td>{{thing.ticker}}</td>
+        <tr ng-repeat="thing in listToWatch[0]">
+          <td>{{thing.ticker}}</td>
     </tr>
 
     <tr><td>&nbsp;</td></tr>
     <tr><td>WATCHLIST (SHORTS)</td></tr>
         <tr ng-repeat="thing in listToWatch[1]">
-      <td>{{thing.ticker}}</td>
+          <td>{{thing.ticker}}</td>
     </tr>
 
     <tr><td>&nbsp;</td></tr>
     <tr><td>CURRENT POSITION</td></tr>
         <tr ng-repeat="thing in listToWatch[1]">
-      <td>{{thing.ticker}}</td>
+          <td>{{thing.ticker}}</td>
     </tr>
+
+    <tr><td>&nbsp;</td></tr>
+    <tr><td>PRICE CHANGE TODAY</td></tr>
+        <tr ng-repeat="thing in userData">
+          <td>{{thing.ticker}}: {{thing.calculation}}</td>
+    </tr>
+
+
+
+
 
 <!--     <tr><td>&nbsp;</td></tr>
     <tr><td>KEY / VALUE [ ]</td></tr>
@@ -111,8 +123,8 @@
 
 
 
-
-<!-- <div id="divMain">
+<!-- 
+<div id="divMain">
 <script type='text/javascript'>
 function main()
 {
@@ -220,7 +232,7 @@ function StockTracker(stocksToTrack)
   // instance methods
   StockTracker.prototype.initialize = function()
   {
-    var millisecondsPerTimerTick = 500000;
+    var millisecondsPerTimerTick = 2000;
     setInterval
     (
       this.handleEventTimerTick.bind(this),

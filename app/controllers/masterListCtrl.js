@@ -11,6 +11,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     var data = $firebaseArray(dataRef);
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
     var data2 = $firebaseArray(dataRef2);
+    var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
+    var userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
+    $scope.userData = userData;
 
     data.$loaded()
       .then(function(data) {  // promise
@@ -24,8 +27,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
         $scope.data2 = data2[0];
 })
 
+
 //  CALCULATION FUNCTION FOR 'PRICE CHANGE TODAY'
-  // function priceChange() {
+  $scope.priceChange = function() {
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
     var data = $firebaseArray(dataRef);
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
@@ -42,40 +46,40 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
         $scope.data = data[0];
         // console.log("yesterday's close", $scope.data[0].close)
     })
-
     data2.$loaded()
       .then(function(data2) {  // promise
         // console.log("data2.length", data2.length);
         $scope.data2 = data2[0];
-
         // console.log("data2 ", data2[0]);
-
     var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
-    $scope.userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
-    $scope.scanResults = { ticker: "", calculation: ""};  // create new object to hold calculation
+    userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
+    scanResults = { ticker: "", calculation: ""};  // create new object to hold calculation
     // console.log("data2.length", data2.length);
       for (var i = 0; i < data3.length; i++) {
         // console.log(i);
       // console.log("current price", $scope.data2[i].lastPrice)
       // console.log("Price Change Today in", $scope.data2[i].symbol, $scope.data2[i].lastPrice - $scope.data[i].close);
-
-      $scope.ticker = $scope.data2[i].symbol;
-      $scope.calculation = $scope.data2[i].lastPrice - $scope.data[i].close;
+      var ticker = $scope.data2[i].symbol;
+      var calculation = $scope.data2[i].lastPrice - $scope.data[i].close;
       // console.log("ticker", $scope.ticker);
       // console.log("calculation", $scope.calculation);
-      console.log("ticker", $scope.ticker);
-      console.log("calc", $scope.calculation);
-      $scope.userData.$add({  // add tickers/calculations to Firebase
-        ticker: $scope.ticker,
-        calculation: $scope.calculation
+      console.log("ticker", ticker);
+      console.log("calc", calculation);
+      
+
+
+// * REMOVE DATA BEFORE ADDING
+      // $scope.userData.$remove($scope.userData);
+      userData.$add({  // add tickers/calculations to Firebase
+        ticker: ticker,
+        calculation: calculation
       });
 
       // newData.set(userData);
 
     }
 })
-
-
+}
 
 
     //     data2.$loaded()
