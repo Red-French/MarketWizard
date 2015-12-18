@@ -2,7 +2,7 @@
 
 app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  
   function($scope, $http, $firebaseArray) {
-   console.log("inside masterList.Ctrl"); 
+   // console.log("inside masterList.Ctrl"); 
 
   $scope.searchText = "";
 
@@ -30,6 +30,13 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     var data = $firebaseArray(dataRef);
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
     var data2 = $firebaseArray(dataRef2);
+    var dataRef3 = dataRef2.child("today");
+    var data3 = $firebaseArray(dataRef3);
+
+    // data3.$loaded().then(function() {
+    //   console.log("data3", data3.length);
+    // });
+
     data.$loaded()
       .then(function(data) {  // promise
         $scope.data = data[0];
@@ -41,11 +48,13 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
         // console.log("data2.length", data2.length);
         $scope.data2 = data2[0];
 
+        // console.log("data2 ", data2[0]);
+
     var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
     $scope.userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
     $scope.scanResults = { ticker: "", calculation: ""};  // create new object to hold calculation
     // console.log("data2.length", data2.length);
-      for (var i = 0; i < 100; i++) {
+      for (var i = 0; i < data3.length; i++) {
         // console.log(i);
       // console.log("current price", $scope.data2[i].lastPrice)
       // console.log("Price Change Today in", $scope.data2[i].symbol, $scope.data2[i].lastPrice - $scope.data[i].close);
@@ -213,7 +222,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     var stocksRef = new Firebase("https://market-wizard.firebaseio.com/stocks/"); // grab data from Firebase
     var stocks = $firebaseArray(stocksRef);
     $scope.stocks = stocks;
-    console.log("stocks = ", $scope.stocks)
+    // console.log("stocks = ", $scope.stocks)
 
 
 // UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE'
