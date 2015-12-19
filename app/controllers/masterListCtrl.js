@@ -11,11 +11,11 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     var data = $firebaseArray(dataRef);
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
     var data2 = $firebaseArray(dataRef2);
-    var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
     var dataRef3 = dataRef2.child("today");
     var data3 = $firebaseArray(dataRef3);
+    var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
     var userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
-    $scope.userData = userData;
+    // $scope.userData = userData;
 
 
     data.$loaded()
@@ -103,14 +103,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     // })
 
 //  GRAB TODAY'S DATA
-    var ticker = "";
-    var calculation = 0;
-    var calcResult = 0;
-    $scope.ticker = ticker;
-    $scope.calculation = calculation;
-    $scope.calcResult = calcResult;
-
-
     dataRef2.once("value", function(snapshot) {
       dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
       snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
@@ -123,51 +115,40 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
         // console.log("childData2.length", childData2.length);
         // console.log("date", childData2[2].serverTimestamp);
         // console.log("childData2", childData2.lastPrice);
-          // childData2.forEach(function(object) {  // loop through data
-            // console.log("object.name", object.name);
-            // var tickerToday = object;
-            // $scope.tickerToday;
-            // console.log(object.symbol);
-            // console.log("Today's last price", object.lastPrice);
-          // })
         })
     });
 
-
 // GRAB YESTERDAY'S DATA
         dataRef.once("value", function(snapshot) {
+          var ticker = "";
+          var calculation = 0;
+          var calcResult = 0;
           dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
           snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
             // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
             var key = snapshot3.key();  // key is the unique ID of each day's data
-            // console.log("key", key);
             var childData3 = snapshot3.val();  // childData is contents of the child
-            $scope.childData3 = childData3;
-            yesterdaysData = $scope.childData3;
-            // console.log("childData3.length", childData3.length);
-            // console.log("childData3.length", $scope.childData3.length);
-            // console.log("date", childData3[0].serverTimestamp);
-            // $scope.childData2.forEach(function(object2) {
-            // })
+            childData3 = childData3;
+            yesterdaysData = childData3;
 
+            // REMOVE OLD DATA
+            newData.remove();
+
+            // PERFORM CALCULATION
             childData3.forEach(function(object2, i) {  // loop through data
               // console.log($scope.childData2[i].symbol);
               // console.log("Price Change Today = ", todaysData[i].lastPrice - yesterdaysData[i].close);
-              $scope.ticker = todaysData[i].symbol;
-              $scope.calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-              $scope.calcResult = $scope.calculation.toFixed(2);
-              console.log("ticker", $scope.ticker);
-              console.log("calculation", $scope.calcResult);
+              ticker = todaysData[i].symbol;
+              console.log("ticker ", ticker);
+              calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+              calcResult = calculation.toFixed(2);
+              // console.log("ticker", ticker);
+              // console.log("calculation", calcResult);
 
-      
-// // * REMOVE DATA BEFORE ADDING
-//       // $scope.userData.$remove($scope.userData);
-//       userData.$add({  // add tickers/calculations to Firebase
-//         ticker: ticker,
-//         calculation: calculation
-//       });
-
-
+              userData.$add({  // add tickers/calculations to Firebase
+                ticker: ticker,
+                calculation: calcResult
+              });
 
               //   // to access yesterday's dataset only, get number of entries with
               //   // var length = childData.length;
@@ -175,22 +156,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
             })
           })
         });
-
-      // for (var i = 0; i < data3.length; i++) {
-      //   console.log(i);
-
-            // console.log("current price", $scope.data2[i].lastPrice)
-            // console.log("Price Change Today in", $scope.data2[i].symbol, $scope.data2[i].lastPrice - $scope.data[i].close);
-      
-      // var ticker = $scope.data2[i].symbol;
-      // var calculation = $scope.data2[i].lastPrice - $scope.data[i].close;
-      
-            // console.log("ticker", $scope.ticker);
-            // console.log("calculation", $scope.calculation);
-      
-            // console.log("ticker", ticker);
-            // console.log("calc", calculation);
-// }
 });
 
 
