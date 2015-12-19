@@ -1,3 +1,4 @@
+<div id="cntrlPanelTop">
 <div>
   <input type="text" ng-model="addTicker" placeholder="Add Ticker">
     <a><button ng-click="newTicker()">Add</button></a> to 
@@ -28,6 +29,10 @@
 <!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
 <button ng-click="predicate=''">Unsort</button>
 <a><button ng-click="priceChange()">Price Change Today</button></a>
+</div>
+
+
+<div id="cntrlPanel">
   <table class="list">
     <tr>
      <td>
@@ -97,6 +102,9 @@
           <td>{{thing.ticker}}</td>
     </tr>
   </table>
+</div>
+
+
 <!-- 
 <div id="divMain">
 <script type='text/javascript'>
