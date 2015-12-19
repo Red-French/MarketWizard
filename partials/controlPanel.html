@@ -1,10 +1,8 @@
-
 <div>
   <input type="text" ng-model="addTicker" placeholder="Add Ticker">
     <a><button ng-click="newTicker()">Add</button></a> to 
     <select ng-model="symbolModel" ng-options="thing.$id for thing in listToWatch" >
       <option></option>
-      <option ng-repeat="thing in data">{{thing.lastPrice}}</option>
     </select><input ng-model="watchName" type="text" placeholder="New or Existing Watchlist">
 </div>
 
@@ -30,7 +28,6 @@
 <!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
 <button ng-click="predicate=''">Unsort</button>
 <a><button ng-click="priceChange()">Price Change Today</button></a>
-
   <table class="list">
     <tr>
      <td>
@@ -59,7 +56,6 @@
          <span class="sortorder" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
      </td>
     </tr>
-
     <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
     <!-- MOVE BELOW INTO ITS OWN MODULE -->
     <!-- <tr><td>THING IN DATA</td></tr> -->
@@ -75,7 +71,14 @@
     <tr ng-repeat="thing in data">
       <td>{{thing.symbol}}  {{thing.name}}</td>
     </tr> -->
-
+        <tr><td>&nbsp;</td></tr>
+    <tr><td>PRICE CHANGE TODAY</td></tr>
+        <tr ng-repeat="thing in userData">
+          <td>{{thing.ticker}}: {{thing.calculation}}</td>
+    </tr>
+    </table>
+    
+    <table>
     <tr><td>&nbsp;</td></tr>
     <tr><td>WATCHLIST (LONGS)</td></tr>
         <tr ng-repeat="thing in listToWatch[0]">
@@ -93,36 +96,7 @@
         <tr ng-repeat="thing in listToWatch[1]">
           <td>{{thing.ticker}}</td>
     </tr>
-
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>PRICE CHANGE TODAY</td></tr>
-        <tr ng-repeat="thing in userData">
-          <td>{{thing.ticker}}: {{thing.calculation}}</td>
-    </tr>
-
-
-
-
-
-<!--     <tr><td>&nbsp;</td></tr>
-    <tr><td>KEY / VALUE [ ]</td></tr>
-    <tr ng-repeat="(key, value) in listToWatch">
-  <td>{{key}} / {{value}}</td>
-</tr>
-    <tr><td>&nbsp;</td></tr>
-    <tr><td>THING IN WATCHREF { }</td></tr>
-    <tr ng-repeat="thing in listToWatch">
-      <td>{{thing}}</td>
-    </tr> -->
   </table>
-</div>
-
-
-
-
-
-
-
 <!-- 
 <div id="divMain">
 <script type='text/javascript'>
