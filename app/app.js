@@ -30,7 +30,7 @@ app.config(['$routeProvider',  // this is like entry.js
       controller: 'masterListCtrl'
       })
       .when('/data', {
-      templateUrl: 'partials/data.html',
+      templateUrl: 'partials/priceChange.html',
       controller: 'masterListCtrl'
       })
      .otherwise('/main'); // catchall
