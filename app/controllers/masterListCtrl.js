@@ -15,7 +15,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
     var data3 = $firebaseArray(dataRef3);
     var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
     var userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
-    // $scope.userData = userData;
+    $scope.userData = userData;
 
 
     data.$loaded()
@@ -72,7 +72,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
 
 // // * REMOVE DATA BEFORE ADDING
-//       // $scope.userData.$remove($scope.userData);
+//       newData.remove();
 //       userData.$add({  // add tickers/calculations to Firebase
 //         ticker: ticker,
 //         calculation: calculation
@@ -85,23 +85,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 // }
 
 
-    //     data2.$loaded()
-    //       .then(function(data2) {  // promise
-    //         $scope.data2 = data2[0];
-
-    //       data.$loaded()
-    //         .then(function(data) {  // promise
-    //           $scope.data = data[0];
-    //           console.log("ticker is ", $scope.data[0].symbol);
-    //           console.log("data[0].close", $scope.data[0].close)
-    //           console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
-
-    //       var calculation = $scope.data2[0].lastPrice - $scope.data[0].close;
-    //       $scope.calculation = calculation;
-    //       console.log("$scope.calculation", $scope.calculation);
-    //     })
-    // })
-
+  $scope.priceChange = function() {
 //  GRAB TODAY'S DATA
     dataRef2.once("value", function(snapshot) {
       dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
@@ -139,7 +123,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
               // console.log($scope.childData2[i].symbol);
               // console.log("Price Change Today = ", todaysData[i].lastPrice - yesterdaysData[i].close);
               ticker = todaysData[i].symbol;
-              console.log("ticker ", ticker);
+              // console.log("ticker ", ticker);
               calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
               calcResult = calculation.toFixed(2);
               // console.log("ticker", ticker);
@@ -157,6 +141,27 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
           })
         });
 });
+}
+
+
+
+    //     data2.$loaded()
+    //       .then(function(data2) {  // promise
+    //         $scope.data2 = data2[0];
+
+    //       data.$loaded()
+    //         .then(function(data) {  // promise
+    //           $scope.data = data[0];
+    //           console.log("ticker is ", $scope.data[0].symbol);
+    //           console.log("data[0].close", $scope.data[0].close)
+    //           console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
+
+    //       var calculation = $scope.data2[0].lastPrice - $scope.data[0].close;
+    //       $scope.calculation = calculation;
+    //       console.log("$scope.calculation", $scope.calculation);
+    //     })
+    // })
+
 
 
 
