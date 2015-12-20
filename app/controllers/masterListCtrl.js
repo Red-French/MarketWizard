@@ -1,7 +1,7 @@
 // * = note regarding issue to be addressed
 
-app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  
-  function($scope, $http, $firebaseArray) {
+app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$location",  
+  function($scope, $http, $firebaseArray, $location) {
    // console.log("inside masterList.Ctrl"); 
 
   $scope.searchText = "";
@@ -87,11 +87,12 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 // }
 
 
-  $scope.calc = function() {
-  console.log("scanOption is ", scanOption.value);
+  $scope.calc = function(scanners) {
+    // console.log("scanOption is ", scanOption.value);
+    console.log(scanners.$id);
 
   // BEGIN PRICE CHANGE FUNCTION
-    if (scanOption.value === "object:19") {
+    if (scanners.$id === "Net Change") {
       console.log("inside calc via NET CHANGE");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
@@ -139,7 +140,8 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
                   ticker: ticker,
                   calculation: calcResult
                 });
-
+               $location.path("/data");  // take user to this location
+               // $scope.$apply();
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
                 })
@@ -152,7 +154,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
 
   // BEGIN TOP % ADVANCERS FUNCTION
-    if (scanOption.value === "object:20") {
+    if (scanners.$id === "Top % Advancers") {
       console.log("inside calc via TOP % ADVANCERS");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
@@ -542,4 +544,3 @@ sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
 
   }  // end of controller function (all functionality goes inside this function)
 ]);
-
