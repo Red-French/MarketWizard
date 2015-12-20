@@ -70,8 +70,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 //       // console.log("calculation", $scope.calculation);
 //       console.log("ticker", ticker);
 //       console.log("calc", calculation);
-      
-
 
 // // * REMOVE DATA BEFORE ADDING
 //       newData.remove();
@@ -79,9 +77,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 //         ticker: ticker,
 //         calculation: calculation
 //       });
-
 //       // newData.set(userData);
-
 //     }
 // })
 // }
@@ -90,6 +86,13 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
   $scope.calc = function(scanners) {
     // console.log("scanOption is ", scanOption.value);
     console.log(scanners.$id);
+
+// * // BEGIN LOAD SUMMARY
+    if (scanners.$id === "- Summary -") {
+      console.log("inside calc via - SUMMARY -");
+      newData.remove();  // remove old data
+      $location.path("/controlPanel");  // take user to this location
+    }
 
   // BEGIN PRICE CHANGE FUNCTION
     if (scanners.$id === "Net Change") {
@@ -206,7 +209,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
                     calculation: calcResult
                   });
                 }
-
+               $location.path("/data");  // take user to this location
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
                 })
