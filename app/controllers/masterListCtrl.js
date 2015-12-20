@@ -135,7 +135,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
                 calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
                 calcResult = calculation.toFixed(2);  // round to nearest 100th
                 // console.log("ticker", ticker);
-                console.log(ticker, calcResult);
+                // console.log(ticker, calcResult);
 
                 userData.$add({  // add tickers/calculations to Firebase
                   ticker: ticker,
@@ -181,7 +181,8 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
             dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
-            snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
+              // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
+              // console.log("duece?");
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
               var childData3 = snapshot3.val();  // childData is contents of the child
@@ -197,31 +198,24 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",
                 // console.log("Price Change Today = ", todaysData[i].lastPrice - yesterdaysData[i].close);
                 ticker = todaysData[i].symbol;
                 // console.log("ticker ", ticker);
-                if (todaysData[i].lastPrice < yesterdaysData[i].close) {
-                  console.log(ticker, " down on day");
-
-                } else {
-                  console.log(ticker, " up on day");
-                // calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-                // calcResult = calculation.toFixed(2);  // round to nearest 100th
-                // console.log(ticker);
-                // console.log("calculation", calcResult);
+                if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+                  // console.log(ticker, " up on day");
+                  var calculation = (todaysData[i].lastPrice / yesterdaysData[i].close) -1;
+                  calcResult = calculation.toFixed(3) + "%";  // round to nearest 1000th
+                  console.log(ticker + " up", calcResult);
                 }
 
+                userData.$add({  // add tickers/calculations to Firebase
+                  ticker: ticker,
+                  calculation: calcResult
+                });
 
 
-
-
-// * PUT userData.$add function back in //
-                // userData.$add({  // add tickers/calculations to Firebase
-                //   ticker: ticker,
-                //   calculation: calcResult
-                // });
 
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
                 })
-              })
+              // })
             })
           });
 });
