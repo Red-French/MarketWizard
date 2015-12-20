@@ -8,19 +8,23 @@
 </div>
 
 <div>
-<label>StockList:
+<!-- <label>StockList:
   <select ng-model="stockList" ng-options="thing.symbol for thing in data"></select>
 {{stockList.symbol}}
-</label>
+</label> -->
 
   <label>WatchList:
-  <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="changeList()"></select>
+  <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="changeList()">
+    <option value=""></option>
+  </select>
+
   {{watchList}}
 </label>
 
   <label>Scan Market:
-  <select ng-model="scan" ng-change="changeList()"></select>
-    <options>Price Change Today</options>
+  <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc()" id="scanOption">
+    <option value=""></option>
+  </select>
 </label>
 </div>
 
