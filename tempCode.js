@@ -143,3 +143,18 @@ sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
     // console.log("The " + data.key() + " dinosaur's score is " + data.close);
   });
 });
+
+
+// $scope.changeList =  function(chosenWatchList) {
+//   console.log("chosen watchlist", chosenWatchList);
+//   var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+//   var currentAuth = ref.getAuth().uid;  // get current user's ID
+//   // console.log("current user = ", currentAuth);
+//   var stocksRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
+//   // console.log("stocksRef = ", stocksRef);
+//   var userStocks = $firebaseArray(stocksRef);
+
+//   console.log("user's stock list = ", userStocks)
+// }
+
+

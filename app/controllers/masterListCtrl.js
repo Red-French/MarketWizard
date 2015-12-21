@@ -19,6 +19,10 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     var scans =  new Firebase("https://market-wizard.firebaseio.com/scans");
     var scanners = $firebaseArray(scans);
     $scope.scans = scanners;
+    var newTop10 = new Firebase("https://market-wizard.firebaseio.com/topTen/");
+    var top10 = $firebaseArray(newTop10);  // turn Firebase into Array for Angular
+    $scope.top10 = top10;
+
 
     data.$loaded()
       .then(function(data) {  // promise
@@ -81,12 +85,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 //     }
 // })
 // }
-
-$scope.changeList =  function(chosenWatchList) {
-  console.log("chosen watchlist", chosenWatchList);
-  
-}
-
 
   $scope.calc = function(scanners) {
     // console.log("scanOption is ", scanOption.value);
@@ -686,32 +684,34 @@ $scope.changeList =  function(chosenWatchList) {
             })
           });
     });
-    // addTen(userData);
+    addTen();
   }
 // END 'TOP % DECLINERS' FUNCTION
 
 
 // PUSH TOP 10 TO FIREBASE
-  // function addTen (userData) {
-  //   newData.orderByChild("calculation").limitToLast(2).on("child_added", function(snapshot4) {
-  //     newData.remove();  // remove old data
-  //     // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
-  //     // console.log("snapshot", snapshot4.val());  // log each stock (# limited above by limitToLast)
-  //     var key = snapshot4.key();  // key is the unique ID of each day's data
-  //     var topTenData = snapshot4.val();  // topTenData is contents of the child
-  //     var topTenTicker = topTenData.ticker;
-  //     var topTenCalc = topTenData.calculation;
+  function addTen () {
+    newData.orderByChild("calculation").limitToLast(2).on("child_added", function(snapshot4) {
+      newData.remove();  // remove old data
+      // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
+      // console.log("snapshot", snapshot4.val());  // log each stock (# limited above by limitToLast)
+      var key = snapshot4.key();  // key is the unique ID of each day's data
+      var topTenData = snapshot4.val();  // topTenData is contents of the child
+      var topTenTicker = topTenData.ticker;
+      var topTenCalc = topTenData.calculation;
 
-  //     console.log("TopTen", topTenTicker, topTenCalc);
+      console.log("TopTen", topTenTicker, topTenCalc);
 
-  //     // userData.$add({  // add tickers/calculations to Firebase
-  //     //   ticker: topTenTicker,
-  //     //   calculation: topTenCalc
-  //     // });
-  //   });
-  // }
-}  
-// END CALC FUNCTION
+      top10.$add({  // add tickers/calculations to Firebase
+        ticker: topTenTicker,
+        calculation: topTenCalc
+      });
+    });
+  }
+
+
+
+}  // END CALC FUNCTION
 
 
 // PUT 'WATCHLISTS' (IN FIREBASE) ON $SCOPE
