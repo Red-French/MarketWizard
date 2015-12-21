@@ -82,6 +82,11 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 // })
 // }
 
+$scope.changeList =  function(chosenWatchList) {
+  console.log("chosen watchlist", chosenWatchList);
+  
+}
+
 
   $scope.calc = function(scanners) {
     // console.log("scanOption is ", scanOption.value);
@@ -129,7 +134,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
               var key = snapshot3.key();  // key is the unique ID of each day's data
               var childData3 = snapshot3.val();  // childData is contents of the child
               childData3 = childData3;
@@ -215,7 +220,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
               var key = snapshot3.key();  // key is the unique ID of each day's data
               var childData3 = snapshot3.val();  // childData is contents of the child
               childData3 = childData3;
@@ -301,7 +306,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
             // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
@@ -382,7 +387,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
             // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
@@ -464,7 +469,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
             // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
@@ -547,7 +552,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot3) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
               // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("duece?");
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
@@ -631,7 +636,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot4) {
+            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot4) {
               // console.log("duece?");
               var key = snapshot4.key();  // key is the unique ID of each day's data
               var childData3 = snapshot4.val();  // childData is contents of the child

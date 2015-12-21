@@ -146,4 +146,7 @@ footer {
 .sortorder.reverse:after {
   content: '\25bc'; }
 
+#watchListTable {
+  vertical-align: top; }
+
 /*# sourceMappingURL=main.css.map */
