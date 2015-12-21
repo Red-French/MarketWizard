@@ -94,7 +94,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
       $location.path("/controlPanel");  // take user to this location
     }
 
-  // BEGIN PRICE CHANGE FUNCTION
+  // BEGIN 'NET CHANGE' FUNCTION
     if (scanners.$id === "Net Change") {
       console.log("inside calc via NET CHANGE");
       newData.remove();  // remove old data
@@ -221,77 +221,90 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
   // END TOP % ADVANCERS FUNCTION
 
 
+// BEGIN TOP % DECLINERS FUNCTION
+    if (scanners.$id === "Top % Decliners") {
+      console.log("inside calc via TOP % DECLINERS");
+      newData.remove();  // remove old data
+    //  GRAB TODAY'S DATA
+      dataRef2.once("value", function(snapshot) {
+        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+          var key = snapshot2.key();  // key is the unique ID of each day's data
+          // console.log("key", key);
+          var childData2 = snapshot2.val();  // childData2 is contents of the child
+          $scope.childData2 = childData2;
+          todaysData = $scope.childData2;
+          // console.log("childData2.length", childData2.length);
+          // console.log("date", childData2[2].serverTimestamp);
+          // console.log("childData2", childData2.lastPrice);
+          // })
+      });
+
+  // GRAB YESTERDAY'S DATA
+          dataRef.once("value", function(snapshot) {
+            var ticker = "";
+            var calculation = 0;
+            var calcResult = 0;
+
+  // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
+            dataRef.orderByChild("symbol").limitToFirst(1).on("child_added", function(snapshot4) {
+              // console.log("duece?");
+              var key = snapshot4.key();  // key is the unique ID of each day's data
+              var childData3 = snapshot4.val();  // childData is contents of the child
+              yesterdaysData = childData3;
+
+              // PERFORM CALCULATION
+              yesterdaysData.forEach(function(object2, i) {  // loop through data
+                // console.log($scope.childData2[i].symbol);
+                // console.log("Price Change Today = ", todaysData[i].lastPrice - yesterdaysData[i].close);
+                // ticker = todaysData[i].symbol;
+                // console.log("ticker ", ticker);
+                if (todaysData[i].lastPrice < yesterdaysData[i].close) {
+                  // console.log(ticker, " up on day");
+                  ticker = todaysData[i].symbol;
+                  var calculation = ((todaysData[i].lastPrice / yesterdaysData[i].close) -1);
+                  calcResult = calculation.toFixed(3) + "%";  // round to nearest 1000th
+                  // console.log(ticker + " down", calcResult);
+
+                  userData.$add({  // add tickers/calculations to Firebase
+                    ticker: ticker,
+                    calculation: calcResult
+                  });
+                }
+               // $location.path("/data");  // take user to this location
+                //   // to access yesterday's dataset only, get number of entries with
+                //   // var length = childData.length;
+                // })
+              })
+
+
+            })
+          });
+    });
+    // addTen(userData);
+  }
+  // END TOP % DECLINERS FUNCTION
+
+
+  // PUSH TOP 10 TO FIREBASE
+  // function addTen (userData) {
+  //   newData.orderByChild("calculation").limitToLast(2).on("child_added", function(snapshot4) {
+  //     newData.remove();  // remove old data
+  //     // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
+  //     // console.log("snapshot", snapshot4.val());  // log each stock (# limited above by limitToLast)
+  //     var key = snapshot4.key();  // key is the unique ID of each day's data
+  //     var topTenData = snapshot4.val();  // topTenData is contents of the child
+  //     var topTenTicker = topTenData.ticker;
+  //     var topTenCalc = topTenData.calculation;
+
+  //     console.log("TopTen", topTenTicker, topTenCalc);
+
+  //     // userData.$add({  // add tickers/calculations to Firebase
+  //     //   ticker: topTenTicker,
+  //     //   calculation: topTenCalc
+  //     // });
+  //   });
+  // }
 }  // END CALC FUNCTION
-
-    //     data2.$loaded()
-    //       .then(function(data2) {  // promise
-    //         $scope.data2 = data2[0];
-
-    //       data.$loaded()
-    //         .then(function(data) {  // promise
-    //           $scope.data = data[0];
-    //           console.log("ticker is ", $scope.data[0].symbol);
-    //           console.log("data[0].close", $scope.data[0].close)
-    //           console.log("data2[0].lastPrice", $scope.data2[0].lastPrice)
-
-    //       var calculation = $scope.data2[0].lastPrice - $scope.data[0].close;
-    //       $scope.calculation = calculation;
-    //       console.log("$scope.calculation", $scope.calculation);
-    //     })
-    // })
-
-
-
-
-// * FOR CALCULATING ALL PREVIOUS DAYS' DATA - UNFINISHED UNFINISHED
-// UNFINISHED UNFINISHED UNFINISHED UNFINISHED UNFINISHED UNFINISHED
-    // dataRef2.once("value", function(snapshot) {
-    //   snapshot.forEach(function(childSnapshot) {  // The callback function is called for each day's data
-    //     // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
-    //     var key = childSnapshot.key();  // key is the unique ID of each day's data
-    //     console.log("key", key);
-    //     var childData = childSnapshot.val();  // childData is contents of the child
-    //     // console.log("childData.length", childData.length);
-    //     console.log("date", childData[0].serverTimestamp);
-
-    //     childData.forEach(function(object) {  // loop through data
-    //     // console.log("object.name", object.name);
-    //     // console.log("object.lastPrice", object.lastPrice);
-
-    //   // LOOPS THROUGH ALL PREVIOUS DAYS' DATA IN 'DATA'
-    //       dataRef.once("value", function(snapshot) {
-    //         snapshot.forEach(function(yesterdayChildSnapshot) {  // The callback function is called for each day's data
-    //           // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
-    //           var key = yesterdayChildSnapshot.key();  // key is the unique ID of each day's data
-    //           console.log("key", key);
-    //           var childData = yesterdayChildSnapshot.val();  // childData is contents of the child
-    //           // console.log("childData.length", childData.length);
-    //           console.log("date", childData[0].serverTimestamp);
-
-
-    //     })
-    //   });
-    //     })
-    //   });
-    // });
-
-
-// LOG PAST 3 DAYS' DATA (OR HOW MANY DAYS ARE STORED IN 'DATA') FOR AAPL
-    // dataRef.once("value", function(snapshot) {
-    //   // The callback function will get called twice, once for "fred" and once for "barney"
-    //   snapshot.forEach(function(childSnapshot) {
-    //     // key will be "fred" the first time and "barney" the second time
-    //     var key = childSnapshot.key();
-
-    //     // childData will be the actual contents of the child
-    //     var childData = childSnapshot.val();
-    //     console.log("childData", childData[1]);
-    //   });
-    // });
-
-
-
-
 
 
 // PUT 'WATCHLISTS' (IN FIREBASE) ON $SCOPE
@@ -349,28 +362,16 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
   $scope.newWatchlist = function() {
     console.log("inside newWatchlist function");
     console.log("user 'new watchlist' input field value = ", $scope.watchName);
-
       var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
       console.log("ref", ref);
       var currentAuth = ref.getAuth().uid;  // get current user's ID
       console.log("currentAuth = ", currentAuth);
       var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
       console.log("listRef", listRef);
-      // var newList = {
-      //   "user": currentAuth,
-      //   "name": "Red"
-      // };
-      // console.log("newList = ", newList.name);
-      // console.log("newList = ", newList.user);
       var listName = $scope.watchName;
       console.log("listName = ", listName);
       listRef.child(listName)
       listRef.child(listName).push("");
-
-      // var newStock = $scope.addTicker;
-      // console.log("stock = ", newStock);
-      // listRef.child(listName).push(newStock);
-
       }
 
 
@@ -399,52 +400,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
       // var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
       listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
       // listRef.push($scope.newTicker);
-
-
-
-
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// +++++ CONNECT USER'S ID TO STOCK AND RETRIEVE STOCK +++++++++++++++++++++++++++++++++++++++++++++++
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-// ADD USER'S ID TO 'SYMBOL' IN FIREBASE 'STOCKS'
-      // var userTickers = stocksRef.orderByChild("symbol").equalTo("AAL");
-      // console.log("stocksRef", stocksRef);
-      // console.log("userTickers", userTickers);
-
 };
-
-// GRAB USER'S STOCKS (THIS FUNCTIONALITY WILL GO INSIDE 'NEWTICKER' FUNCTION ABOVE)
-// 
-// brings back all stocks
-// var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
-// refy.orderByChild("symbol").on("child_added", function(snapshot) {
-//   console.log(snapshot.key() + " was " + snapshot.val().symbol);
-// });
-
-var wlist = "BUY";  // fake data from 'New or Existing Watchlist' input field
-var refer = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth); // grab data from Firebase
-refer.orderByChild("currentAuth").equalTo(wlist).on("child_added", function(snapshot) {
-  console.log("Watchlist is " + snapshot.val());
-  // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + addTicker + currentAuth);
-});
-
-
-// ADD USER'S UNIQUE ID TO 'STOCKS > SYMBOL' IN FIREBASE
-var tempTick = "AMZN";  // fake data from 'Add Ticker' input field
-var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
-refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapshot) {
-  // console.log("Ticker is " + snapshot.val().symbol + " " + snapshot.val().name);
-  // var newUser = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100" + tempTick + currentAuth);
-});
-
-
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// +++++ END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
 
 
 // LIST OF STOCKS (CONTROL INITIAL DISPLAY)
@@ -465,7 +421,6 @@ refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapsho
       var userWatchlists = snapshot.key();
       // console.log("userWatchlists = ", userWatchlists);
       });listToWatch
-
 
 
 // GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST:
@@ -504,46 +459,5 @@ refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapsho
   }
 
 
-
-
-
-
-// EXAMPLES FROM FIREBASE
-// Get a database reference to our posts
-// var ref = new Firebase("https://docs-examples.firebaseio.com/web/saving-data/fireblog/posts");
-
-// // Attach an asynchronous callback to read the data at our posts reference
-// ref.on("value", function(snapshot) {
-//   console.log(snapshot.val());
-// }, function (errorObject) {
-//   console.log("The read failed: " + errorObject.code);
-// });
-// // Retrieve new posts as they are added to our database
-// ref.on("child_added", function(snapshot, prevChildKey) {
-//   var newPost = snapshot.val();
-//   console.log("Author: " + newPost.author);
-//   console.log("Title: " + newPost.title);
-//   console.log("Previous Post ID: " + prevChildKey);
-// });
-// // Get the data on a post that has changed
-// ref.on("child_changed", function(snapshot) {
-//   var changedPost = snapshot.val();
-//   console.log("The updated post title is " + changedPost.title);
-// });
-// // Get the data on a post that has been removed
-// ref.on("child_removed", function(snapshot) {
-//   var deletedPost = snapshot.val();
-//   console.log("The blog post titled '" + deletedPost.title + "' has been deleted");
-// });
-
-// SORT DATA
-var sortData = new Firebase("https://market-wizard.firebaseio.com/data2/");
-sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
-  snapshot.forEach(function(data) {
-    // console.log("The " + data.key() + " dinosaur's score is " + data.close);
-  });
-});
-
-
-  }  // end of controller function (all functionality goes inside this function)
+  }  // END OF CONTROLLER FUNCTION -> (all functionality goes inside this function)
 ]);
