@@ -518,9 +518,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 // END 'NET CHANGE' FUNCTION
 
 
-// BEGIN 'TOP % ADVANCERS' FUNCTION
-    if (scanners.$id === "Top % Advancers") {
-      console.log("inside calc via TOP % ADVANCERS");
+// BEGIN 'TODAY'S ADVANCERS' FUNCTION
+    if (scanners.$id === "Today's Advancers") {
+      console.log("inside calc via TODAY'S ADVANCERS");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
       dataRef2.once("value", function(snapshot) {
@@ -599,14 +599,14 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
               // })
             })
           });
-});
-}
-// END 'TOP % ADVANCERS' FUNCTION
+      });
+    }
+// END 'TODAY'S ADVANCERS' FUNCTION
 
 
-// BEGIN 'TOP % DECLINERS' FUNCTION
-    if (scanners.$id === "Top % Decliners") {
-      console.log("inside calc via TOP % DECLINERS");
+// BEGIN 'TODAY'S DECLINERS' FUNCTION
+    if (scanners.$id === "Today's Decliners") {
+      console.log("inside calc via TODAY'S DECLINERS");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
       dataRef2.once("value", function(snapshot) {
@@ -674,29 +674,28 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
                   });
 
                 }
-               // $location.path("/data");  // take user to this location
+               $location.path("/data");  // take user to this location
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
                 // })
               })
-
-
             })
           });
-    });
-    addTen();
-  }
-// END 'TOP % DECLINERS' FUNCTION
+      });
+    }
+// END 'TODAY'S DECLINERS' FUNCTION
 
+}  // END CALC FUNCTION
 
-// PUSH TOP 10 TO FIREBASE
+// NOT USING CURRENTLY!!!!!!! --
+// PUSH TOP 10 TO FIREBASE -- 
   function addTen () {
-    newData.orderByChild("calculation").limitToLast(2).on("child_added", function(snapshot4) {
-      newData.remove();  // remove old data
+    newData.orderByChild("calculation").limitToLast(2).on("child_added", function(snapshot5) {
+      newTop10.remove();  // remove old data
       // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
-      // console.log("snapshot", snapshot4.val());  // log each stock (# limited above by limitToLast)
-      var key = snapshot4.key();  // key is the unique ID of each day's data
-      var topTenData = snapshot4.val();  // topTenData is contents of the child
+      console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
+      var key = snapshot5.key();  // key is the unique ID of each day's data
+      var topTenData = snapshot5.val();  // topTenData is contents of the child
       var topTenTicker = topTenData.ticker;
       var topTenCalc = topTenData.calculation;
 
@@ -708,10 +707,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
       });
     });
   }
-
-
-
-}  // END CALC FUNCTION
 
 
 // PUT 'WATCHLISTS' (IN FIREBASE) ON $SCOPE
