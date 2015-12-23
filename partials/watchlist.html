@@ -282,7 +282,7 @@ main();
                <span class="sortorder" ng-show="predicate === 'change'" ng-class="{reverse:reverse}"></span>
            </td>
           </tr>
-          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button>{{thing.ticker}}</td></tr>
+          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" id="deleteButton" ng-click="deleteTicker(thing)">Delete</button>{{thing.ticker}}</td></tr>
         </table>
       </td>
     </tr>

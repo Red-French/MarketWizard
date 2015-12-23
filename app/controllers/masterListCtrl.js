@@ -22,7 +22,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     var newTop10 = new Firebase("https://market-wizard.firebaseio.com/topTen/");
     var top10 = $firebaseArray(newTop10);  // turn Firebase into Array for Angular
     $scope.top10 = top10;
-
+    var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
+    var userWatching = $firebaseArray(userWatchlistRef);
+    $scope.userWatchlistRef = userWatching;
 
     data.$loaded()
       .then(function(data) {  // promise
@@ -842,14 +844,32 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     });
 
 
-    $scope.watchListView = function(watchListID) {
-      // console.log("scanOption is ", scanOption.value);
-      console.log(watchListID.$id);
-      if (watchListID.$id === "NASDAQ 100") {
-        console.log("NAZ 100 DUDE.");
-      }
-     $location.path("/watchlist");  // take user to this location
-    }
+  $scope.watchListView = function(watchListID) {
+    console.log(watchListID);
+    console.log(watchListID.$id);
+
+// * NEED TO LOOP THROUGH OBJECT AND MATCH TICKERS TO TICKERS IN 'DATA2' TO PULL DATA
+
+   $location.path("/watchlist");  // take user to this location
+  // $scope.$apply();
+  }
+
+  $scope.deleteTicker = function(stock) {
+    // console.log("delete click");
+    var refx = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);  // make reference to location of current user's watchlists
+      refx.orderByKey().on("child_added", function(snapshot) {
+      var userWatchlists = snapshot.key();
+      console.log("userWatchlists = ", userWatchlists);
+      console.log("userWatchlists.length", userWatchlists.length);
+    });
+
+    console.log(stock.ticker);
+    // for (var i = 0; i < )
+
+
+    // $scope.userWatchlistRef.$remove(stock.ticker);
+
+  };
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  TEMPORARY FUNCTION TO LOAD 'STOCKS' IN FIREBASE FROM 'POPULATE STOCK LIST' BUTTON
