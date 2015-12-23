@@ -92,8 +92,8 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
 
 // * // BEGIN LOAD 'SUMMARY'
-    if (scanners.$id === "- Summary -") {
-      console.log("inside calc via - SUMMARY -");
+    if (scanners.$id === "- NASDAQ 100 -") {
+      console.log("inside calc via - NASDAQ 100 -");
       // newData.remove();  // remove old data
       $location.path("/controlPanel");  // take user to this location
     }
@@ -845,6 +845,10 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     $scope.watchListView = function(watchListID) {
       // console.log("scanOption is ", scanOption.value);
       console.log(watchListID.$id);
+      if (watchListID.$id === "NASDAQ 100") {
+        console.log("NAZ 100 DUDE.");
+      }
+     $location.path("/watchlist");  // take user to this location
     }
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -33,10 +33,10 @@ app.config(['$routeProvider',  // this is like entry.js
         templateUrl: 'partials/priceChange.html',
         controller: 'masterListCtrl'
       })
-      // .when('/watchlist', {
-      //   templateUrl: 'partials/watchlist.html',
-      //   controller: 'masterListCtrl'
-      // })
+      .when('/watchlist', {
+        templateUrl: 'partials/watchlist.html',
+        controller: 'masterListCtrl'
+      })
      .otherwise('/main'); // catchall
      // .otherwise({ redirectTo: '/main' });
  }]);
