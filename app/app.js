@@ -18,21 +18,25 @@ app.config(['$routeProvider',  // this is like entry.js
       //   controller: 'FilterCtrl'
       // })
       .when('/login', {
-      templateUrl: 'partials/login.html',
-      controller: 'logIn'
+        templateUrl: 'partials/login.html',
+        controller: 'logIn'
       })
       .when('/logout', {
-      templateUrl: 'partials/splash.html',
-      controller: 'logIn'
+        templateUrl: 'partials/splash.html',
+        controller: 'logIn'
       })
       .when('/controlPanel', {
-      templateUrl: 'partials/controlPanel.html',
-      controller: 'masterListCtrl'
+        templateUrl: 'partials/controlPanel.html',
+        controller: 'masterListCtrl'
       })
       .when('/data', {
-      templateUrl: 'partials/priceChange.html',
-      controller: 'masterListCtrl'
+        templateUrl: 'partials/priceChange.html',
+        controller: 'masterListCtrl'
       })
+      // .when('/watchlist', {
+      //   templateUrl: 'partials/watchlist.html',
+      //   controller: 'masterListCtrl'
+      // })
      .otherwise('/main'); // catchall
      // .otherwise({ redirectTo: '/main' });
  }]);

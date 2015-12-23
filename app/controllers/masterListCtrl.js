@@ -842,6 +842,11 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     });
 
 
+    $scope.watchListView = function(watchListID) {
+      // console.log("scanOption is ", scanOption.value);
+      console.log(watchListID.$id);
+    }
+
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  TEMPORARY FUNCTION TO LOAD 'STOCKS' IN FIREBASE FROM 'POPULATE STOCK LIST' BUTTON
   $scope.populateStocks = function() {

@@ -228,8 +228,14 @@ main();
 {{stockList.symbol}}
 </label> -->
 
-  <label>WatchList:
+<!--   <label>WatchList:
     <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
+    <option value="">Select Watchlist</option>
+    </select>
+  </label> -->
+
+    <label>WatchList:
+    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="watchListView(watchList)">
     <option value="">Select Watchlist</option>
     </select>
     <!-- {{watchList}} -->
@@ -296,14 +302,7 @@ main();
         <table>
           <tr><td>&nbsp;</td></tr>
           <tr><td>{{watchList.$id}}</td></tr>
-          <!-- <tr ng-repeat="thing in listToWatch[0]"><td>{{thing.ticker}}</td></tr> -->
-          <!-- <tr ng-repeat="thing in watchList"><td>{{thing.ticker}}</td></tr> -->
-          <tr ng-repeat="thing in watchList"><td class="watchTicks"><a href="#/songs/delete" ><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button>{{thing.ticker}}</a></td></tr>
-          <!-- 
-          <tr><td>&nbsp;</td></tr>
-          <tr><td>CURRENT POSITION</td></tr>
-          <tr ng-repeat="thing in listToWatch[1]"><td>{{thing.ticker}}</td></tr> 
-          -->
+          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button>{{thing.ticker}}</td></tr>
         </table>
       </td>
     </tr>
@@ -316,12 +315,3 @@ main();
 
 <!-- <a href="#/songs/delete" ><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button></a>
   <a href="#/songs/details/{{thing.$id}}" >{{thing.ticker}}</a> -->
-
-
-
-
-
-
-
-
-
