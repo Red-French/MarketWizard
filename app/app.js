@@ -9,14 +9,18 @@ app.config(['$routeProvider',  // this is like entry.js
         templateUrl: 'partials/splash.html',
         controller: 'masterListCtrl'
       })
-   // .when('/list', {  // when URL ends with this
-   //     templateUrl: 'partials/watchList.html',  // location of template
-   //     controller: 'watchlistCtrl'  // name of controller (songCtrl.js)
-   //   })
+   .when('/instruct', {  // when URL ends with this
+       templateUrl: 'partials/instruct.html',  // location of template
+       controller: 'masterListCtrl'  // name of controller (songCtrl.js)
+     })
       // .when('/filter', {
       //   templateUrl: 'partials/filter.html',
       //   controller: 'FilterCtrl'
       // })
+      .when('/sp500', {
+        templateUrl: 'partials/sp500.html',
+        controller: 'masterListCtrl'
+      })
       .when('/login', {
         templateUrl: 'partials/login.html',
         controller: 'logIn'

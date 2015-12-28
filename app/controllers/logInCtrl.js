@@ -37,7 +37,7 @@ ref.authWithPassword({  // method that authenticates user with email/password co
   if (error) {
     console.log("Login Failed!", error);
   } else {
-    $location.path("/controlPanel");  // on successful login, take user to this location
+    $location.path("/instruct");  // on successful login, take user to this location
     $scope.$apply();
     console.log("Authenticated successfully with payload:", authData);
   }
