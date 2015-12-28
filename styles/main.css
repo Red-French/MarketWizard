@@ -2,38 +2,77 @@ body {
   font: 100% Helvetica, sans-serif;
   color: #333; }
 
+div {
+  font-size: 1.5rem; }
+
 #results {
-  float: left;
-  border: 1px solid black; }
+  float: left; }
 
 #cntrlPanelTop {
   width: 100%;
   text-align: center;
   vertical-align: top;
-  border: 2px solid black; }
+  margin: -30px 0 15px 20px; }
+
+.links {
+  margin-bottom: 20px; }
 
 #cntrlPanel {
   width: 100%;
   text-align: center;
   vertical-align: top;
   border: 2px solid black;
-  height: 400px;
-  overflow: auto; }
+  height: 500px;
+  overflow: auto;
+  margin: 0 0 0 20px; }
 
 #chartContainer {
-  float: right; }
-
-#background {
-  height: 750px;
-  background-image: url("http://www.motherjones.com/files/wall_st_bull_0.jpg");
-  background-size: cover;
-  /*background-attachment :fixed;*/ }
+  float: right;
+  margin: 80px 40px 0 0; }
 
 .banner_text {
   color: #B4D7FF;
   font-weight: 900;
   font-size: 13rem;
   letter-spacing: -.9rem;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 200px;
+  opacity: .7; }
+
+#background {
+  margin-top: -220px;
+  color: #B4D7FF;
+  font-weight: 900;
+  font-size: 13rem;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 200px;
+  height: 750px;
+  background-image: url("http://www.motherjones.com/files/wall_st_bull_0.jpg");
+  background-size: cover;
+  /*background-attachment :fixed;*/ }
+
+#login-page {
+  margin-top: -220px;
+  color: #B4D7FF;
+  font-weight: 900;
+  font-size: 13rem;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 200px;
+  height: 750px;
+  background-image: url("http://www.motherjones.com/files/wall_st_bull_0.jpg");
+  background-size: cover; }
+
+#login-container {
+  margin-top: 220px;
+  color: #B4D7FF;
+  font-weight: 900;
+  font-size: 13rem;
   position: absolute;
   width: 100%;
   text-align: center;

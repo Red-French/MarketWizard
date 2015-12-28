@@ -1,5 +1,20 @@
 temp code (possible later use)
 
+1. order by value
+2. get length
+3. if length>10, 
+4. loop over length-10 and remove()
+
+
+// Record the current time immediately, and queue an event to
+// record the time at which the user disconnects.
+var sessionsRef = new Firebase('https://samplechat.firebaseio-demo.com/sessions/');
+var mySessionRef = sessionsRef.push();
+mySessionRef.onDisconnect().update({ endedAt: Firebase.ServerValue.TIMESTAMP });
+mySessionRef.update({ startedAt: Firebase.ServerValue.TIMESTAMP });
+
+
+
     //     data2.$loaded()
     //       .then(function(data2) {  // promise
     //         $scope.data2 = data2[0];

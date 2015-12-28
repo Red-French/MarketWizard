@@ -37,40 +37,33 @@
 <!-- end navbar -->
 
     <div ng-view id="results"></div>
-    <!-- <div ng-include="'partials/controlPanel.html'"></div> -->
-
-
-
-<!-- <div id="chartContainer"> -->
-<!-- TradingView Widget BEGIN -->
-<!-- <div>
-<script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
-<script type="text/javascript">
-new TradingView.widget({
-  "width": 725,
-  "height": 465,
-  "symbol": "FX:SPX500",
-  "interval": "D",
-  "timezone": "Etc/UTC",
-  "theme": "White",
-  "style": "1",
-  "locale": "en",
-  "toolbar_bg": "#f1f3f6",
-  "allow_symbol_change": true,
-  "save_image": false,
-  "hideideas": true,
-  "studies": [
-    "MASimple@tv-basicstudies"
-  ]
-});
-</script>
-</div> -->
-<!-- TradingView Widget END -->
-
-<!-- <div id="chartContainer" style="width:100%;height:300px;"></div>
-</div> -->
-
-
+    <div id="chartContainer">
+    <!-- TradingView Widget BEGIN -->
+    <div id="chart">
+    <script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
+    <script type="text/javascript">
+    new TradingView.widget({
+      "width": 725,
+      "height": 465,
+      "symbol": "FX:SPX500",
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "White",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "allow_symbol_change": true,
+      "save_image": false,
+      "hideideas": true,
+      "studies": [
+        "MASimple@tv-basicstudies"
+      ]
+    });
+    </script>
+    </div>
+    <!-- TradingView Widget END -->
+    <div id="chartContainer" style="width:100%;height:300px;"></div>
+    </div>
 
 
     <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>

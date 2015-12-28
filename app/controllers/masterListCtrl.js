@@ -1101,7 +1101,6 @@ setInterval(function () {
     // console.log(watchList.$id);
 
   // * NEED TO LOOP THROUGH OBJECT AND MATCH TICKERS TO TICKERS IN 'DATA2' TO PULL DATA
-
    $location.path("/watchlist");  // take user to this location
   // $scope.$apply();
   }
@@ -1235,8 +1234,19 @@ document.querySelector("body").addEventListener("click", function(event) {  // l
 
 
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//  SHOW/HIDE CHART
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("p").hide();
+    });
+    $("#show").click(function(){
+        $("p").show();
+    });
+});
 
- 
+
+
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
