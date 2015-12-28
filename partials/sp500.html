@@ -228,6 +228,12 @@ main();
 {{stockList.symbol}}
 </label> -->
 
+<!--   <label>WatchList:
+    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
+    <option value="">Select Watchlist</option>
+    </select>
+  </label> -->
+
     <label>WatchList:
     <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="watchListView(watchList)">
     <option value="">Select Watchlist</option>
@@ -238,13 +244,13 @@ main();
   <label>Scan Market:
     <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)" id="scanOption"><option value="">Select Scan</option>
     </select>
-</label>
+  </label>
 </div>
 
 <div></div>
-<a><button ng-click="update()">Update</button></a>
-<!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
-<button ng-click="predicate=''">Unsort</button>
+  <a><button ng-click="update()">Update</button></a>
+  <!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
+  <button ng-click="predicate=''">Unsort</button>
 </div>
 
 <div id="cntrlPanel">
@@ -277,14 +283,35 @@ main();
                <button ng-click="order('volume')">Volume</button>
                <span class="sortorder" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
            </td>
-           <td>
-               <button ng-click="order('change')">Change</button>
-               <span class="sortorder" ng-show="predicate === 'change'" ng-class="{reverse:reverse}"></span>
-           </td>
           </tr>
-          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" class="deleteButton" ng-click="deleteTicker(thing, watchList)">Delete</button>{{thing.ticker}}</td></tr>
+          <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
+          <!-- MOVE BELOW INTO ITS OWN MODULE -->
+          <tr><td>THING IN DATA3 - SP-500</td></tr>
+          <tr ng-repeat="thing in data3 | filter: query | orderBy:predicate:reverse">
+            <td>{{thing.symbol}}</td>
+            <td>{{thing.lastPrice}}</td>
+            <td>{{thing.close}}</td>
+            <td>{{thing.high}}</td>
+            <td>{{thing.low}}</td>
+            <td>{{thing.volume}}</td>
+          </tr>
         </table>
       </td>
+
+<!--       <td id="watchListTable">
+        <table>
+          <tr><td>&nbsp;</td></tr>
+          <tr><td>{{watchList.$id}}</td></tr>
+          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button>{{thing.ticker}}</td></tr>
+        </table>
+      </td> -->
     </tr>
   </table>
 </div>
+
+
+
+
+
+<!-- <a href="#/songs/delete" ><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button></a>
+  <a href="#/songs/details/{{thing.$id}}" >{{thing.ticker}}</a> -->
