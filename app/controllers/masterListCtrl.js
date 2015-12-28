@@ -72,10 +72,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     scanners.$loaded()
       .then(function(scanners) {  // promise
         console.log("scanners.length", scanners.length);
-        console.log(scanners[3].$id);
-        $scope.scanners = scanners[0];
+        // console.log(scanners[3].$id);
+        // $scope.scanners = scanners[0]; // set to desired default in dropdown array
 })
-
 
 //  CALCULATION FUNCTION FOR 'PRICE CHANGE TODAY'
 //   $scope.priceChange = function() {
@@ -135,7 +134,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     if (marketList.$id === "NASDAQ 100") {
       console.log("inside calc via NASDAQ 100");
       // newData.remove();  // remove old data
-      $location.path("/controlPanel");  // take user to this location
+      $location.path("/naz100");  // take user to this location
     }
 // END LOAD 'NASDAQ-100'
 
@@ -158,8 +157,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
   $scope.calc = function(scanners) {
     // console.log("scanOption is ", scanOption.value);
-    console.log(scanners.$id);
-
+    console.log("scanners.$id =", scanners.$id);
 
 // * // BEGIN LOAD 'NASDAQ-100'
     if (scanners.$id === "- NASDAQ 100 -") {

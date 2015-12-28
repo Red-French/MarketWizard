@@ -17,6 +17,10 @@ app.config(['$routeProvider',  // this is like entry.js
       //   templateUrl: 'partials/filter.html',
       //   controller: 'FilterCtrl'
       // })
+      .when('/naz100', {
+        templateUrl: 'partials/naz100.html',
+        controller: 'masterListCtrl'
+      })
       .when('/sp500', {
         templateUrl: 'partials/sp500.html',
         controller: 'masterListCtrl'
