@@ -19,6 +19,14 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     var scans =  new Firebase("https://market-wizard.firebaseio.com/scans");
     var scanners = $firebaseArray(scans);
     $scope.scans = scanners;
+
+    var marketsRef = new Firebase("https://market-wizard.firebaseio.com/markets"); // grab data from Firebase
+    var markets = $firebaseArray(marketsRef);
+    $scope.marketsList = markets;
+
+    var spRef = new Firebase("https://market-wizard.firebaseio.com/sp500"); // grab data from Firebase
+    var sp500 = $firebaseArray(spRef);
+
     var newTop10 = new Firebase("https://market-wizard.firebaseio.com/topTen/");
     var top10 = $firebaseArray(newTop10);  // turn Firebase into Array for Angular
     $scope.top10 = top10;
@@ -36,6 +44,27 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
       .then(function(data2) {  // promise
         // console.log("data2.length", data2.length);
         $scope.data2 = data2[0];
+})
+
+    sp500.$loaded()
+      .then(function(sp500) {  // promise
+        console.log("sp500.length", sp500.length);
+        $scope.sp500 = sp500[0];
+})
+
+    markets.$loaded()
+      .then(function(markets) {  // promise
+        console.log("markets.length", markets.length);
+        console.log(markets[1].$id);
+        // console.log("scans", scans[3].$id);
+        $scope.markets = markets[0];
+})
+
+    scanners.$loaded()
+      .then(function(scanners) {  // promise
+        console.log("scanners.length", scanners.length);
+        console.log(scanners[3].$id);
+        $scope.scanners = scanners[0];
 })
 
 
@@ -721,7 +750,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
 // ++++++ USER WATCHLIST FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// CREATES NEW WATCHLIST FOR USER
+// CREATES NEW WATCHLIST FOR CURRENT USER
   $scope.newWatchlist = function() {
     console.log("inside newWatchlist function");
     console.log("user 'new watchlist' input field value = ", $scope.watchName);
@@ -747,7 +776,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
       // console.log("userWatchlists = ", userWatchlists);
       });
 
-// PUT 'WATCHLISTS' (IN FIREBASE) ON $SCOPE
+// PUT CURRENT USER'S WATCHLISTS' (IN FIREBASE) ON $SCOPE
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
     // console.log("ref", ref);
     var currentAuth = ref.getAuth().uid;  // get current user's ID
@@ -755,8 +784,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
     var listToWatch = $firebaseArray(watchRef);
     $scope.listToWatch = listToWatch;
     // console.log("listToWatch = ", $scope.listToWatch)
-
-
 
 
 // ++++++ STOCKS FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -864,7 +891,7 @@ setInterval(function () {
       console.log("hour is", hour);
       console.log("minutes is", minutes);
 
-  if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 10 && minutes === 09) {
+  if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 11 && minutes === 27) {
       console.log("inside update function");
       $http({
       method: 'GET',
@@ -873,7 +900,7 @@ setInterval(function () {
         // this callback will be called asynchronously
         // when the response is available
         console.log("successful response from update1", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/data3");  //  make reference to database location for data to be stored
+        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
       })
     .then 
@@ -884,7 +911,7 @@ setInterval(function () {
         // this callback will be called asynchronously
         // when the response is available
         console.log("successful response from update2", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/data3");  //  make reference to database location for data to be stored
+        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
     }).then 
       $http({
@@ -894,7 +921,7 @@ setInterval(function () {
         // this callback will be called asynchronously
         // when the response is available
         console.log("successful response from update3", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/data3");  //  make reference to database location for data to be stored
+        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
     }).then 
       $http({
@@ -904,7 +931,7 @@ setInterval(function () {
         // this callback will be called asynchronously
         // when the response is available
         console.log("successful response from update4", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/data3");  //  make reference to database location for data to be stored
+        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
     }).then 
       $http({
@@ -914,7 +941,7 @@ setInterval(function () {
         // this callback will be called asynchronously
         // when the response is available
         console.log("successful response from update5", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/data3");  //  make reference to database location for data to be stored
+        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
     }).then 
       $http({
@@ -924,7 +951,7 @@ setInterval(function () {
         // this callback will be called asynchronously
         // when the response is available
         console.log("successful response from update-final", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/data3");  //  make reference to database location for data to be stored
+        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
         alert("Today's EOD market data successfully imported.");
       }, function errorCallback(response) {  // called asynchronously if an error occurs

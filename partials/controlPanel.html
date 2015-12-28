@@ -223,31 +223,25 @@ main();
 </div>
 
 <div>
-<!-- <label>StockList:
-  <select ng-model="stockList" ng-options="thing.symbol for thing in data"></select>
-{{stockList.symbol}}
-</label> -->
-
-<!--   <label>WatchList:
-    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
-    <option value="">Select Watchlist</option>
-    </select>
-  </label> -->
-
-    <label>WatchList:
+  <label>WatchList:
     <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="watchListView(watchList)">
     <option value="">Select Watchlist</option>
     </select>
-    <!-- {{watchList}} -->
   </label>
 
-  <label>Scan Market:
-    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)" id="scanOption"><option value="">Select Scan</option>
+  <label>Market:
+    <select ng-model="marketList" ng-options="thing.$id for thing in marketsList" ng-change="">
+    <option value="">Select Market</option>
     </select>
   </label>
 </div>
 
-<div></div>
+<div>  
+  <label>Scan Market:
+    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)" id="scanOption"><option value="">Select Scan</option>
+    </select>
+  </label>   
+</div>
   <a><button ng-click="update()">Update</button></a>
   <!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
   <button ng-click="predicate=''">Unsort</button>
