@@ -21,6 +21,10 @@ app.config(['$routeProvider',  // this is like entry.js
         templateUrl: 'partials/sp500.html',
         controller: 'masterListCtrl'
       })
+      .when('/dj30', {
+        templateUrl: 'partials/dj30.html',
+        controller: 'masterListCtrl'
+      })
       .when('/login', {
         templateUrl: 'partials/login.html',
         controller: 'logIn'

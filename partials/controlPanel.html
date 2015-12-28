@@ -230,7 +230,7 @@ main();
   </label>
 
   <label>Market:
-    <select ng-model="marketList" ng-options="thing.$id for thing in marketsList" ng-change="">
+    <select ng-model="marketList" ng-options="thing.$id for thing in marketsList" ng-change="marketView(marketList)">
     <option value="">Select Market</option>
     </select>
   </label>

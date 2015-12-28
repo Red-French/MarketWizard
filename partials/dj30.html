@@ -21,7 +21,7 @@ function Stock(exchange, symbol, priceLast)
 }
 {
   Stock.prototype.domElementUpdate = function(parentDomElement)
-  {
+
     if (this.domElement == null)
     {
       var tr = document.createElement("tr");
@@ -277,30 +277,19 @@ main();
                <button ng-click="order('volume')">Volume</button>
                <span class="sortorder" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
            </td>
-           <td>
-               <button ng-click="order('change')">Change</button>
-               <span class="sortorder" ng-show="predicate === 'change'" ng-class="{reverse:reverse}"></span>
-           </td>
           </tr>
-          <tr ng-repeat="thing in userData | filter: query | orderBy:predicate:reverse">
-            <td>{{thing.ticker}}</td>
+          <!-- USE NG-VIEW HERE TO POPULATE USER-CHOSEN WATCHLIST -->
+          <!-- MOVE BELOW INTO ITS OWN MODULE -->
+          <tr ng-repeat="thing in dj30 | filter: query | orderBy:predicate:reverse">
+            <td>{{thing.symbol}}</td>
             <td>{{thing.lastPrice}}</td>
             <td>{{thing.close}}</td>
             <td>{{thing.high}}</td>
             <td>{{thing.low}}</td>
             <td>{{thing.volume}}</td>
-            <td>{{thing.calculation}}</td>
           </tr>
         </table>
       </td>
-
-<!--       <td id="watchListTable">
-        <table>
-          <tr><td>&nbsp;</td></tr>
-          <tr><td>{{watchList.$id}}</td></tr>
-          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button>{{thing.ticker}}</td></tr>
-        </table>
-      </td> -->
     </tr>
   </table>
 </div>
