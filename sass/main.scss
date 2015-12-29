@@ -10,6 +10,14 @@ div {
   font-size: 1.5rem;
 }
 
+.instructions {
+  font-weight: 700;
+}
+
+.list {
+  margin: 0 auto 0 auto;
+}
+
 #results {
   float: left;
   // width: 100%;
@@ -30,8 +38,8 @@ div {
   // border: 2px solid black;
 }
 
-.links {
-  margin-bottom: 20px;
+#dropdowns {
+  margin: 0 auto 0 auto;
 }
 
 #cntrlPanel {

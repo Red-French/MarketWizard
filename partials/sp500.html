@@ -212,14 +212,13 @@ main();
 </script>
 </div> -->
 
-
 <div id="cntrlPanelTop">
 <div>
-  <input type="text" ng-model="addTicker" placeholder="Add Ticker">
-    <a><button ng-click="newTicker()">Add</button></a> to 
-    <select ng-model="symbolModel" ng-options="thing.$id for thing in listToWatch" >
+  <input type="text" ng-model="addTicker" placeholder=" Add Ticker">
+    <a><button ng-click="newTicker()">Add to</button></a>
+    <select ng-model="addToThisList" ng-options="thing.$id for thing in listToWatch">
       <option></option>
-    </select><input ng-model="watchName" type="text" placeholder="New or Existing Watchlist">
+    </select><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist">
 </div>
 
 <div>
@@ -237,14 +236,14 @@ main();
 </div>
 
 <div>  
-  <label>Scan Market:
-    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)" id="scanOption"><option value="">Select Scan</option>
+  <label>Live Market Scan:
+    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)"><option value="">Select Scan</option>
     </select>
-  </label>   
-</div>
+  </label>
   <a><button ng-click="update()">Update</button></a>
+</div>
   <!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
-  <button ng-click="predicate=''">Unsort</button>
+  <!-- <button ng-click="predicate=''">Unsort</button> -->
 </div>
 
 <div id="cntrlPanel">

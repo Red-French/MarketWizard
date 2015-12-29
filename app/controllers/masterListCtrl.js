@@ -833,32 +833,52 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
       $scope.predicate = predicate;
     };
 
+
 // ADDS NEW TICKER TO USER'S CHOSEN WATCHLIST
-  $scope.newTicker = function() {
-    console.log("inside newTicker function");
-    console.log("user 'add to watchlist' input field value = ", $scope.addTicker);
+  $scope.newTicker = function(addToThisList) {
+    var dropWatchlistRef = undefined;
+    var watchlistRef = undefined;
+    var newTicker = undefined;
 
-      var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-      // console.log("ref", ref);
-      var currentAuth = ref.getAuth().uid;  // get current user's ID
-      // console.log("currentAuth = ", currentAuth);
-      var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
-      // console.log("listRef", listRef);
-      // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
-      // console.log("watchlistRef = ", watchlistRef);
-      var newTicker = {
-        "ticker": $scope.addTicker
-      };
-      var watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
-      // console.log("watchlistRef = ", watchlistRef);
-      // listRef.child(watchlistRef).push(newStock);
+    // console.log("user's EXISTING watchlist to add to is", $scope.addToThisList.$id);
+    // console.log("user's NEW watchlist is", $scope.watchName);
+    // console.log("user's ticker to add = ", $scope.addTicker);
 
-      // var newTicker = $scope.addTicker;  // obtain ticker from input field
-      console.log("newTicker = ", newTicker);
-      // var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
-      listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-      // listRef.push($scope.newTicker);
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    // console.log("ref", ref);
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // console.log("currentAuth = ", currentAuth);
+    var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
+    // console.log("listRef", listRef);
+    // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
+    // console.log("watchlistRef = ", watchlistRef);
+
+    var newTicker = {
+      "ticker": $scope.addTicker
+    };
+
+    // console.log("watchlistRef = ", watchlistRef);
+    // listRef.child(watchlistRef).push(newStock);
+
+    // var newTicker = $scope.addTicker;  // obtain ticker from input field
+    // console.log("newTicker = ", newTicker);
+    // var stockRef = new Firebase("https://market-wizard.firebaseio.com/stocks/" + currentAuth);
+    // listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+
+    // listRef.push($scope.newTicker);
+
+    if ($scope.addTicker === undefined || null) {
+      alert("Enter ticker to be added to watchlist.");
+    }  else if ($scope.watchName !== undefined || null) {
+        watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
+        listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+    } else if ($scope.addToThisList.$id !== undefined || null) {
+        dropWatchlistRef = $scope.addToThisList.$id;  // obtain name of watchlist from dropdown
+        listRef.child(dropWatchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+    }
+    $('#addTickerModal').modal('show'); 
 };
+
 
 // PUT 'STOCKS' (IN FIREBASE) ON $SCOPE
     var stocksRef = new Firebase("https://market-wizard.firebaseio.com/stocks/"); // grab data from Firebase
@@ -1017,7 +1037,8 @@ setInterval(function () {
         console.log("DJ-30 successfully updated", response.data.results);
         var dataRef = new Firebase("https://market-wizard.firebaseio.com/dj30");  //  make reference to database location for data to be stored
         dataRef.push(response.data.results);
-        alert("Today's EOD market data successfully imported.");
+        // alert("Today's EOD market data successfully imported.");
+        $('#nightlyUpdateModal').modal('show');
       }, function errorCallback(response) {  // called asynchronously if an error occurs
                                             // or server returns response with an error status.
       });
@@ -1087,7 +1108,7 @@ setInterval(function () {
       // );
 
       dataRef.set(response.data.results);
-      alert("Today's intraday market data successfully updated.");
+      $('#userDataUpdateModal').modal('show');
     }, function errorCallback(response) {  // called asynchronously if an error occurs
                                           // or server returns response with an error status.
     });
@@ -1234,7 +1255,7 @@ document.querySelector("body").addEventListener("click", function(event) {  // l
 
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++ CURRENTLY NOT  BEING USED ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //  SHOW/HIDE CHART
 $(document).ready(function(){
     $("#hide").click(function(){

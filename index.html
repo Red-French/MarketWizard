@@ -39,7 +39,7 @@
     <div ng-view id="results"></div>
     <div id="chartContainer">
     <!-- TradingView Widget BEGIN -->
-    <div id="chart">
+<!--     <div id="chart">
     <script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
     <script type="text/javascript">
     new TradingView.widget({
@@ -60,11 +60,64 @@
       ]
     });
     </script>
-    </div>
+    </div> -->
     <!-- TradingView Widget END -->
-    <div id="chartContainer" style="width:100%;height:300px;"></div>
+    <!-- <div id="chartContainer" style="width:100%;height:300px;"></div> -->
     </div>
 
+<!-- Modal for ticker added to watchlist -->
+<div class="modal fade" id="addTickerModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Watchlist Update</h4>
+      </div>
+      <div class="modal-body">
+      The ticker was successfully added to your watchlist.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for nightly update -->
+<div class="modal fade" id="nightlyUpdateModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Nightly Data Update</h4>
+      </div>
+      <div class="modal-body">
+      Nightly market data update successful.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for user-click update -->
+<div class="modal fade" id="userDataUpdateModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Data Update</h4>
+      </div>
+      <div class="modal-body">
+      Data update successful.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="lib/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
