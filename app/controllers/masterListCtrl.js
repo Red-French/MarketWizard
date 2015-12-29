@@ -63,15 +63,15 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
     markets.$loaded()
       .then(function(markets) {  // promise
-        console.log("markets.length", markets.length);
-        console.log(markets[1].$id);
+        // console.log("markets.length", markets.length);
+        // console.log(markets[1].$id);
         // console.log("scans", scans[3].$id);
         $scope.markets = markets[0];
 })
 
     scanners.$loaded()
       .then(function(scanners) {  // promise
-        console.log("scanners.length", scanners.length);
+        // console.log("scanners.length", scanners.length);
         // console.log(scanners[3].$id);
         // $scope.scanners = scanners[0]; // set to desired default in dropdown array
 })
@@ -935,7 +935,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 //     })();
 // }, 60000)
 
-
+// EOD UPDATE!!
 // AUTOMATICALLY RETRIEVE NASDAQ-100, S&P-500, AND DJ-30 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
 setInterval(function () {
   var timer = ( function() {
@@ -1042,45 +1042,90 @@ setInterval(function () {
       }, function errorCallback(response) {  // called asynchronously if an error occurs
                                             // or server returns response with an error status.
       });
+  }  //  end of 'if' statement
+})();  // end of 'timer' IIFE
+}, 60000)  // end of 'setInterval'
+
+
+// LIVE UPDATE!!
+// ---> AUTOMATICALLY RETRIEVE NASDAQ-100 DATA EVERY 30 SECONDS DURING TRADING HOURS
+setInterval(function () {
+  var timer = ( function() {
+      var date = new Date();
+      var day = date.getDay();
+      var hour = date.getHours();
+      var minutes = date.getMinutes();
+      console.log("Date", date);
+      console.log("day of week is", day);
+      console.log("hour is", hour);
+      console.log("minutes is", minutes);
+
+// Create a callback which logs the current auth state
+var ref = new Firebase("https://market-wizard.firebaseio.com");
+ref.onAuth(authDataCallback);
+
+function authDataCallback(authData) {
+  if (authData) {
+    console.log("User " + authData.uid + " is logged in with " + authData.provider);
+
+
+
+
+  if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && (hour > 8 && hour < 16)) {
+    console.log("inside update function");
+    // UPDATE NASDAQ-100
+    $http({
+    method: 'GET',
+    url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
+  }).then(function successCallback(response) {
+      // this callback will be called asynchronously
+      // when the response is available
+      console.log("successful response from update", response.data.results);
+
+      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data2/today");  //  make reference to database location for data to be stored
+      
+      // var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+
+      // var today = new Date();
+      // var dayNum = today.getDay().toString();
+      // var month = monthArray[today.getMonth()];
+      // var year = today.getFullYear();
+
+      // var full = month + dayNum + year;
+
+      // dataRef.child(full).push(
+      //   response.data.results
+      // );
+
+      dataRef.set(response.data.results);
+      $('#userDataUpdateModal').modal('show');
+    }, function errorCallback(response) {  // called asynchronously if an error occurs
+                                          // or server returns response with an error status.
+    });
+  }  //  end of 'if' statement
+
+
+
+
+
+  } else {  // else user is logged out
+    console.log("User is logged out");
   }
-})();
-}, 60000)
+}
 
 
-// AUTOMATICALLY RETRIEVE DJ-30 MARKET EOD DATA AT 6:20 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
-// setInterval(function () {
-//   var timer = ( function() {
-//       var date = new Date();
-//       var day = date.getDay();
-//       var hour = date.getHours();
-//       var minutes = date.getMinutes();
-//       // console.log("Date", date);
-//       // console.log("day of week is", day);
-//       // console.log("hour is", hour);
-//       // console.log("minutes is", minutes);
-
-//   if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 20) {
-//     console.log("inside update function");
-//     $http({
-//     method: 'GET',
-//     url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAPL,AXP,BA,CAT,CSCO,CVX,DD,DIS,GE,GS,HD,IBM,INTC,JNJ,JPM,KO,MCD,MMM,MRK,MSFT,NKE,PFE,PG,TRV,UNH,UTX,V,VZ,WMT,XOM'
-//   }).then(function successCallback(response) {
-//       // this callback will be called asynchronously
-//       // when the response is available
-//       console.log("successful response from update", response.data.results);
-
-//       var dataRef = new Firebase("https://market-wizard.firebaseio.com/dj30");  //  make reference to database location for data to be stored
-
-//       dataRef.push(response.data.results);
-//       alert("Today's EOD market data successfully imported.");
-//     }, function errorCallback(response) {  // called asynchronously if an error occurs
-//                                           // or server returns response with an error status.
-//     });
-//   }
-//     })();
-// }, 60000)
+})();  // end of 'timer' IIFE
 
 
+
+
+}, 30000)  // end of 'setInterval'
+
+
+
+
+
+// USER'S AT-WILL UPDATE (no longer used)
 // ++++++ UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE' ++++++++++++++++++++++++++++++
   $scope.update = function() {
     console.log("inside update function");
