@@ -52,4 +52,3 @@ app.config(['$routeProvider',  // this is like entry.js
      .otherwise('/main'); // catchall
      // .otherwise({ redirectTo: '/main' });
  }]);
-
