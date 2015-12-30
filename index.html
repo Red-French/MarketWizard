@@ -38,31 +38,8 @@
 
     <div ng-view id="results"></div>
     <div id="chartContainer">
-    <!-- TradingView Widget BEGIN -->
-<!--     <div id="chart">
-    <script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
-    <script type="text/javascript">
-    new TradingView.widget({
-      "width": 725,
-      "height": 465,
-      "symbol": "FX:SPX500",
-      "interval": "D",
-      "timezone": "Etc/UTC",
-      "theme": "White",
-      "style": "1",
-      "locale": "en",
-      "toolbar_bg": "#f1f3f6",
-      "allow_symbol_change": true,
-      "save_image": false,
-      "hideideas": true,
-      "studies": [
-        "MASimple@tv-basicstudies"
-      ]
-    });
-    </script>
-    </div> -->
-    <!-- TradingView Widget END -->
-    <!-- <div id="chartContainer" style="width:100%;height:300px;"></div> -->
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Chart</button>
+
     </div>
 
 <!-- Modal for ticker added to watchlist -->
@@ -115,6 +92,44 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for chart -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+  <!-- Modal content below -->
+    <!-- TradingView Widget BEGIN -->
+    <div id="chartContainer">
+    <div>
+    <script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
+    <script type="text/javascript">
+    new TradingView.widget({
+      "width": 725,
+      "height": 465,
+      "symbol": "FX:SPX500",
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "White",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "allow_symbol_change": true,
+      "save_image": false,
+      "hideideas": true,
+      "studies": [
+        "MASimple@tv-basicstudies"
+      ]
+    });
+    </script>
+    </div>
+    <div id="chartContainer" style="width:100%;height:300px;"></div>
+    </div>
+    <!-- TradingView Widget END -->
+    <!-- Begin modal footer -->
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
     </div>
   </div>
 </div>
