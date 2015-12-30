@@ -23,7 +23,6 @@ body {
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
   border-radius: 6px;
-  border: 1px solid #dcdcdc;
   display: inline-block;
   cursor: pointer;
   color: #777777;
@@ -82,10 +81,11 @@ div {
   margin: 0 30% 0 auto;
   text-align: center; }
 
-#chartContainer {
-  float: right;
-  width: 30%;
-  margin: 15% 25% 0 0; }
+#tickerBoardChartTable {
+  border: 1px solid black; }
+
+#inputSymbolToAdd {
+  width: 155px; }
 
 #cntrlPanelTop {
   width: 100%;
@@ -272,5 +272,18 @@ footer {
 
 #watchListTable {
   vertical-align: top; }
+
+#myModal {
+  height: 100%;
+  width: 90%;
+  display: flex;
+  align-items: center; }
+
+.modal-content {
+  margin: auto 5% auto 40%; }
+
+.closeChart {
+  position: relative;
+  margin: 0 0 0 90%; }
 
 /*# sourceMappingURL=main.css.map */

@@ -7,20 +7,43 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
   $scope.searchText = "";
 
 
-// +++++ TEXT COLOR FLASH ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++ CHECK AND LOG USER'S CURRENT AUTHENTICATION STATE +++++++++++++++++++++
+  // set 'Chart' button's 'display' property to 'none' if user logged out
+  // set a authentication flag ('loginStaus') for use elsewhere
 
-// LOGO COLOR FLASH IN NAVBAR
-// function flash() {
-//     var text = document.getElementById('logo');
-//     text.style.color = (text.style.color=='silver') ? 'white':'silver';  // ternary operator for if/then functionality
-// }
-// var clr = setInterval(flash, 2000);
+var ref = new Firebase("https://market-wizard.firebaseio.com");
+var loginStatus = false;
+ref.onAuth(authCallback);
+  function authCallback(authData) {
+    // Do not show 'chart' modal if user is logged out
+    var text = document.getElementById('chartButton');
+    if (authData) {  // if user is logged in
+      text.style.display = "block"  // set 'display' property to 'block'
+      console.log("User " + authData.uid + " is logged in with " + authData.provider);
+      // set flag for use elsewhere
+      loginStatus = true;
+    } else {  // else user is logged out
+      text.style.display = "none"  // set 'display' property to 'none'
+      console.log("User is logged out");
+      loginStatus = false;
+    }
+  }
+
+// $(document).ready(function()
+// {
+//    // executes when HTML-Document is loaded and DOM is ready
+//    alert("(document).ready was called - document is ready!");
+// });
+
+// +++++ TEXT COLOR FLASH ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // TEXT COLOR FLASH ('Last Live Update' below navbar)
     function flasher() {
+      if (loginStatus === true) {  // if user is logged in
       var text = document.getElementById('textFlash');
       text.style.color = (text.style.color=='silver') ? 'green':'silver';  // ternary operator for if/then functionality
       text.style.textDecoration = (text.style.textDecoration=='none') ? 'underline':'none';  // ternary operator for if/then functionality
+      }
     }
     var clr = setInterval(flasher, 2000);
 
@@ -72,13 +95,13 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
     sp500.$loaded()
       .then(function(sp500) {  // promise
-        console.log("sp500.length", sp500.length);
+        // console.log("sp500.length", sp500.length);
         $scope.sp500 = sp500[0];
 })
 
     dj30.$loaded()
       .then(function(dj30) {  // promise
-        console.log("dj30.length", dj30.length);
+        // console.log("dj30.length", dj30.length);
         $scope.dj30 = dj30[0];
 })
 
@@ -206,9 +229,9 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 // END LOAD 'SP-500'
 
 
-// BEGIN '<20 & >5 MIL SHARES AND ADVANCING TODAY' FUNCTION
-    if (scanners.$id === "<20 & >5 mil shrs & advancing") {
-      console.log("inside calc via <20 & >5 MIL SHARES & ADVANCING");
+// BEGIN '<50 & >5 MIL SHARES AND ADVANCING TODAY' FUNCTION
+    if (scanners.$id === "<50 & >1 mil shrs & advancing") {
+      console.log("inside calc via <50 & >1 MIL SHARES & ADVANCING");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
       dataRef2.once("value", function(snapshot) {
@@ -256,8 +279,8 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
                 volume = todaysData[i].volume;
 
                 // find relevant stocks
-                if (todaysData[i].lastPrice < 20.00) {
-                  if (yesterdaysData[i].volume > 5000000) {
+                if (todaysData[i].lastPrice < 50.00) {
+                  if (yesterdaysData[i].volume > 1000000) {
                     if (todaysData[i].lastPrice > yesterdaysData[i].close) {
 
                       calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
@@ -289,12 +312,12 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
           });
 });
 }
-  // END '<20 & >5 MIL SHARES AND ADVANCING TODAY' FUNCTION
+  // END '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
 
 
-// BEGIN '>50 & >5 MIL SHARES AND DECLINING TODAY' FUNCTION
-    if (scanners.$id === ">50 & >5 mil shrs & declining") {
-      console.log("inside calc via >50 & >5 MIL SHARES & DECLINING");
+// BEGIN '>50 & >2 MIL SHARES AND DECLINING TODAY' FUNCTION
+    if (scanners.$id === ">50 & >750k shrs & declining") {
+      console.log("inside calc via >50 & >750k SHARES & DECLINING");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
       dataRef2.once("value", function(snapshot) {
@@ -343,7 +366,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
                 // find relevant stocks
                 if (todaysData[i].lastPrice > 50.00) {
-                  if (yesterdaysData[i].volume > 5000000) {
+                  if (yesterdaysData[i].volume > 750000) {
                     if (todaysData[i].lastPrice < yesterdaysData[i].close) {
 
                       calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
@@ -376,7 +399,7 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
           });
 });
 }
-  // END '>50 & >5 MIL SHARES AND DECLINING TODAY' FUNCTION
+  // END '>50 & >750k SHARES AND DECLINING TODAY' FUNCTION
 
 
   // BEGIN 'GAP UP' FUNCTION
@@ -975,137 +998,134 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 // EOD UPDATE FOR ALL MARKETS!!
 // AUTOMATICALLY RETRIEVE NASDAQ-100, S&P-500, AND DJ-30 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
 setInterval(function () {
-  var timer = ( function() {
+  // if (loginStatus === true) {  // if user is logged in
+
+    var timer = ( function() {
       var date = new Date();
       var day = date.getDay();
       var hour = date.getHours();
       var minutes = date.getMinutes();
-      console.log("Date", date);
-      console.log("day of week is", day);
-      console.log("hour is", hour);
-      console.log("minutes is", minutes);
+      // console.log("Date", date);
+      // console.log("day of week is", day);
+      // console.log("hour is", hour);
+      // console.log("minutes is", minutes);
 
-  if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
-    console.log("inside update function");
-    // UPDATE NASDAQ-100
-    $http({
-    method: 'GET',
-    url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
-    }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
-      console.log("NASDAQ-100 successfully updated", response.data.results);
+      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
+        console.log("inside update function");
+        // UPDATE NASDAQ-100
+        $http({
+        method: 'GET',
+        url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
+        }).then(function successCallback(response) {
+          // this callback will be called asynchronously
+          // when the response is available
+          console.log("NASDAQ-100 successfully updated", response.data.results);
 
-      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
+          var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
 
-      dataRef.push(response.data.results);
-    })
-    .then 
-    // UPDATE S&P-500
-      // get first 100 s&p-500 tickers
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=A,AA,AAL,AAP,AAPL,ABBV,ABC,ABT,ACE,ACN,ADBE,ADI,ADM,ADP,ADS,ADSK,ADT,AEE,AEP,AES,AET,AFL,AGN,AIG,AIV,AIZ,AKAM,ALL,ALLE,ALTR,ALXN,AMAT,AME,AMG,AMGN,AMP,AMT,AMZN,AN,ANTM,AON,APA,APC,APD,APH,ARG,ATVI,AVB,AVGO,AVY,AXP,AZO,BA,BAC,BAX,BBBY,BBT,BBY,BCR,BDX,BEN,BF.B,BHI,BIIB,BK,BLK,BLL,BMY,BRCM,BRK.B,BSX,BWA,BXLT,BXP,C,CA,CAG,CAH,CAM,CAT,CB,CBG,CBS,CCE,CCI,CCL,CELG,CERN,CF,CHK,CHRW,CI,CINF,CL,CLX,CMA,CMCSA,CMCSK,CME,CMG'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("S&P-500 api call#1 successful", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-      })
-    .then // get next 100 s&p-500 tickers (101-200)
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=CMI,CMS,CNP,CNX,COF,COG,COH,COL,COP,COST,CPB,CPGX,CRM,CSC,CSCO,CSRA,CSX,CTAS,CTL,CTSH,CTXS,CVC,CVS,CVX,D,DAL,DD,DE,DFS,DG,DGX,DHI,DHR,DIS,DISCA,DISCK,DLPH,DLTR,DNB,DO,DOV,DOW,DPS,DRI,DTE,DUK,DVA,DVN,EA,EBAY,ECL,ED,EFX,EIX,EL,EMC,EMN,EMR,ENDP,EOG,EQIX,EQR,EQT,ES,ESRX,ESS,ESV,ETFC,ETN,ETR,EW,EXC,EXPD,EXPE,F,FAST,FB,FCX,FDX,FE,FFIV,FIS,FISV,FITB,FLIR,FLR,FLS,FMC,FOSL,FOX,FOXA,FSLR,FTI,FTR,GAS,GD,GE,GGP,GILD,GIS'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("S&P-500 api call#2 successful", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-    }).then // get next 100 s&p-500 tickers (201-300)
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=GLW,GM,GMCR,GME,GOOG,GOOGL,GPC,GPS,GRMN,GS,GT,GWW,HAL,HAR,HAS,HBAN,HBI,HCA,HCN,HCP,HD,HES,HIG,HOG,HON,HOT,HP,HPE,HPQ,HRB,HRL,HRS,HSIC,HST,HSY,HUM,IBM,ICE,IFF,ILMN,INTC,INTU,IP,IPG,IR,IRM,ISRG,ITW,IVZ,JBHT,JCI,JEC,JNJ,JNPR,JPM,JWN,K,KEY,KHC,KIM,KLAC,KMB,KMI,KMX,KO,KORS,KR,KSS,KSU,L,LB,LEG,LEN,LH,LLL,LLTC,LLY,LM,LMT,LNC,LOW,LRCX,LUK,LUV,LVLT,LYB,M,MA,MAC,MAR,MAS,MAT,MCD,MCHP,MCK,MCO,MDLZ,MDT,MET,MHFI'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("S&P-500 api call#3 successful", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-    }).then // get next 100 s&p-500 tickers (301-400)
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=MHK,MJN,MKC,MLM,MMC,MMM,MNK,MNST,MO,MON,MOS,MPC,MRK,MRO,MS,MSFT,MSI,MTB,MU,MUR,MYL,NAVI,NBL,NDAQ,NEE,NEM,NFLX,NFX,NI,NKE,NLSN,NOC,NOV,NRG,NSC,NTAP,NTRS,NUE,NVDA,NWL,NWS,NWSA,O,OI,OKE,OMC,ORCL,ORLY,OXY,PAYX,PBCT,PBI,PCAR,PCG,PCL,PCLN,PCP,PDCO,PEG,PEP,PFE,PFG,PG,PGR,PH,PHM,PKI,PLD,PM,PNC,PNR,PNW,POM,PPG,PPL,PRGO,PRU,PSA,PSX,PVH,PWR,PX,PXD,PYPL,QCOM,QRVO,R,RAI,RCL,REGN,RF,RHI,RHT,RIG,RL,ROK,ROP,ROST,RRC,RSG'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("S&P-500 api call#4 successful", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-    }).then // get next 100 s&p-500 tickers (401-500)
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=RTN,SBUX,SCG,SCHW,SE,SEE,SHW,SIG,SJM,SLB,SLG,SNA,SNDK,SNI,SO,SPG,SPLS,SRCL,SRE,STI,STJ,STT,STX,STZ,SWK,SWKS,SWN,SYF,SYK,SYMC,SYY,T,TAP,TDC,TE,TEL,TGNA,TGT,THC,TIF,TJX,TMK,TMO,TRIP,TROW,TRV,TSCO,TSN,TSO,TSS,TWC,TWX,TXN,TXT,TYC,UA,UAL,UHS,UNH,UNM,UNP,UPS,URBN,URI,USB,UTX,V,VAR,VFC,VIAB,VLO,VMC,VNO,VRSK,VRSN,VRTX,VTR,VZ,WAT,WBA,WDC,WEC,WFC,WFM,WHR,WM,WMB,WMT,WRK,WU,WY,WYN,WYNN,XEC,XEL,XL,XLNX,XOM,XRAY,XRX'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("S&P-500 api call#5 successful", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-    }).then // get any remaining s&p-500 tickers (often a few more than 500 in index)
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=XYL,YHOO,YUM,ZBH,ZION,ZTS'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("S&P-500 api call#6 successful", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-    }).then 
-    // UPDATE DOW-JONES-30
-      $http({
-      method: 'GET',
-      url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAPL,AXP,BA,CAT,CSCO,CVX,DD,DIS,GE,GS,HD,IBM,INTC,JNJ,JPM,KO,MCD,MMM,MRK,MSFT,NKE,PFE,PG,TRV,UNH,UTX,V,VZ,WMT,XOM'
-    }).then(function successCallback(response) {
-        // this callback will be called asynchronously
-        // when the response is available
-        console.log("DJ-30 successfully updated", response.data.results);
-        var dataRef = new Firebase("https://market-wizard.firebaseio.com/dj30");  //  make reference to database location for data to be stored
-        dataRef.push(response.data.results);
-        // alert("Today's EOD market data successfully imported.");
-        $('#nightlyUpdateModal').modal('show');
-      }, function errorCallback(response) {  // called asynchronously if an error occurs
-                                            // or server returns response with an error status.
-      });
-  }  //  end of 'if' statement
-})();  // end of 'timer' IIFE
+          dataRef.push(response.data.results);
+        })
+        .then 
+        // UPDATE S&P-500
+          // get first 100 s&p-500 tickers
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=A,AA,AAL,AAP,AAPL,ABBV,ABC,ABT,ACE,ACN,ADBE,ADI,ADM,ADP,ADS,ADSK,ADT,AEE,AEP,AES,AET,AFL,AGN,AIG,AIV,AIZ,AKAM,ALL,ALLE,ALTR,ALXN,AMAT,AME,AMG,AMGN,AMP,AMT,AMZN,AN,ANTM,AON,APA,APC,APD,APH,ARG,ATVI,AVB,AVGO,AVY,AXP,AZO,BA,BAC,BAX,BBBY,BBT,BBY,BCR,BDX,BEN,BF.B,BHI,BIIB,BK,BLK,BLL,BMY,BRCM,BRK.B,BSX,BWA,BXLT,BXP,C,CA,CAG,CAH,CAM,CAT,CB,CBG,CBS,CCE,CCI,CCL,CELG,CERN,CF,CHK,CHRW,CI,CINF,CL,CLX,CMA,CMCSA,CMCSK,CME,CMG'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("S&P-500 api call#1 successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+          })
+        .then // get next 100 s&p-500 tickers (101-200)
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=CMI,CMS,CNP,CNX,COF,COG,COH,COL,COP,COST,CPB,CPGX,CRM,CSC,CSCO,CSRA,CSX,CTAS,CTL,CTSH,CTXS,CVC,CVS,CVX,D,DAL,DD,DE,DFS,DG,DGX,DHI,DHR,DIS,DISCA,DISCK,DLPH,DLTR,DNB,DO,DOV,DOW,DPS,DRI,DTE,DUK,DVA,DVN,EA,EBAY,ECL,ED,EFX,EIX,EL,EMC,EMN,EMR,ENDP,EOG,EQIX,EQR,EQT,ES,ESRX,ESS,ESV,ETFC,ETN,ETR,EW,EXC,EXPD,EXPE,F,FAST,FB,FCX,FDX,FE,FFIV,FIS,FISV,FITB,FLIR,FLR,FLS,FMC,FOSL,FOX,FOXA,FSLR,FTI,FTR,GAS,GD,GE,GGP,GILD,GIS'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("S&P-500 api call#2 successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+        }).then // get next 100 s&p-500 tickers (201-300)
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=GLW,GM,GMCR,GME,GOOG,GOOGL,GPC,GPS,GRMN,GS,GT,GWW,HAL,HAR,HAS,HBAN,HBI,HCA,HCN,HCP,HD,HES,HIG,HOG,HON,HOT,HP,HPE,HPQ,HRB,HRL,HRS,HSIC,HST,HSY,HUM,IBM,ICE,IFF,ILMN,INTC,INTU,IP,IPG,IR,IRM,ISRG,ITW,IVZ,JBHT,JCI,JEC,JNJ,JNPR,JPM,JWN,K,KEY,KHC,KIM,KLAC,KMB,KMI,KMX,KO,KORS,KR,KSS,KSU,L,LB,LEG,LEN,LH,LLL,LLTC,LLY,LM,LMT,LNC,LOW,LRCX,LUK,LUV,LVLT,LYB,M,MA,MAC,MAR,MAS,MAT,MCD,MCHP,MCK,MCO,MDLZ,MDT,MET,MHFI'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("S&P-500 api call#3 successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+        }).then // get next 100 s&p-500 tickers (301-400)
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=MHK,MJN,MKC,MLM,MMC,MMM,MNK,MNST,MO,MON,MOS,MPC,MRK,MRO,MS,MSFT,MSI,MTB,MU,MUR,MYL,NAVI,NBL,NDAQ,NEE,NEM,NFLX,NFX,NI,NKE,NLSN,NOC,NOV,NRG,NSC,NTAP,NTRS,NUE,NVDA,NWL,NWS,NWSA,O,OI,OKE,OMC,ORCL,ORLY,OXY,PAYX,PBCT,PBI,PCAR,PCG,PCL,PCLN,PCP,PDCO,PEG,PEP,PFE,PFG,PG,PGR,PH,PHM,PKI,PLD,PM,PNC,PNR,PNW,POM,PPG,PPL,PRGO,PRU,PSA,PSX,PVH,PWR,PX,PXD,PYPL,QCOM,QRVO,R,RAI,RCL,REGN,RF,RHI,RHT,RIG,RL,ROK,ROP,ROST,RRC,RSG'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("S&P-500 api call#4 successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+        }).then // get next 100 s&p-500 tickers (401-500)
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=RTN,SBUX,SCG,SCHW,SE,SEE,SHW,SIG,SJM,SLB,SLG,SNA,SNDK,SNI,SO,SPG,SPLS,SRCL,SRE,STI,STJ,STT,STX,STZ,SWK,SWKS,SWN,SYF,SYK,SYMC,SYY,T,TAP,TDC,TE,TEL,TGNA,TGT,THC,TIF,TJX,TMK,TMO,TRIP,TROW,TRV,TSCO,TSN,TSO,TSS,TWC,TWX,TXN,TXT,TYC,UA,UAL,UHS,UNH,UNM,UNP,UPS,URBN,URI,USB,UTX,V,VAR,VFC,VIAB,VLO,VMC,VNO,VRSK,VRSN,VRTX,VTR,VZ,WAT,WBA,WDC,WEC,WFC,WFM,WHR,WM,WMB,WMT,WRK,WU,WY,WYN,WYNN,XEC,XEL,XL,XLNX,XOM,XRAY,XRX'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("S&P-500 api call#5 successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+        }).then // get any remaining s&p-500 tickers (often a few more than 500 in index)
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=XYL,YHOO,YUM,ZBH,ZION,ZTS'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("S&P-500 api call#6 successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+        }).then 
+        // UPDATE DOW-JONES-30
+          $http({
+          method: 'GET',
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAPL,AXP,BA,CAT,CSCO,CVX,DD,DIS,GE,GS,HD,IBM,INTC,JNJ,JPM,KO,MCD,MMM,MRK,MSFT,NKE,PFE,PG,TRV,UNH,UTX,V,VZ,WMT,XOM'
+        }).then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            console.log("DJ-30 successfully updated", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/dj30");  //  make reference to database location for data to be stored
+            dataRef.push(response.data.results);
+            // alert("Today's EOD market data successfully imported.");
+            $('#nightlyUpdateModal').modal('show');
+          }, function errorCallback(response) {  // called asynchronously if an error occurs
+                                                // or server returns response with an error status.
+          });
+      }  //  end of 'if' statement
+    })();  // end of 'timer' IIFE
+  // }  // end of 'if loginStatus === true'
 }, 60000)  // end of 'setInterval'
 
 
 // LIVE UPDATE!!
-// ---> AUTOMATICALLY RETRIEVE NASDAQ-100 DATA EVERY 30 SECONDS DURING TRADING HOURS
+// ---> AUTOMATICALLY RETRIEVE NASDAQ-100 DATA EVERY 15 SECONDS DURING TRADING HOURS
 setInterval(function () {
-  var timer = ( function() {
+  if (loginStatus === true) {  // if user is logged in
+
+    var timer = ( function() {
       var date = new Date();
       var day = date.getDay();
       var hour = date.getHours();
       var minutes = date.getMinutes();
       var seconds = date.getSeconds();
-      console.log("Date", date);
-      console.log("day of week is", day);
-      console.log("hour is", hour);
-      console.log("minutes is", minutes);
-      console.log("seconds are", seconds);
-
-    // Create a callback which logs the current auth state
-    var ref = new Firebase("https://market-wizard.firebaseio.com");
-    ref.onAuth(authDataCallback);
-
-    function authDataCallback(authData) {
-      if (authData) {
-        console.log("User " + authData.uid + " is logged in with " + authData.provider);
+      // console.log("Date", date);
+      // console.log("day of week is", day);
+      // console.log("hour is", hour);
+      // console.log("minutes is", minutes);
+      // console.log("seconds are", seconds);
 
         if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && (hour > 8 && hour < 16)) {
           console.log("inside update function");
@@ -1116,7 +1136,7 @@ setInterval(function () {
         }).then(function successCallback(response) {
             // this callback will be called asynchronously
             // when the response is available
-            console.log("successful response from update", response.data.results);
+            // console.log("successful response from update", response.data.results);
 
             var dataRef = new Firebase("https://market-wizard.firebaseio.com/data2/today");  //  make reference to database location for data to be stored
             
@@ -1134,26 +1154,22 @@ setInterval(function () {
             // );
 
             dataRef.set(response.data.results);
-            $('#userDataUpdateModal').modal('show');
+            // $('#userDataUpdateModal').modal('show');
           }, function errorCallback(response) {  // called asynchronously if an error occurs
                                                 // or server returns response with an error status.
           });
+            // clock that updates DOM to show time of last real-time update
+            hour = ((hour + 11) % 12 + 1);  // convert military time to 12-hour time
+            minutes = minutes > 9 ? minutes : '0' + minutes;  // ternary operator for if/then functionality to prepend with a '0' if less than '10'
+            seconds = seconds > 9 ? seconds : '0' + seconds;  // ternary operator for if/then functionality to prepend with a '0' if less than '10'
+            var newTime = hour + ":" + minutes + ":" + seconds;
+
+            $("#updateTime").html(newTime);  // Replace contents in DOM element
+          } else {
+            $("#updateTime").html("Market Closed <br> EOD update at 6:15 CST");  // Replace contents in DOM element
         }  //  end of 'if' statement
-
-        // clock that updates DOM to show time of last real-time update
-        hour = ((hour + 11) % 12 + 1);  // convert military time to 12-hour time
-        minutes = minutes > 9 ? minutes : '0' + minutes;  // ternary operator for if/then functionality to prepend with a '0' if less than '10'
-        seconds = seconds > 9 ? seconds : '0' + seconds;  // ternary operator for if/then functionality to prepend with a '0' if less than '10'
-        var newTime = hour + ":" + minutes + ":" + seconds;
-        // To completely replace the contents of a DOM element, 
-        // we used to write element.innerHTML = "something new"; 
-        $("#updateTime").html(newTime);
-
-        } else {  // else user is logged out
-          console.log("User is logged out");
-      }
-    }  // end of authDataCallback function
-  })();  // end of 'timer' IIFE
+    })();  // end of 'timer' IIFE
+  }  // end of 'if loginStatus === true'
 }, 15000)  // end of 'setInterval'
 
 
@@ -1347,8 +1363,6 @@ $(document).ready(function(){
         $("p").show();
     });
 });
-
-
 
 
 

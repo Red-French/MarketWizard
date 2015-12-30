@@ -46,11 +46,12 @@
       new StockTracker
       (
         [
-          new Stock("NASDAQ", "^IXIC"),
-          new Stock("NASDAQ", "^GSPC"),
-          new Stock("NASDAQ", "NFLX"),
-          new Stock("NASDAQ", "MNST"),
-          new Stock("NASDAQ", "GOOGL"),
+          new Stock("NASDAQ", "^IXIC"), // NASDAQ Composite
+          new Stock("NYSE", "^GSPC"), // SP-500
+          new Stock("NYSE", "^DJI"), // DJ-30
+          // new Stock("NASDAQ", "NFLX"),
+          // new Stock("NASDAQ", "MNST"),
+          // new Stock("NASDAQ", "GOOGL"),
         ]
       ).initialize();
     }
@@ -90,9 +91,9 @@
         tdsAll[0].innerHTML = this.symbol;
         tdsAll[1].innerHTML = priceAsString;
       }
-      Stock.prototype.update = function()
+      Stock.prototype.liveUpdate = function()
       {
-        this.updateViaGoogle();
+        this.updateViaYahoo();  // update either via Google or Yahoo (code for both is below)
       }
     // GOOG quote API deprecated in 2011, but still working
       Stock.prototype.updateViaGoogle = function()
@@ -151,7 +152,7 @@
       // instance methods
       StockTracker.prototype.initialize = function()
       {
-        var millisecondsPerTimerTick = 20000;
+        var millisecondsPerTimerTick = 2000;
         setInterval
         (
           this.handleEventTimerTick.bind(this),
@@ -159,12 +160,12 @@
         );
         this.handleEventTimerTick();
       }
-      StockTracker.prototype.update = function()
+      StockTracker.prototype.liveUpdate = function()
       {
         for (var i = 0; i < this.stocksToTrack.length; i++)
         {
           var stock = this.stocksToTrack[i];
-          stock.update();
+          stock.liveUpdate();
         }
         this.domElementUpdate();
       }
@@ -174,6 +175,7 @@
         var divTracker = document.createElement("div");
         if (this.domElement == null)
         {
+        // 'ADD TICKER' INPUT FIELD
           var labelSymbolToAdd = document.createElement("label");
           labelSymbolToAdd.for = "inputSymbolToAdd";
           labelSymbolToAdd.innerHTML = "Add Ticker:";
@@ -182,6 +184,7 @@
           inputSymbolToAdd.id = "inputSymbolToAdd";
           divTracker.appendChild(inputSymbolToAdd);
 
+        // 'ADD' BUTTON
           var buttonSymbolAdd = document.createElement("button");
           buttonSymbolAdd.innerHTML = "Add";
           buttonSymbolAdd.onclick = this.buttonSymbolAdd_Click.bind(this);
@@ -196,7 +199,7 @@
           //tr.appendChild(td);
           var td = document.createElement("td");
           td.width = "65px";
-          td.innerHTML = "Symbol";
+          td.innerHTML = "Index";
           tr.appendChild(td);
           var td = document.createElement("td");
           td.width = "65px";
@@ -244,20 +247,22 @@
           exchange, symbol
         );
         this.stocksToTrack.push(stock);
-        this.update();
+        this.liveUpdate();
       }
       StockTracker.prototype.handleEventTimerTick = function()
       {
-        this.update();  
+        this.liveUpdate();  
       }
     }
     main();
     </script>
-    </div>
-    </div>
+    </div>  <!-- end 'id=tickerBoard' -->
+    </div>  <!-- end 'id=divMain' -->
+
 
     <div id="chartButton"><button type="button" class="myButton" data-toggle="modal" data-target="#myModal">Chart</button>
     </div>
+
 
 <!-- Modal for ticker added to watchlist -->
 <div class="modal fade" id="addTickerModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
@@ -315,11 +320,10 @@
 
 <!-- Modal for chart -->
 <div id="myModal" class="modal fade" role="dialog">
-  <!-- <div class="modal-dialog"> -->
+  <div class="modal-content">
   <!-- Modal content below -->
     <!-- TradingView Widget BEGIN -->
-    <div id="chartContainer">
-    <div>
+    <button type="button" class="btn btn-default closeChart" data-dismiss="modal">Close</button>
     <script type="text/javascript" src="https://d33t3vvu2t2yu5.cloudfront.net/tv.js"></script>
     <script type="text/javascript">
     new TradingView.widget({
@@ -340,16 +344,9 @@
       ]
     });
     </script>
-    </div>
-    <div id="chartModal" style="width:100%;height:300px;"></div>
-        <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-    </div>
-    </div>
+    <!-- <div id="chartModal" style="width:50%;height:100%;"></div> -->
     <!-- TradingView Widget END -->
-    <!-- Begin modal footer -->
-
-  <!-- </div> -->
+  </div>
 </div>
 
     <script src="lib/bower_components/jquery/dist/jquery.min.js"></script>
