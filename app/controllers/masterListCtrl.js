@@ -1140,9 +1140,11 @@ setInterval(function () {
           });
         }  //  end of 'if' statement
 
+        // clock that updates DOM to show time of last real-time update
         hour = ((hour + 11) % 12 + 1);  // convert military time to 12-hour time
-        minutes = minutes > 9 ? minutes : '0' + minutes;  // ternary operator for if/then functionality
-          var newTime = hour + ":" + minutes + ":" + seconds;
+        minutes = minutes > 9 ? minutes : '0' + minutes;  // ternary operator for if/then functionality to prepend with a '0' if less than '10'
+        seconds = seconds > 9 ? seconds : '0' + seconds;  // ternary operator for if/then functionality to prepend with a '0' if less than '10'
+        var newTime = hour + ":" + minutes + ":" + seconds;
         // To completely replace the contents of a DOM element, 
         // we used to write element.innerHTML = "something new"; 
         $("#updateTime").html(newTime);
@@ -1199,6 +1201,7 @@ setInterval(function () {
     // console.log(watchList.$id);
 
   // * NEED TO LOOP THROUGH OBJECT AND MATCH TICKERS TO TICKERS IN 'DATA2' TO PULL DATA
+  
    $location.path("/watchlist");  // take user to this location
   // $scope.$apply();
   }
