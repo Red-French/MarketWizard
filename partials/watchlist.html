@@ -283,7 +283,7 @@ main();
            </td>
           </tr>
           <tr ng-repeat="thing in watchList">
-            <td class="watchTicks"><button type="button" class="deleteButton" ng-click="deleteTicker(thing.ticker, watchList)">Delete</button>{{thing.ticker}}</td>
+            <td class="watchTicks"><button type="button" class="deleteButton" ng-click="getTickerData(thing.ticker, watchList)">Get Data</button>{{thing.ticker}}</td>
           </tr>
           <!--       <td id="watchListTable">
         <table>

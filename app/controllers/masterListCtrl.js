@@ -1235,7 +1235,7 @@ setInterval(function () {
 // ++++++ BEGIN 'FIND MATCHING TICKER' FUNCTION ++++++++++++++++++++++++++++++++++++++
 // * push specified key 'ticker' with user's ticker //
 
-  $scope.findTicker = function(ticker) {
+  $scope.getTickerData = function(stockTicker, watchList) {
       console.log("inside 'find matching ticker' function");
       // newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
@@ -1252,18 +1252,9 @@ setInterval(function () {
           // console.log("date", childData2[2].serverTimestamp);
           // console.log("childData2", childData2.lastPrice);
           // })
-      });
-
-  // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
-            var ticker = "";
-            var lastPrice = 0;
-            var close = 0;
-            var high = 0;
-            var low = 0;
-            var volume = 0;
-            var calculation = 0;
-            var calcResult = 0;
+        // console.log(todaysData);
+      })
+      })
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
             dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
@@ -1273,7 +1264,7 @@ setInterval(function () {
               yesterdaysData = childData3;
 
               // PERFORM CALCULATION
-              yesterdaysData.forEach(function(object2, i) {  // loop through data
+              todaysData.forEach(function(object2, i) {  // loop through data
                 
                 // place API data in variables
                 ticker = todaysData[i].symbol;
@@ -1283,16 +1274,13 @@ setInterval(function () {
                 low = todaysData[i].low;
                 volume = todaysData[i].volume;
 
-                // console.log(i + ". " + ticker + " = " + lastPrice);
+                console.log(i + ". " + ticker + " = " + lastPrice);
 
                 if (ticker === "AAPL") {
                   console.log("Apple's price is " + lastPrice);
                 }
-
-
-
-
-
+})
+})
 
 // get current user's stocks from chosen watchlist
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
@@ -1306,66 +1294,61 @@ setInterval(function () {
     .then(function(userStocks) {  // promise
       $scope.userStocks = userStocks;
     });
-      console.log(i + ". " + $scope.userStocks[i].$id);  // 'undefined' for remaining past # in watchlist
+      // console.log(i + ". " + $scope.userStocks[i].$id);  // 'undefined' for remaining past # in watchlist
       // console.log(i + ". " + "userStocks = ", $scope.userStocks[1].ticker); // returns 'undefined'
 
 
-// + //
-     // dataRef2.once("value", function(snapshot) {
-     //    dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
-     //    // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
-     //      // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
-     //      var key = snapshot2.key();  // key is the unique ID of each day's data
-     //      // console.log("key", key);
-     //      var childData2 = snapshot2.val();  // childData2 is contents of the child
-     //      $scope.childData2 = childData2;
-     //      todaysData = $scope.childData2;
-     //      // console.log("childData2.length", childData2.length);
-     //      // console.log("date", childData2[2].serverTimestamp);
-     //      // console.log("childData2", childData2.lastPrice);
-     //      // })
-     //  });
 
 
+    console.log(stockTicker);
+    console.log("all of user's watchlists", listToWatch);  // log all of user's watchlists
+    console.log("user's dropdown choice", watchList.$id);  // log user's dropdown choice
+
+    for (var i = 0; i < listToWatch.length; i++) {  // loop through user's watchlists stored in Firebase
+      if (listToWatch[i].$id === watchList.$id) {  // if Firebase watchlist equals dropdown choice
+        console.log("accessed Firebase watchlist is", listToWatch[i].$id); // log successful access to chosen watclist in Firebase
+        console.log("contents of", listToWatch[i].$id, "is", listToWatch[i]); // log chosen watchlist object
+        console.log("ticker to delete is", stockTicker);
+        var tickToRemove = stockTicker;
+        // listToWatch[i].$id.remove();
+
+          // for (var i = 0; i < 2; i++) {
+            // console.log("inside for-loop in deleteTicker");
+            // console.log(listToWatch[i].$id);
+            // console.log(listToWatch[i].ticker); // returns 'undefined'
+            // watchListID.$id.$remove(stockTicker);
+            // $scope.listToWatch.$remove(stockTicker.ticker);
+          // }
+        }
+      }
+
+    angular.forEach(watchList, function(element, i) {  // loop over Firebase list
+      console.log(i);
+      console.log(watchList[i].ticker);
+      if (watchList[i].ticker === stockTicker) {
+        console.log("guess what? Found", stockTicker);
+        console.log(watchList[i]);
+        tickerChosen = watchList[i].ticker;
+        console.log("chosen ticker =", tickerChosen);
+        // watchList[i].remove();
+      }
+
+      // console.log(data2);
+
+    // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
+    //   console.log(i);
+    //   console.log(watchList[i].ticker);
+    //   if (watchList[i].ticker === stockTicker) {
+    //     console.log("guess what? Found", stockTicker);
+    //     console.log(watchList[i]);
+    //     tickerChosen = watchList[i].ticker;
+    //     console.log("chosen ticker =", tickerChosen);
+    //   }
+
+    })
 
 
-
-
-                // find relevant stocks
-                // if (todaysData[i].lastPrice < 50.00) {
-                //   if (yesterdaysData[i].volume > 1000000) {
-                //     if (todaysData[i].lastPrice > yesterdaysData[i].close) {
-
-                //       calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-                //       calcResult = calculation.toFixed(2);  // round to nearest 100th
-                //       console.log(ticker);
-                //       console.log(lastPrice, close);
-                //       console.log(high, low);
-                //       console.log(volume);
-
-                //       // push information to Firebase
-                //       userData.$add({  // add tickers/information/calculations to Firebase
-                //         ticker: ticker,
-                //         lastPrice: lastPrice,
-                //         close: close,
-                //         high: high,
-                //         low: low,
-                //         volume: volume,
-                //         calculation: calcResult
-                //       });
-                //     }
-                //   }
-                // }
-               $location.path("/data");  // take user to this location
-                //   // to access yesterday's dataset only, get number of entries with
-                //   // var length = childData.length;
-                })
-              // })
-            })
-          });
-});
-}
-  // END 'FIND MATCHING TICKER' FUNCTION
+}  // END 'FIND MATCHING TICKER' FUNCTION
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1428,16 +1411,17 @@ setInterval(function () {
         // watchList[i].remove();
       }
 
-    angular.forEach(watchList, function(element, i) {  // loop over Firebase list
-      console.log(i);
-      console.log(watchList[i].ticker);
-      if (watchList[i].ticker === stockTicker) {
-        console.log("guess what? Found", stockTicker);
-        console.log(watchList[i]);
-        tickerChosen = watchList[i].ticker;
-        console.log("chosen ticker =", tickerChosen);
-        // watchList[i].remove();
-      }
+      // console.log(data2);
+
+    // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
+    //   console.log(i);
+    //   console.log(watchList[i].ticker);
+    //   if (watchList[i].ticker === stockTicker) {
+    //     console.log("guess what? Found", stockTicker);
+    //     console.log(watchList[i]);
+    //     tickerChosen = watchList[i].ticker;
+    //     console.log("chosen ticker =", tickerChosen);
+    //   }
 
     })
 
@@ -1471,23 +1455,6 @@ setInterval(function () {
     // userLists.forEach(function(object2, i) {  // loop through data
 
     // }
-
-
-
-//     var array = [];
-//     angular.forEach(watchList, function(element) {
-//       array.push(element);
-//     });
-//     console.log(array);
-//     console.log("array.length", array.length);
-// for (var i = 0; i < array.length - 3; i++) {
-//     // array.forEach(function(object, i) {  // loop through data
-//     console.log("array[i]", array[i].ticker);
-//     if (array[i].ticker === stock.ticker)
-//       console.log(array[i].ticker, " will be deleted");
-
-//     }
-                
 
 
 
