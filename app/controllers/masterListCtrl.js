@@ -892,6 +892,7 @@ ref.onAuth(authCallback);
 
 
 // ADDS NEW TICKER TO USER'S CHOSEN WATCHLIST
+
   $scope.newTicker = function(addToThisList) {
     var dropWatchlistRef = undefined;
     var watchlistRef = undefined;
@@ -923,22 +924,23 @@ ref.onAuth(authCallback);
     // listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
 
     // listRef.push($scope.newTicker);
-
+    // if (($scope.watchName != "") && ($scope.addToThisList.$id != "")) {
+    //     alert("Please choose either a current or a new watchlist.")
+    // } else 
     if ($scope.addTicker === undefined || null) {
-      alert("Enter ticker to be added to watchlist.");
-    }  else if ($scope.watchName !== undefined || null) {
+        alert("Enter ticker to be added to watchlist.");
+    }  else if ($scope.watchName != undefined || null) {
         watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
         listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-    } else if ($scope.addToThisList.$id !== undefined || null) {
+        $('#addTickerModal').modal('show'); 
+    } else if ($scope.addToThisList.$id != undefined || null) {
         dropWatchlistRef = $scope.addToThisList.$id;  // obtain name of watchlist from dropdown
         listRef.child(dropWatchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-        // $scope.addTicker = "";  // clear 'Add Ticker' input field
+        $('#addTickerModal').modal('show'); 
     }
     $scope.addTicker = "";  // clear 'Add Ticker' input field
     $scope.addToThisList = "";  // clear watchlist dropdown
     $scope.watchName = "";  // clear 'or enter new Watchlist' field
-
-    $('#addTickerModal').modal('show'); 
 };
 
 
