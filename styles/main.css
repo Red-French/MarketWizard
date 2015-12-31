@@ -275,15 +275,14 @@ footer {
 
 #myModal {
   height: 100%;
-  width: 90%;
-  display: flex;
-  align-items: center; }
+  width: 93%;
+  margin-top: 10%; }
 
 .modal-content {
   margin: auto 5% auto 40%; }
 
 .closeChart {
   position: relative;
-  margin: 0 0 0 90%; }
+  margin: 0 0 0 91.5%; }
 
 /*# sourceMappingURL=main.css.map */
