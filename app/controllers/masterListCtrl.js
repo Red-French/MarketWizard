@@ -932,7 +932,12 @@ ref.onAuth(authCallback);
     } else if ($scope.addToThisList.$id !== undefined || null) {
         dropWatchlistRef = $scope.addToThisList.$id;  // obtain name of watchlist from dropdown
         listRef.child(dropWatchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+        // $scope.addTicker = "";  // clear 'Add Ticker' input field
     }
+    $scope.addTicker = "";  // clear 'Add Ticker' input field
+    $scope.addToThisList = "";  // clear watchlist dropdown
+    $scope.watchName = "";  // clear 'or enter new Watchlist' field
+
     $('#addTickerModal').modal('show'); 
 };
 

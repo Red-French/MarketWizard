@@ -247,6 +247,7 @@
           exchange, symbol
         );
         this.stocksToTrack.push(stock);
+        inputSymbolToAdd.value = "";  // clear 'Add Ticker' input field
         this.liveUpdate();
       }
       StockTracker.prototype.handleEventTimerTick = function()
