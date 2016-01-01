@@ -57,9 +57,11 @@ ref.onAuth(authCallback);
     var data2 = $firebaseArray(dataRef2);
     var dataRef3 = dataRef2.child("today");
     var data3 = $firebaseArray(dataRef3);
+
     var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
     var userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
     $scope.userData = userData;
+
     var scans =  new Firebase("https://market-wizard.firebaseio.com/scans");
     var scanners = $firebaseArray(scans);
     $scope.scans = scanners;
@@ -77,9 +79,13 @@ ref.onAuth(authCallback);
     var newTop10 = new Firebase("https://market-wizard.firebaseio.com/topTen/");
     var top10 = $firebaseArray(newTop10);  // turn Firebase into Array for Angular
     $scope.top10 = top10;
+
     var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);  // make reference to location of current user's watchlists
     var userWatching = $firebaseArray(userWatchlistRef);
     $scope.userWatchlistRef = userWatching;
+
+    var newtickerData = new Firebase("https://market-wizard.firebaseio.com/tickerData/");
+    var tickerData = $firebaseArray(newtickerData);  // turn Firebase into Array for Angular
 
     data.$loaded()
       .then(function(data) {  // promise
@@ -1237,6 +1243,7 @@ setInterval(function () {
 
   $scope.getTickerData = function(stockTicker, watchList) {
     // console.log("inside 'find matching ticker' function");
+    newtickerData.remove();  // remove old data
     // newData.remove();  // remove old data
 
     // GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST
@@ -1332,7 +1339,16 @@ setInterval(function () {
         // console.log(i + ". " + ticker + " = " + lastPrice);
 
         if (ticker === stockTicker) {
-          console.log(stockTicker + " = " + lastPrice);
+          console.log(ticker + " = " + lastPrice + " = " + close + " = " + high + " = " + low + " = " + volume);
+          // push information to Firebase
+          tickerData.$add({  // add tickers/information/calculations to Firebase
+            ticker: ticker,
+            lastPrice: lastPrice,
+            close: close,
+            high: high,
+            low: low,
+            volume: volume
+          });
         }
       })
     })
