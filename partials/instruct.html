@@ -28,9 +28,18 @@
     </select>
   </label>
   <!-- <a><button ng-click="update()">Force Update</button></a> -->
+  <!-- <a><button ng-click="getTickerData()">Find Ticker</button></a> -->
 </div>
-  <!-- <a><button ng-click="populateStocks()">Populate Stock List</button></a> -->
-  <!-- <button ng-click="predicate=''">Unsort</button> -->
+</div>
+
+<div>  
+  <label>Real-Time Market Scan:
+    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)"><option value="">Select Scan</option>
+    </select>
+  </label>
+  <!-- <a><button ng-click="update()">Force Update</button></a> -->
+  <!-- <a><button ng-click="getTickerData()">Find Ticker</button></a> -->
+</div>
 </div>
 
 <div id="cntrlPanel">

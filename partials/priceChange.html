@@ -5,7 +5,9 @@
     <a><button ng-click="newTicker()">Add to</button></a>
     <select ng-model="addToThisList" ng-options="thing.$id for thing in listToWatch">
       <option></option>
-    </select><div><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
+    </select>
+
+    <div><a><button ng-click="newWatchlist()">Add to</button></a><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
 </div>
 
 <div>
@@ -87,7 +89,7 @@
     <tr>
       <td>
         <table class="list2">
-          <tr>
+<!--           <tr>
            <td>
                <button ng-click="order2('symbol')"><em>Symbol</em></button>
                <span class="sortorder2" ng-show="predicate === 'symbol'" ng-class="{reverse:reverse}"></span>
@@ -116,34 +118,24 @@
                <button ng-click="order2('change')">Change</button>
                <span class="sortorder2" ng-show="predicate === 'change'" ng-class="{reverse:reverse}"></span>
            </td>
-          </tr>
+          </tr> -->
           <tr ng-repeat="thing in watchList">
-            <td class="watchTicks"><button type="button" class="deleteButton" ng-click="getTickerData(thing.ticker, watchList)">Get Data</button>{{thing.ticker}}</td>
+            <td class="watchTicks"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" style="color:red;">[x]</a></td>
+          </tr>
+        </table>
+      </td>
+      <td class="tickerDetail">
+        <table ng-repeat="thing in tickerData">
+          <tr>
+            <td>{{thing.ticker}} currently trading at {{thing.lastPrice}}</td>
+          </tr>
+          <tr><td>Today's high is {{thing.high}}</td>
+          </tr>
+          <tr><td>Today's low is {{thing.low}}</td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
-
-
-
-
-
-
-  <table>
-    <tr ng-repeat="thing in tickerData">
-      <td class="watchTicks">{{thing.ticker}}</td>
-      <td class="watchTicks">{{thing.lastPrice}}</td>
-      <td class="watchTicks">{{thing.high}}</td>
-      <td class="watchTicks">{{thing.low}}</td>
-    </tr>
-  </table>
-
-
-
-
-
-
 </div>
-
 

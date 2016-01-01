@@ -16,14 +16,20 @@ var loginStatus = false;
 ref.onAuth(authCallback);
   function authCallback(authData) {
     // Do not show 'chart' modal if user is logged out
-    var text = document.getElementById('chartButton');
+    var chartButton = document.getElementById('chartButton');  // reference 'Chart' button
+    var tickerBoard = document.getElementById('tickerBoard');  // reference index tickerboard
+    var tickerBoard2 = document.getElementById('tickerBoard2'); // reference tickerboard
     if (authData) {  // if user is logged in
-      text.style.display = "block"  // set 'display' property to 'block'
+      chartButton.style.display = "block"  // show 'Chart' button
+      tickerBoard.style.display = "block" // show index tickerboard
+      tickerBoard2.style.display = "block" // show tickerboard
       console.log("User " + authData.uid + " is logged in with " + authData.provider);
       // set flag for use elsewhere
       loginStatus = true;
     } else {  // else user is logged out
-      text.style.display = "none"  // set 'display' property to 'none'
+      chartButton.style.display = "none"  // do not show 'Chart' button
+      tickerBoard.style.display = "none"  // do not show index tickerboard
+      tickerBoard2.style.display = "none" // do not show tickerBoard
       console.log("User is logged out");
       loginStatus = false;
     }
@@ -86,6 +92,7 @@ ref.onAuth(authCallback);
 
     var newtickerData = new Firebase("https://market-wizard.firebaseio.com/tickerData/");
     var tickerData = $firebaseArray(newtickerData);  // turn Firebase into Array for Angular
+    $scope.tickerData = tickerData;
 
     data.$loaded()
       .then(function(data) {  // promise
@@ -933,19 +940,49 @@ ref.onAuth(authCallback);
     // if (($scope.watchName != "") && ($scope.addToThisList.$id != "")) {
     //     alert("Please choose either a current or a new watchlist.")
     // } else 
-    if ($scope.addTicker === undefined || null) {
+    if ($scope.addTicker === undefined || null || "") {
         alert("Enter ticker to be added to watchlist.");
-    }  else if ($scope.watchName != undefined || null) {
-        watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
-        listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-        $('#addTickerModal').modal('show'); 
-    } else if ($scope.addToThisList.$id != undefined || null) {
+    // }  else if ($scope.watchName != undefined || null || "") {
+        // watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
+        // listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+        // $('#addTickerModal').modal('show'); 
+    } else if ($scope.addToThisList.$id != undefined || null || "") {
         dropWatchlistRef = $scope.addToThisList.$id;  // obtain name of watchlist from dropdown
         listRef.child(dropWatchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
         $('#addTickerModal').modal('show'); 
     }
     $scope.addTicker = "";  // clear 'Add Ticker' input field
     $scope.addToThisList = "";  // clear watchlist dropdown
+    // $scope.watchName;  // clear 'or enter new Watchlist' field
+};
+
+
+// ADDS NEW WATCHLIST UNDER USER'S FIREBASE ID
+
+  $scope.newWatchlist = function(addToThisList) {
+    var dropWatchlistRef = undefined;
+    var watchlistRef = undefined;
+    var newTicker = undefined;
+
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    // console.log("ref", ref);
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // console.log("currentAuth = ", currentAuth);
+    var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
+    // console.log("listRef", listRef);
+    // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
+    // console.log("watchlistRef = ", watchlistRef);
+
+    var newTicker = {
+      "ticker": $scope.addTicker
+    };
+
+    if ($scope.watchName != undefined || null || "") {
+        watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
+        listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+        $('#addTickerModal').modal('show'); 
+    } 
+    $scope.addTicker = "";  // clear 'Add Ticker' input field
     $scope.watchName = "";  // clear 'or enter new Watchlist' field
 };
 
@@ -1183,7 +1220,7 @@ setInterval(function () {
         }  //  end of 'if' statement
     })();  // end of 'timer' IIFE
   }  // end of 'if loginStatus === true'
-}, 15000)  // end of 'setInterval'
+}, 1500000)  // end of 'setInterval'
 
 
 // USER'S AT-WILL UPDATE (no longer used)
@@ -1221,25 +1258,8 @@ setInterval(function () {
   }
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// ++++++ DISPLAY USER'S CHOSEN WATCHLIST FROM DROPDOWN ++++++++++++++++++++++++++++++++++++++
-
-  $scope.watchListView = function(watchList) {
-    // console.log(watchList);
-    // console.log(watchList.$id);
-
-  // * NEED TO LOOP THROUGH OBJECT AND MATCH TICKERS TO TICKERS IN 'DATA2' TO PULL DATA
-  
-   $location.path("/watchlist");  // take user to this location
-  // $scope.$apply();
-  }
-
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 // ++++++ BEGIN 'FIND MATCHING TICKER' FUNCTION ++++++++++++++++++++++++++++++++++++++
-// * push specified key 'ticker' with user's ticker //
+  newtickerData.remove();  // remove old data on page load so it doesn't display until user clicks a ticker
 
   $scope.getTickerData = function(stockTicker, watchList) {
     // console.log("inside 'find matching ticker' function");
@@ -1261,6 +1281,7 @@ setInterval(function () {
       // console.log(i + ". " + $scope.userStocks[i].$id);  // 'undefined' for remaining past # in watchlist
 
     // console.log(stockTicker);  // log ticker user clicked
+    // console.log("watchList =", watchList);  // log entire object of this dropdown choice
     console.log("user's dropdown choice", watchList.$id);  // log user's dropdown choice
     // console.log("all of user's watchlists", listToWatch);  // log all of user's watchlists
 
@@ -1270,14 +1291,6 @@ setInterval(function () {
         console.log("accessed Firebase watchlist is", listToWatch[i].$id); // log successful access to chosen watclist in Firebase
         console.log("contents of", listToWatch[i].$id, "is", listToWatch[i]); // log chosen watchlist object
         console.log("user's ticker choice =", stockTicker);
-
-          // for (var i = 0; i < 2; i++) {
-            // console.log("inside for-loop in deleteTicker");
-            // console.log(listToWatch[i].$id);
-            // console.log(listToWatch[i].ticker); // returns 'undefined'
-            // watchListID.$id.$remove(stockTicker);
-            // $scope.listToWatch.$remove(stockTicker.ticker);
-          // }
         }
       }
 
@@ -1293,8 +1306,6 @@ setInterval(function () {
         // watchList[i].remove();
         // return;
       // }
-
-      // console.log(data2);
 
     // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
     //   console.log(i);
@@ -1338,6 +1349,7 @@ setInterval(function () {
 
         // console.log(i + ". " + ticker + " = " + lastPrice);
 
+        // LOCATE IN FIREBASE, USER'S TICKER WHICH WAS CLICKED ON
         if (ticker === stockTicker) {
           console.log(ticker + " = " + lastPrice + " = " + close + " = " + high + " = " + low + " = " + volume);
           // push information to Firebase
@@ -1353,12 +1365,24 @@ setInterval(function () {
       })
     })
 
+
 }  // END 'FIND MATCHING TICKER' FUNCTION
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // ++++++ DELETE TICKER FROM USER'S WATCHLIST ++++++++++++++++++++++++++++++++++++++++++++++++
+    $scope.removeItem = function (thing) {
+    var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);  // make reference to location of current user's watchlists
+    var userWatching = $firebaseArray(userWatchlistRef);
+    $scope.userWatchlistRef = userWatching;
+
+      console.log("inside removeItem()");
+      console.log(thing);
+        // var item = thing;
+      console.log(thing.ticker);
+        userWatchlistRef.child(thing.ticker).remove();
+      }
 
   $scope.deleteTicker = function(stockTicker, watchList) {
     // console.log("from 'deleteTicker' function", watchList);
@@ -1454,26 +1478,9 @@ setInterval(function () {
   // });
 
 
-
-
-
     // userLists.forEach(function(object2, i) {  // loop through data
 
     // }
-
-
-
-// +++ CURRENTLY NOT  BEING USED ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  SHOW/HIDE CHART
-$(document).ready(function(){
-    $("#hide").click(function(){
-        $("p").hide();
-    });
-    $("#show").click(function(){
-        $("p").show();
-    });
-});
-
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1497,3 +1504,34 @@ $(document).ready(function(){
 
   }  // END OF CONTROLLER FUNCTION -> (all functionality goes inside this function)
 ]);
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// ++++++ DISPLAY USER'S CHOSEN WATCHLIST FROM DROPDOWN ++++++++++++++++++++++++++++++++++++++
+// * NO LONGER USED
+// * NO LONGER USED
+// * NO LONGER USED
+  // $scope.watchListView = function(watchList) {
+    // console.log(watchList);
+    // console.log(watchList.$id);
+
+  // * NEED TO LOOP THROUGH OBJECT AND MATCH TICKERS TO TICKERS IN 'DATA2' TO PULL DATA
+  
+   // $location.path("/watchlist");  // take user to this location
+  // $scope.$apply();
+  // }
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// +++ CURRENTLY NOT  BEING USED ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//  SHOW/HIDE CHART
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("p").hide();
+    });
+    $("#show").click(function(){
+        $("p").show();
+    });
+});

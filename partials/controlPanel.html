@@ -10,7 +10,7 @@
 
 <div>
   <label>WatchList:
-    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="watchListView(watchList)">
+    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
     <option value="">Select Watchlist</option>
     </select>
   </label>
@@ -20,6 +20,16 @@
     <option value="">Select Market</option>
     </select>
   </label>
+</div>
+
+<div>  
+  <label>Real-Time Market Scan:
+    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)"><option value="">Select Scan</option>
+    </select>
+  </label>
+  <!-- <a><button ng-click="update()">Force Update</button></a> -->
+  <!-- <a><button ng-click="getTickerData()">Find Ticker</button></a> -->
+</div>
 </div>
 
 <div>  

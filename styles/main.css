@@ -124,6 +124,9 @@ td.wide {
   overflow: auto;
   margin: 0 0 0 0; }
 
+.tickerDetail {
+  margin: 0 0 0 5em; }
+
 .banner_text {
   color: silver;
   font-weight: 900;
