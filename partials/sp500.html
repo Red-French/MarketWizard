@@ -10,7 +10,7 @@
 
 <div>
   <label>WatchList:
-    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch" ng-change="watchListView(watchList)">
+    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
     <option value="">Select Watchlist</option>
     </select>
   </label>
@@ -76,14 +76,51 @@
           </tr>
         </table>
       </td>
+    </tr>
+  </table>
+</div>
 
-<!--       <td id="watchListTable">
-        <table>
-          <tr><td>&nbsp;</td></tr>
-          <tr><td>{{watchList.$id}}</td></tr>
-          <tr ng-repeat="thing in watchList"><td class="watchTicks"><button type="button" id="deleteButton" ng-click="deleteSong(thing)">Delete</button>{{thing.ticker}}</td></tr>
+
+<div id"cntrlPanel2">
+  <table>
+    <tr>
+      <td>
+        <table class="list2">
+          <tr>
+           <td>
+               <button ng-click="order2('symbol')"><em>Symbol</em></button>
+               <span class="sortorder2" ng-show="predicate === 'symbol'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('lastPrice')">Last</button>
+               <span class="sortorder2" ng-show="predicate === 'lastPrice'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('close')">Close</button>
+               <span class="sortorder2" ng-show="predicate === 'close'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('high')">High</button>
+               <span class="sortorder2" ng-show="predicate === 'high'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('low')">Low</button>
+               <span class="sortorder2" ng-show="predicate === 'low'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('volume')">Volume</button>
+               <span class="sortorder2" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('change')">Change</button>
+               <span class="sortorder2" ng-show="predicate === 'change'" ng-class="{reverse:reverse}"></span>
+           </td>
+          </tr>
+          <tr ng-repeat="thing in watchList">
+            <td class="watchTicks"><button type="button" class="deleteButton" ng-click="getTickerData(thing.ticker, watchList)">Get Data</button>{{thing.ticker}}</td>
+          </tr>
         </table>
-      </td> -->
+      </td>
     </tr>
   </table>
 </div>
