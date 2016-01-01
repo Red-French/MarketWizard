@@ -84,6 +84,10 @@ td.wide {
   width: 5em;
 }
 
+td.watchlist {
+  width: 10em;
+}
+
 #results {
   float: left;
   width: 100%;
@@ -160,10 +164,6 @@ td.wide {
   overflow: auto;
   margin: 0 0 0 0;
   // overflow-x: hidden;
-}
-
-.tickerDetail {
-  margin: 0 0 0 5em;
 }
 
 .banner_text {

@@ -70,6 +70,9 @@ div {
 td.wide {
   width: 5em; }
 
+td.watchlist {
+  width: 10em; }
+
 #results {
   float: left;
   width: 100%;
@@ -123,9 +126,6 @@ td.wide {
   vertical-align: top;
   overflow: auto;
   margin: 0 0 0 0; }
-
-.tickerDetail {
-  margin: 0 0 0 5em; }
 
 .banner_text {
   color: silver;

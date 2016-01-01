@@ -87,7 +87,7 @@
 <div id"cntrlPanel2">
   <table>
     <tr>
-      <td>
+      <td class="watchlist">
         <table class="list2">
 <!--           <tr>
            <td>
@@ -124,14 +124,20 @@
           </tr>
         </table>
       </td>
-      <td class="tickerDetail">
+
+      <td class="watchlist">
         <table ng-repeat="thing in tickerData">
           <tr>
-            <td>{{thing.ticker}} currently trading at {{thing.lastPrice}}</td>
+            <td>Live Data: {{thing.ticker}}</td>
+          <tr>
+          <tr>
+            <td>&nbsp;</td>
+            </tr>
+            <td>Current Price: {{thing.lastPrice}}</td>
           </tr>
-          <tr><td>Today's high is {{thing.high}}</td>
+          <tr><td>Current High: {{thing.high}}</td>
           </tr>
-          <tr><td>Today's low is {{thing.low}}</td>
+          <tr><td>Current Low: {{thing.low}}</td>
           </tr>
         </table>
       </td>

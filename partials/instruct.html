@@ -5,7 +5,9 @@
     <a><button ng-click="newTicker()">Add to</button></a>
     <select ng-model="addToThisList" ng-options="thing.$id for thing in listToWatch">
       <option></option>
-    </select><div><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
+    </select>
+
+    <div><a><button ng-click="newWatchlist()">Add to</button></a><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
 </div>
 
 <div>
@@ -20,16 +22,6 @@
     <option value="">Select Market</option>
     </select>
   </label>
-</div>
-
-<div>  
-  <label>Real-Time Market Scan:
-    <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)"><option value="">Select Scan</option>
-    </select>
-  </label>
-  <!-- <a><button ng-click="update()">Force Update</button></a> -->
-  <!-- <a><button ng-click="getTickerData()">Find Ticker</button></a> -->
-</div>
 </div>
 
 <div>  
@@ -65,3 +57,65 @@
     </tr>
   </table>
 </div>
+
+<div id"cntrlPanel2">
+  <table>
+    <tr>
+      <td class="watchlist">
+        <table class="list2">
+<!--           <tr>
+           <td>
+               <button ng-click="order2('symbol')"><em>Symbol</em></button>
+               <span class="sortorder2" ng-show="predicate === 'symbol'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('lastPrice')">Last</button>
+               <span class="sortorder2" ng-show="predicate === 'lastPrice'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('close')">Close</button>
+               <span class="sortorder2" ng-show="predicate === 'close'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('high')">High</button>
+               <span class="sortorder2" ng-show="predicate === 'high'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('low')">Low</button>
+               <span class="sortorder2" ng-show="predicate === 'low'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('volume')">Volume</button>
+               <span class="sortorder2" ng-show="predicate === 'volume'" ng-class="{reverse:reverse}"></span>
+           </td>
+           <td>
+               <button ng-click="order2('change')">Change</button>
+               <span class="sortorder2" ng-show="predicate === 'change'" ng-class="{reverse:reverse}"></span>
+           </td>
+          </tr> -->
+          <tr ng-repeat="thing in watchList">
+            <td class="watchTicks"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" style="color:red;">[x]</a></td>
+          </tr>
+        </table>
+      </td>
+
+      <td class="watchlist">
+        <table ng-repeat="thing in tickerData">
+          <tr>
+            <td>Live Data: {{thing.ticker}}</td>
+          <tr>
+          <tr>
+            <td>&nbsp;</td>
+            </tr>
+            <td>Current Price: {{thing.lastPrice}}</td>
+          </tr>
+          <tr><td>Current High: {{thing.high}}</td>
+          </tr>
+          <tr><td>Current Low: {{thing.low}}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</div>
+
