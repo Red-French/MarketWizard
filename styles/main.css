@@ -81,6 +81,12 @@ td.wide {
   position: absolute;
   text-align: center; }
 
+#tickerBoard2 {
+  width: 20%;
+  margin: 0 70% 0 0;
+  position: absolute;
+  text-align: center; }
+
 #chartButton {
   margin: -4em 0 0 69%;
   position: absolute; }
