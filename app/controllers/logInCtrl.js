@@ -2,7 +2,7 @@
 
 app.controller('logIn', ["$scope", "$location", 
   function($scope, $location) {
-  	console.log("inside login.js");
+  	console.log("inside loginCtrl.js");
 
 // REGISTER USER
 $scope.createUser = function() {
@@ -46,18 +46,18 @@ ref.authWithPassword({  // method that authenticates user with email/password co
 
 
 // log user out
-$scope.logout = function() {
-
-  // get authdata object by calling firebase method on reference created up top
-  var authData = ref.getAuth();
-  console.log("authData", authData);
-  console.log("authData.uid", authData.uid);
-  // unauthorize user location
-  userRef.unauth();
-  console.log("authData", authData);
-  $location.path("partials/splash.html");
-  $scope.$apply();  // used to call the digest() method to listen for DOM event
-  }
+// $scope.logout = function() {
+// console.log("in logout()");
+// var ref = new Firebase("https://market-wizard.firebaseio.com");  // reference database
+//   var authData = ref.getAuth();  // get authdata object by calling firebase method on reference created above
+//   console.log("authData", authData);
+//   console.log("authData.uid", authData.uid);
+//   // unauthorize user location
+//   userRef.unauth();
+//   console.log("authData", authData);
+//   $location.path("/splash.html");
+//   $scope.$apply();  // used to call the digest() method to listen for DOM event
+//   }
 
 
 

@@ -35,7 +35,7 @@ app.config(['$routeProvider',  // this is like entry.js
       })
       .when('/logout', {
         templateUrl: 'partials/splash.html',
-        controller: 'logIn'
+        controller: 'logOut'
       })
       .when('/controlPanel', {
         templateUrl: 'partials/controlPanel.html',
@@ -52,4 +52,3 @@ app.config(['$routeProvider',  // this is like entry.js
      .otherwise('/main'); // catchall
      // .otherwise({ redirectTo: '/main' });
  }]);
-
