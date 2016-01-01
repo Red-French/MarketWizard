@@ -5,7 +5,7 @@
     <a><button ng-click="newTicker()">Add to</button></a>
     <select ng-model="addToThisList" ng-options="thing.$id for thing in listToWatch">
       <option></option>
-    </select><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist">
+    </select><div><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
 </div>
 
 <div>
@@ -28,7 +28,7 @@
     </select>
   </label>
   <!-- <a><button ng-click="update()">Force Update</button></a> -->
-  <a><button ng-click="getTickerData()">Find Ticker</button></a>
+  <!-- <a><button ng-click="getTickerData()">Find Ticker</button></a> -->
 </div>
 </div>
 
@@ -68,16 +68,26 @@
            </td>
           </tr>
           <tr ng-repeat="thing in userData | filter: query | orderBy:predicate:reverse">
-            <td>{{thing.ticker}}</td>
-            <td>{{thing.lastPrice}}</td>
-            <td>{{thing.close}}</td>
-            <td>{{thing.high}}</td>
-            <td>{{thing.low}}</td>
-            <td>{{thing.volume}}</td>
-            <td>{{thing.calculation}}</td>
+            <td class="wide">{{thing.ticker}}</td>
+            <td class="wide">{{thing.lastPrice}}</td>
+            <td class="wide">{{thing.close}}</td>
+            <td class="wide">{{thing.high}}</td>
+            <td class="wide">{{thing.low}}</td>
+            <td class="wide">{{thing.volume}}</td>
+            <td class="wide">{{thing.calculation}}</td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
 </div>
+
+<div id"cntrlPanel2">
+    <table id="cntrlPanel2">
+          <tr ng-repeat="thing in watchList">
+            <td class="watchTicks"><button type="button" class="deleteButton" ng-click="getTickerData(thing.ticker, watchList)">Get Data</button>{{thing.ticker}}</td>
+          </tr>
+  </table>
+</div>
+
+

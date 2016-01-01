@@ -46,7 +46,7 @@ app.config(['$routeProvider',  // this is like entry.js
         controller: 'masterListCtrl'
       })
       .when('/watchlist', {
-        templateUrl: 'partials/watchlist.html',
+        templateUrl: 'partials/priceChange.html',
         controller: 'masterListCtrl'
       })
      .otherwise('/main'); // catchall
