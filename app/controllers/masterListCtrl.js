@@ -1236,53 +1236,10 @@ setInterval(function () {
 // * push specified key 'ticker' with user's ticker //
 
   $scope.getTickerData = function(stockTicker, watchList) {
-      console.log("inside 'find matching ticker' function");
-      // newData.remove();  // remove old data
-    //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
-        // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
-          // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
-          var key = snapshot2.key();  // key is the unique ID of each day's data
-          // console.log("key", key);
-          var childData2 = snapshot2.val();  // childData2 is contents of the child
-          $scope.childData2 = childData2;
-          todaysData = $scope.childData2;
-          // console.log("childData2.length", childData2.length);
-          // console.log("date", childData2[2].serverTimestamp);
-          // console.log("childData2", childData2.lastPrice);
-          // })
-        // console.log(todaysData);
-      })
-      })
+    // console.log("inside 'find matching ticker' function");
+    // newData.remove();  // remove old data
 
-  // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
-              var key = snapshot3.key();  // key is the unique ID of each day's data
-              var childData3 = snapshot3.val();  // childData is contents of the child
-              childData3 = childData3;
-              yesterdaysData = childData3;
-
-              // PERFORM CALCULATION
-              todaysData.forEach(function(object2, i) {  // loop through data
-                
-                // place API data in variables
-                ticker = todaysData[i].symbol;
-                lastPrice = todaysData[i].lastPrice;
-                close = todaysData[i].close;
-                high = todaysData[i].high;
-                low = todaysData[i].low;
-                volume = todaysData[i].volume;
-
-                console.log(i + ". " + ticker + " = " + lastPrice);
-
-                if (ticker === "AAPL") {
-                  console.log("Apple's price is " + lastPrice);
-                }
-})
-})
-
-// get current user's stocks from chosen watchlist
+    // GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     // console.log("current user = ", currentAuth);
@@ -1295,22 +1252,17 @@ setInterval(function () {
       $scope.userStocks = userStocks;
     });
       // console.log(i + ". " + $scope.userStocks[i].$id);  // 'undefined' for remaining past # in watchlist
-      // console.log(i + ". " + "userStocks = ", $scope.userStocks[1].ticker); // returns 'undefined'
 
-
-
-
-    console.log(stockTicker);
-    console.log("all of user's watchlists", listToWatch);  // log all of user's watchlists
+    // console.log(stockTicker);  // log ticker user clicked
     console.log("user's dropdown choice", watchList.$id);  // log user's dropdown choice
+    // console.log("all of user's watchlists", listToWatch);  // log all of user's watchlists
 
+    //  LOCATE USER'S WATCHLIST CHOICE IN FIREBASE
     for (var i = 0; i < listToWatch.length; i++) {  // loop through user's watchlists stored in Firebase
       if (listToWatch[i].$id === watchList.$id) {  // if Firebase watchlist equals dropdown choice
         console.log("accessed Firebase watchlist is", listToWatch[i].$id); // log successful access to chosen watclist in Firebase
         console.log("contents of", listToWatch[i].$id, "is", listToWatch[i]); // log chosen watchlist object
-        console.log("ticker to delete is", stockTicker);
-        var tickToRemove = stockTicker;
-        // listToWatch[i].$id.remove();
+        console.log("user's ticker choice =", stockTicker);
 
           // for (var i = 0; i < 2; i++) {
             // console.log("inside for-loop in deleteTicker");
@@ -1322,16 +1274,18 @@ setInterval(function () {
         }
       }
 
-    angular.forEach(watchList, function(element, i) {  // loop over Firebase list
-      console.log(i);
-      console.log(watchList[i].ticker);
-      if (watchList[i].ticker === stockTicker) {
-        console.log("guess what? Found", stockTicker);
-        console.log(watchList[i]);
-        tickerChosen = watchList[i].ticker;
-        console.log("chosen ticker =", tickerChosen);
+    // LOCATE USER'S TICKER CHOICE
+    // angular.forEach(watchList, function(element, key) {  // loop over Firebase list
+      // console.log(key);
+      // console.log(watchList[key].ticker);
+      // if (watchList[key].ticker === stockTicker) {
+        // console.log("guess what? Found", stockTicker);
+        // console.log(watchList[key]);
+        // tickerChosen = watchList[key].ticker;
+        // console.log("chosen ticker and its key=", tickerChosen + " " + key);
         // watchList[i].remove();
-      }
+        // return;
+      // }
 
       // console.log(data2);
 
@@ -1345,8 +1299,43 @@ setInterval(function () {
     //     console.log("chosen ticker =", tickerChosen);
     //   }
 
-    })
+    // })
 
+    //  GRAB TODAY'S DATA
+    dataRef2.once("value", function(snapshot) {
+      dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+        var key = snapshot2.key();  // key is the unique ID of each day's data
+        var childData2 = snapshot2.val();  // childData2 is contents of the child
+        $scope.childData2 = childData2;
+        todaysData = $scope.childData2;
+      // console.log(todaysData);
+      })
+    })
+    // * SHOULD ALWAYS BE 'LIMITTOLAST' TO GET LATEST DATA
+    dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+      var key = snapshot3.key();  // key is the unique ID of each day's data
+      var childData3 = snapshot3.val();  // childData is contents of the child
+      childData3 = childData3;
+      yesterdaysData = childData3;
+
+      // MOVE LATEST DATA INTO VARIABLES
+      todaysData.forEach(function(object2, i) {  // loop through data that will be referenced/matched
+        // console.log(i);
+        // PLACE API DATA IN VARIABLES
+        ticker = todaysData[i].symbol;
+        lastPrice = todaysData[i].lastPrice;
+        close = todaysData[i].close;
+        high = todaysData[i].high;
+        low = todaysData[i].low;
+        volume = todaysData[i].volume;
+
+        // console.log(i + ". " + ticker + " = " + lastPrice);
+
+        if (ticker === stockTicker) {
+          console.log(stockTicker + " = " + lastPrice);
+        }
+      })
+    })
 
 }  // END 'FIND MATCHING TICKER' FUNCTION
 
