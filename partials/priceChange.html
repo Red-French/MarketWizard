@@ -120,7 +120,8 @@
            </td>
           </tr> -->
           <tr ng-repeat="thing in watchList">
-            <td class="watchTicks"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" style="color:red;">[x]</a></td>
+          <td class="watchlist"></td>
+            <td class="watchlist"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" style="color:red;">[x]</a></td>
           </tr>
         </table>
       </td>
@@ -129,15 +130,18 @@
         <table ng-repeat="thing in tickerData">
           <tr>
             <td>Live Data: {{thing.ticker}}</td>
+          </tr>
           <tr>
-          <tr>
-            <td>&nbsp;</td>
-            </tr>
             <td>Current Price: {{thing.lastPrice}}</td>
           </tr>
-          <tr><td>Current High: {{thing.high}}</td>
+          <tr>
+            <td>Percent Change: {{thing.percentChange}}</td>
           </tr>
-          <tr><td>Current Low: {{thing.low}}</td>
+          <tr>
+            <td>Current High: {{thing.high}}</td>
+          </tr>
+          <tr>
+            <td>Current Low: {{thing.low}}</td>
           </tr>
         </table>
       </td>
