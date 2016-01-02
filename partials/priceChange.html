@@ -128,38 +128,34 @@
 
       <td class="watchlist"></td>
 
-<td>
-      <table>
-      <tr>
-
-      <td class="watchlist">
-        <table ng-repeat="thing in tickerData">
+      <td>
+        <table>
           <tr>
-            <td class="tickData">{{thing.ticker}}</td>
-          </tr>
-          <tr>
-            <td>Current Price: {{thing.lastPrice}}</td>
-          </tr>
-          <tr>
-            <td>&nbsp</td>
-          </tr>
-          <tr>
-            <td>Percent Change: {{thing.percentChange}}</td>
-          </tr>
-          <tr>
-            <td>Current High: {{thing.high}}</td>
-          </tr>
-          <tr>
-            <td>Current Low: {{thing.low}}</td>
+            <td class="watchlist">
+              <table ng-repeat="thing in tickerData">
+                <tr>
+                  <td class="tickData">{{thing.ticker}}</td>
+                </tr>
+                <tr>
+                  <td>Current Price: {{thing.lastPrice}}</td>
+                </tr>
+                <tr>
+                  <td>&nbsp</td>
+                </tr>
+                <tr>
+                  <td>Percent Change: {{thing.percentChange}}</td>
+                </tr>
+                <tr>
+                  <td>Current High: {{thing.high}}</td>
+                </tr>
+                <tr>
+                  <td>Current Low: {{thing.low}}</td>
+                </tr>
+              </table>
+            </td>
           </tr>
         </table>
       </td>
-
-
-      </tr>
-      </table>
-</td>
-
     </tr>
   </table>
 </div>
