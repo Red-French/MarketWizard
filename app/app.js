@@ -17,18 +17,18 @@ app.config(['$routeProvider',  // this is like entry.js
       //   templateUrl: 'partials/filter.html',
       //   controller: 'FilterCtrl'
       // })
-      .when('/naz100', {
-        templateUrl: 'partials/naz100.html',
-        controller: 'masterListCtrl'
-      })
-      .when('/sp500', {
-        templateUrl: 'partials/sp500.html',
-        controller: 'masterListCtrl'
-      })
-      .when('/dj30', {
-        templateUrl: 'partials/dj30.html',
-        controller: 'masterListCtrl'
-      })
+      // .when('/naz100', {
+      //   templateUrl: 'partials/naz100.html',
+      //   controller: 'masterListCtrl'
+      // })
+      // .when('/sp500', {
+      //   templateUrl: 'partials/sp500.html',
+      //   controller: 'masterListCtrl'
+      // })
+      // .when('/dj30', {
+      //   templateUrl: 'partials/dj30.html',
+      //   controller: 'masterListCtrl'
+      // })
       .when('/login', {
         templateUrl: 'partials/login.html',
         controller: 'logIn'
@@ -37,18 +37,18 @@ app.config(['$routeProvider',  // this is like entry.js
         templateUrl: 'partials/splash.html',
         controller: 'logOut'
       })
-      .when('/controlPanel', {
-        templateUrl: 'partials/controlPanel.html',
-        controller: 'masterListCtrl'
-      })
+      // .when('/controlPanel', {
+      //   templateUrl: 'partials/controlPanel.html',
+      //   controller: 'masterListCtrl'
+      // })
       .when('/data', {
         templateUrl: 'partials/priceChange.html',
         controller: 'masterListCtrl'
       })
-      .when('/watchlist', {
-        templateUrl: 'partials/priceChange.html',
-        controller: 'masterListCtrl'
-      })
+      // .when('/watchlist', {
+      //   templateUrl: 'partials/priceChange.html',
+      //   controller: 'masterListCtrl'
+      // })
      .otherwise('/main'); // catchall
      // .otherwise({ redirectTo: '/main' });
  }]);

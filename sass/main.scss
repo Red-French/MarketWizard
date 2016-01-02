@@ -86,6 +86,12 @@ td.wide {
 
 td.watchlist {
   width: 10em;
+  vertical-align: top;
+}
+
+.tickData {
+  font-weight: 700;
+  vertical-align: top;
 }
 
 #results {
@@ -123,7 +129,11 @@ td.watchlist {
 }
 
 #inputSymbolToAdd {
-  width: 155px;
+  width: 120px;
+}
+
+#tableQuotes {
+  margin: 0 0 0 4em;
 }
 
 #cntrlContainer {
@@ -363,10 +373,6 @@ footer {
 }
 .sortorder.reverse:after {
   content: '\25bc';
-}
-
-#watchListTable {
-  vertical-align: top;
 }
 
 #myModal {

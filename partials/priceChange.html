@@ -126,13 +126,22 @@
         </table>
       </td>
 
+      <td class="watchlist"></td>
+
+<td>
+      <table>
+      <tr>
+
       <td class="watchlist">
         <table ng-repeat="thing in tickerData">
           <tr>
-            <td>Live Data: {{thing.ticker}}</td>
+            <td class="tickData">{{thing.ticker}}</td>
           </tr>
           <tr>
             <td>Current Price: {{thing.lastPrice}}</td>
+          </tr>
+          <tr>
+            <td>&nbsp</td>
           </tr>
           <tr>
             <td>Percent Change: {{thing.percentChange}}</td>
@@ -145,6 +154,12 @@
           </tr>
         </table>
       </td>
+
+
+      </tr>
+      </table>
+</td>
+
     </tr>
   </table>
 </div>
