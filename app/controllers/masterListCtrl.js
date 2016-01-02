@@ -57,30 +57,34 @@ ref.onAuth(authCallback);
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // REFERENCE 'DATA' (IN FIREBASE) AND USE PROMISE TO CONFIRM IT IS LOADED
-    var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // grab data from Firebase
+    var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // reference NAZ100 Historical Data
     var data = $firebaseArray(dataRef);
-    var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // grab data from Firebase
+    var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // reference NAZ100 Today's Data
     var data2 = $firebaseArray(dataRef2);
-    var dataRef3 = dataRef2.child("today");
+    var dataRef3 = dataRef2.child("today");  // reference NAZ100 Today's Data
     var data3 = $firebaseArray(dataRef3);
 
-    var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");
+    var spHistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP500_Historical"); // reference S&P-500 Historical Data
+    var sp500History = $firebaseArray(spHistoryRef);
+    var sp500Ref = new Firebase("https://market-wizard.firebaseio.com/sp500"); // reference S&P-500 Today's Data
+    var sp500 = $firebaseArray(sp500Ref);
+
+    var dj30HistoryRef = new Firebase("https://market-wizard.firebaseio.com/DJ_Historical"); // reference DJ-30 Historical Data
+    var dj30History = $firebaseArray(dj30HistoryRef);
+    var dj30Ref = new Firebase("https://market-wizard.firebaseio.com/dj30"); // reference DJ-30 Today's Data
+    var dj30 = $firebaseArray(dj30Ref);
+
+    var newData = new Firebase("https://market-wizard.firebaseio.com/calculated/");  // reference Market Data after calculations
     var userData = $firebaseArray(newData);  // turn Firebase into Array for Angular
     $scope.userData = userData;
 
-    var scans =  new Firebase("https://market-wizard.firebaseio.com/scans");
+    var scans =  new Firebase("https://market-wizard.firebaseio.com/scans");  // // reference scans
     var scanners = $firebaseArray(scans);
     $scope.scans = scanners;
 
-    var marketsRef = new Firebase("https://market-wizard.firebaseio.com/markets"); // grab data from Firebase
+    var marketsRef = new Firebase("https://market-wizard.firebaseio.com/markets"); // // reference all markets in system
     var markets = $firebaseArray(marketsRef);
     $scope.marketsList = markets;
-
-    var spRef = new Firebase("https://market-wizard.firebaseio.com/sp500"); // grab data from Firebase
-    var sp500 = $firebaseArray(spRef);
-
-    var dj30 = new Firebase("https://market-wizard.firebaseio.com/dj30"); // grab data from Firebase
-    var dj30 = $firebaseArray(dj30);
 
     var newTop10 = new Firebase("https://market-wizard.firebaseio.com/topTen/");
     var top10 = $firebaseArray(newTop10);  // turn Firebase into Array for Angular
@@ -191,64 +195,67 @@ ref.onAuth(authCallback);
   $scope.marketView = function(marketList) {
     // console.log("scanOption is ", scanOption.value);
     console.log(marketList.$id);
+    $scope.marketList === marketList;
 
+// // * // BEGIN LOAD 'NASDAQ-100'
+//     if (marketList.$id === "NASDAQ 100") {
+//       console.log("inside calc via NASDAQ 100");
+//       // newData.remove();  // remove old data
+//       $location.path("/naz100");  // take user to this location
+//     }
+// // END LOAD 'NASDAQ-100'
 
-// * // BEGIN LOAD 'NASDAQ-100'
-    if (marketList.$id === "NASDAQ 100") {
-      console.log("inside calc via NASDAQ 100");
-      // newData.remove();  // remove old data
-      $location.path("/naz100");  // take user to this location
-    }
-// END LOAD 'NASDAQ-100'
+// // * // BEGIN LOAD 'SP-500'
+//     if (marketList.$id === "S&P 500") {
+//       console.log("inside calc via SP 500");
+//       // newData.remove();  // remove old data
+//       $location.path("/sp500");  // take user to this location
+//     }
+// // END LOAD 'SP-500'
 
-// * // BEGIN LOAD 'SP-500'
-    if (marketList.$id === "S&P 500") {
-      console.log("inside calc via SP 500");
-      // newData.remove();  // remove old data
-      $location.path("/sp500");  // take user to this location
-    }
-// END LOAD 'SP-500'
-
-// * // BEGIN LOAD 'DJ-30'
-    if (marketList.$id === "DJ 30") {
-      console.log("inside calc via DJ 30");
-      // newData.remove();  // remove old data
-      $location.path("/dj30");  // take user to this location
-    }
-// END LOAD 'DJ-30'
+// // * // BEGIN LOAD 'DJ-30'
+//     if (marketList.$id === "DJ 30") {
+//       console.log("inside calc via DJ 30");
+//       // newData.remove();  // remove old data
+//       $location.path("/dj30");  // take user to this location
+//     }
+// // END LOAD 'DJ-30'
 }
 
 
 // ++++ CALCULATIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   $scope.calc = function(scanners) {
+    // console.log($scope.marketList.$id);
+    var marketToScan = null;
+    var marketHistoryToScan = null;
     // console.log("scanOption is ", scanOption.value);
-    console.log("scanners.$id =", scanners.$id);
+    // console.log("scanners.$id =", scanners.$id);
 
-// * // BEGIN LOAD 'NASDAQ-100'
-    if (scanners.$id === "- NASDAQ 100 -") {
-      console.log("inside calc via - NASDAQ 100 -");
-      // newData.remove();  // remove old data
-      $location.path("/controlPanel");  // take user to this location
+// * // BEGIN - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
+    if ($scope.marketList.$id === "NASDAQ 100") {
+      marketToScan = dataRef2;
+      marketHistoryToScan = dataRef;
+      console.log("user wants to scan " + marketToScan);
+    } else if ($scope.marketList.$id === "S&P 500") {
+      marketToScan = sp500Ref;
+      marketHistoryToScan = sp500History;
+      console.log("user wants to scan " + marketToScan);
+    } else if ($scope.marketList.$id === "DJ 30") {
+      marketToScan = dj30Ref;
+      marketHistoryToScan = dj30HistoryRef;
+      console.log("user wants to scan " + marketToScan);
     }
-// END LOAD 'NASDAQ-100'
-
-// * // BEGIN LOAD 'SP-500'
-    if (scanners.$id === "- S&P 500 -") {
-      console.log("inside calc via - SP 500 -");
-      // newData.remove();  // remove old data
-      $location.path("/sp500");  // take user to this location
-    }
-// END LOAD 'SP-500'
+// END - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
 
 
-// BEGIN '<50 & >5 MIL SHARES AND ADVANCING TODAY' FUNCTION
+// BEGIN '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
     if (scanners.$id === "<50 & >1 mil shrs & advancing") {
       console.log("inside calc via <50 & >1 MIL SHARES & ADVANCING");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
         // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
           // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
           var key = snapshot2.key();  // key is the unique ID of each day's data
@@ -263,7 +270,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -274,10 +281,9 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
               var key = snapshot3.key();  // key is the unique ID of each day's data
               var childData3 = snapshot3.val();  // childData is contents of the child
-              childData3 = childData3;
               yesterdaysData = childData3;
 
               // PERFORM CALCULATION
@@ -293,7 +299,7 @@ ref.onAuth(authCallback);
 
                 // find relevant stocks
                 if (todaysData[i].lastPrice < 50.00) {
-                  if (yesterdaysData[i].volume > 1000000) {
+                  // if (yesterdaysData[i].volume > 1000) {
                     if (todaysData[i].lastPrice > yesterdaysData[i].close) {
 
                       calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
@@ -314,7 +320,7 @@ ref.onAuth(authCallback);
                         calculation: calcResult
                       });
                     }
-                  }
+                  // }
                 }
                $location.path("/data");  // take user to this location
                 //   // to access yesterday's dataset only, get number of entries with
@@ -328,13 +334,13 @@ ref.onAuth(authCallback);
   // END '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
 
 
-// BEGIN '>50 & >2 MIL SHARES AND DECLINING TODAY' FUNCTION
+// BEGIN '>50 & >750k SHARES AND DECLINING TODAY' FUNCTION
     if (scanners.$id === ">50 & >750k shrs & declining") {
       console.log("inside calc via >50 & >750k SHARES & DECLINING");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
         // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
           // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
           var key = snapshot2.key();  // key is the unique ID of each day's data
@@ -349,7 +355,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -360,10 +366,9 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
               var key = snapshot3.key();  // key is the unique ID of each day's data
               var childData3 = snapshot3.val();  // childData is contents of the child
-              childData3 = childData3;
               yesterdaysData = childData3;
 
               // PERFORM CALCULATION
@@ -420,8 +425,8 @@ ref.onAuth(authCallback);
       console.log("inside calc via GAP UP");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
         // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
           // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
           var key = snapshot2.key();  // key is the unique ID of each day's data
@@ -436,7 +441,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -447,7 +452,7 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
             // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
@@ -501,8 +506,8 @@ ref.onAuth(authCallback);
       console.log("inside calc via GAP DOWN");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
         // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
           // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
           var key = snapshot2.key();  // key is the unique ID of each day's data
@@ -517,7 +522,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -528,7 +533,7 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
             // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
@@ -583,8 +588,8 @@ ref.onAuth(authCallback);
       console.log("inside calc via NET CHANGE");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
         // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
           // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
           var key = snapshot2.key();  // key is the unique ID of each day's data
@@ -599,7 +604,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -610,7 +615,7 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
             // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
               var key = snapshot3.key();  // key is the unique ID of each day's data
@@ -666,8 +671,8 @@ ref.onAuth(authCallback);
       console.log("inside calc via TODAY'S ADVANCERS");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
         // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
           // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
           var key = snapshot2.key();  // key is the unique ID of each day's data
@@ -682,7 +687,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -693,7 +698,7 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
               // snapshot.forEach(function(childSnapshot3) {  // The callback function is called for each day's data
               // console.log("duece?");
               // console.log("snapshot", snapshot.val());  // each day's dataset is console logging
@@ -752,8 +757,8 @@ ref.onAuth(authCallback);
       console.log("inside calc via TODAY'S DECLINERS");
       newData.remove();  // remove old data
     //  GRAB TODAY'S DATA
-      dataRef2.once("value", function(snapshot) {
-        dataRef2.orderByChild("symbol").on("child_added", function(snapshot2) {
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
           var key = snapshot2.key();  // key is the unique ID of each day's data
           // console.log("key", key);
           var childData2 = snapshot2.val();  // childData2 is contents of the child
@@ -766,7 +771,7 @@ ref.onAuth(authCallback);
       });
 
   // GRAB YESTERDAY'S DATA
-          dataRef.once("value", function(snapshot) {
+          marketHistoryToScan.once("value", function(snapshot) {
             var ticker = "";
             var lastPrice = 0;
             var close = 0;
@@ -777,7 +782,7 @@ ref.onAuth(authCallback);
             var calcResult = 0;
 
   // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
-            dataRef.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot4) {
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot4) {
               // console.log("duece?");
               var key = snapshot4.key();  // key is the unique ID of each day's data
               var childData3 = snapshot4.val();  // childData is contents of the child
