@@ -64,8 +64,8 @@ ref.onAuth(authCallback);
     var dataRef3 = dataRef2.child("today");  // reference NAZ100 Today's Data
     var data3 = $firebaseArray(dataRef3);
 
-    var spHistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP500_Historical"); // reference S&P-500 Historical Data
-    var sp500History = $firebaseArray(spHistoryRef);
+    var sp500HistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP500_Historical"); // reference S&P-500 Historical Data
+    var sp500History = $firebaseArray(sp500HistoryRef);
     var sp500Ref = new Firebase("https://market-wizard.firebaseio.com/sp500"); // reference S&P-500 Today's Data
     var sp500 = $firebaseArray(sp500Ref);
 
@@ -239,7 +239,7 @@ ref.onAuth(authCallback);
       console.log("user wants to scan " + marketToScan);
     } else if ($scope.marketList.$id === "S&P 500") {
       marketToScan = sp500Ref;
-      marketHistoryToScan = sp500History;
+      marketHistoryToScan = sp500HistoryRef;
       console.log("user wants to scan " + marketToScan);
     } else if ($scope.marketList.$id === "DJ 30") {
       marketToScan = dj30Ref;
