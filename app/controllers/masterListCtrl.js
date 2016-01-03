@@ -1,6 +1,6 @@
 // * = note regarding issue to be addressed
 
-app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$location",  
+app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$location",
   function($scope, $http, $firebaseArray, $location) {
    // console.log("inside masterList.Ctrl"); 
 
@@ -658,6 +658,7 @@ ref.onAuth(authCallback);
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
                 })
+addTen();
               })
             // })
           });
@@ -738,8 +739,7 @@ ref.onAuth(authCallback);
                     volume: volume,
                     calculation: calcResult
                   });
-
-                }
+                       }
                $location.path("/data");  // take user to this location
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
@@ -841,8 +841,9 @@ ref.onAuth(authCallback);
 // NOT USING CURRENTLY!!!!!!! --
 // PUSH TOP 10 TO FIREBASE -- 
   function addTen () {
-    newData.orderByChild("calculation").limitToLast(2).on("child_added", function(snapshot5) {
       newTop10.remove();  // remove old data
+    newData.orderByChild("calculation").on("child_added", function(snapshot5) {
+
       // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
       console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
       var key = snapshot5.key();  // key is the unique ID of each day's data
@@ -857,6 +858,19 @@ ref.onAuth(authCallback);
         calculation: topTenCalc
       });
     });
+
+
+newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
+  console.log(snapshot.key() + " was " + snapshot.val().calculation);
+});
+
+
+var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+ref.orderByChild("height").on("child_added", function(snapshot) {
+  console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
+});
+
+
   }
 
 
@@ -1378,16 +1392,27 @@ setInterval(function () {
 
 // ++++++ DELETE TICKER FROM USER'S WATCHLIST ++++++++++++++++++++++++++++++++++++++++++++++++
     $scope.removeItem = function (thing) {
-    var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);  // make reference to location of current user's watchlists
+    var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
     var userWatching = $firebaseArray(userWatchlistRef);
     $scope.userWatchlistRef = userWatching;
 
-      console.log("inside removeItem()");
+      // console.log("inside removeItem()");
       console.log(thing);
-        // var item = thing;
       console.log(thing.ticker);
-        userWatchlistRef.child(thing.ticker).remove();
-      }
+      userWatchlistRef.child(thing.ticker).remove();
+
+
+
+userWatchlistRef.orderByChild("ticker").on("child_added", function(snapshot) {
+  console.log(snapshot.key() + " of " + snapshot.val().ticker);
+});
+
+newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
+  console.log(snapshot.key() + " of " + snapshot.val().calculation);
+});
+
+};
+
 
   $scope.deleteTicker = function(stockTicker, watchList) {
     // console.log("from 'deleteTicker' function", watchList);
@@ -1470,22 +1495,6 @@ setInterval(function () {
 
     // })
   }
-
-
-// * removes ticker from DOM but NOT from Firebase
-  // document.querySelector("body").addEventListener("click", function(event) {  // list for click events
-  //   // console.log(event);
-  //   if (event.target.className === "deleteButton") {  // if click is on a 'delete' button
-  //     // console.log("You clicked on 'Delete'");
-  //     console.log(event.target.parentElement);  // log html to be removed
-  //     event.target.parentElement.remove();  // remove chosen ticker from DOM
-  //   }
-  // });
-
-
-    // userLists.forEach(function(object2, i) {  // loop through data
-
-    // }
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
