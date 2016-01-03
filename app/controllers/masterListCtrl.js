@@ -1393,25 +1393,26 @@ setInterval(function () {
 // ++++++ DELETE TICKER FROM USER'S WATCHLIST ++++++++++++++++++++++++++++++++++++++++++++++++
     $scope.removeItem = function (thing) {
     var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
-    var userWatching = $firebaseArray(userWatchlistRef);
-    $scope.userWatchlistRef = userWatching;
+    var watchTicks = $firebaseArray(userWatchlistRef);
+      // console.log(thing.ticker);  // log ticker
 
-      // console.log("inside removeItem()");
-      console.log(thing);
-      console.log(thing.ticker);
-      userWatchlistRef.child(thing.ticker).remove();
+      var tickerToDelete = thing.ticker;
 
+      userWatchlistRef.orderByChild("ticker").on("child_added", function(snapshot) {  // snapshot of user's chosen watchlist
+        console.log(snapshot.key() + " of " + snapshot.val().ticker);  // log key and ticker
+        var watchlistTicker = snapshot.val().ticker;
+        var tickerKey = snapshot.key();
+        
+          if (snapshot.val().ticker === tickerToDelete) {
+            console.log("Found " + watchlistTicker + " and its key... " + tickerKey);
+            userWatchlistRef = userWatchlistRef + tickerKey;
+            // console.log(userWatchlistRef);
 
-
-userWatchlistRef.orderByChild("ticker").on("child_added", function(snapshot) {
-  console.log(snapshot.key() + " of " + snapshot.val().ticker);
-});
-
-newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
-  console.log(snapshot.key() + " of " + snapshot.val().calculation);
-});
-
-};
+            // watchTicks.$remove();
+            userWatchlistRef.child(tickerKey).remove();
+          }
+      });
+    };
 
 
   $scope.deleteTicker = function(stockTicker, watchList) {
