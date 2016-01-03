@@ -121,7 +121,7 @@
           </tr> -->
           <tr ng-repeat="thing in watchList">
           <td class="watchlist"></td>
-            <td class="watchlist"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" style="color:red;">[x]</a></td>
+            <td class="watchlist"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" class="delete_x">[x]</a></td>
           </tr>
         </table>
       </td>

@@ -1032,7 +1032,7 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
 // ++++ DATA UPDATES +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // AUTOMATICALLY RETRIEVE NASDAQ-100 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
-// setInterval(function () {
+// setInterval(function () {  // a callback function after the specified time interval
 //   var timer = ( function() {
 //       var date = new Date();
 //       var day = date.getDay();
@@ -1066,7 +1066,7 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
 
 // EOD UPDATE FOR ALL MARKETS!!
 // AUTOMATICALLY RETRIEVE NASDAQ-100, S&P-500, AND DJ-30 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
-setInterval(function () {
+setInterval(function () {  // a callback function after the specified time interval
   // if (loginStatus === true) {  // if user is logged in
 
     var timer = ( function() {
@@ -1181,7 +1181,7 @@ setInterval(function () {
 
 // LIVE UPDATE!!
 // ---> AUTOMATICALLY RETRIEVE NASDAQ-100 DATA EVERY 15 SECONDS DURING TRADING HOURS
-setInterval(function () {
+setInterval(function () {  // a callback function after the specified time interval
   if (loginStatus === true) {  // if user is logged in
 
     var timer = ( function() {
@@ -1392,24 +1392,34 @@ setInterval(function () {
 
 // ++++++ DELETE TICKER FROM USER'S WATCHLIST ++++++++++++++++++++++++++++++++++++++++++++++++
     $scope.removeItem = function (thing) {
-    var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
-    var watchTicks = $firebaseArray(userWatchlistRef);
+    var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
+    var watchTicks = $firebaseArray(userListRef);
       // console.log(thing.ticker);  // log ticker
 
       var tickerToDelete = thing.ticker;
 
-      userWatchlistRef.orderByChild("ticker").on("child_added", function(snapshot) {  // snapshot of user's chosen watchlist
+      userListRef.orderByChild("ticker").on("child_added", function(snapshot) {  // snapshot of user's chosen watchlist
         console.log(snapshot.key() + " of " + snapshot.val().ticker);  // log key and ticker
         var watchlistTicker = snapshot.val().ticker;
         var tickerKey = snapshot.key();
         
           if (snapshot.val().ticker === tickerToDelete) {
             console.log("Found " + watchlistTicker + " and its key... " + tickerKey);
-            userWatchlistRef = userWatchlistRef + tickerKey;
-            // console.log(userWatchlistRef);
-
+            userListRef = userListRef + tickerKey;
+            console.log(thing);
+            console.log(snapshot.val());
+            console.log(tickerKey);
             // watchTicks.$remove();
-            userWatchlistRef.child(tickerKey).remove();
+
+
+
+            // userWatchlistRef.child(tickerKey).$remove();  // GOOD UNTIL HERE!!!! DO NOT change code above!!!!!
+            // userWatchlistRef.child().$remove(tickerKey);
+            // userWatchlistRef.$remove(tickerKey);
+            
+            // userWatchlistRef.child(thing).$remove();
+            // userWatchlistRef.child().$remove(thing);
+            // userWatchlistRef.$remove(thing);
           }
       });
     };

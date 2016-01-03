@@ -285,6 +285,9 @@ p {
 /*#my-header ~ div {
   color: white;
 }*/
+.delete_x {
+  color: red; }
+
 table tr td {
   color: black; }
 

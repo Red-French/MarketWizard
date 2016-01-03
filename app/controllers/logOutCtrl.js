@@ -13,7 +13,7 @@ var ref = new Firebase("https://market-wizard.firebaseio.com");  // reference da
   ref.unauth();
   // userRef.unauth();  // unauthorize user location
   console.log("authData", authData);
-  $location.path("/splash.html");
+  $location.path("/logout");
   // $scope.$apply();  // used to call the digest() method to listen for DOM event
   }();
 }]);
