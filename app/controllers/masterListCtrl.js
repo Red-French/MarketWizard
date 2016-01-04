@@ -1233,7 +1233,7 @@ setInterval(function () {  // a callback function after the specified time inter
                 setTimeout(function() {
                     $("#updateTime").addClass("colorFlash");
                 }, 1);
-                
+
           } else {
             $("#updateTime").html("Market Closed <br> EOD update at 6:15 CST");  // Replace contents in DOM element
         }  //  end of 'if' statement
@@ -1558,18 +1558,42 @@ setInterval(function () {  // a callback function after the specified time inter
   }
 
 
-   $(function () { $('#myModal').modal('hide')});
+   // $(function () { $('#myModal').modal('hide')});
 
-   $(function () { $('#myModal').on('hide.bs.modal', function () {
-      alert('This one works.');})
-   });
+   // $(function () { $('#myModal').on('hide.bs.modal', function () {
+   //    alert('This one works.');})
+   // });
 
- $(function () { $('#newScanModal').modal('hide')});
+ // $(function () { $('#newScanModal').modal('hide')});
 
- $(function () { $('#newScanModal').on('hide.bs.modal', function () {
-    alert('Yes!');})
- });
+ $(function () { $('#writeScanModal').on('hide.bs.modal', function () {
+  // alert('Yes!');})
+   var newScan = null;
 
+  console.log("inside writeScanModal");
+
+  var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+  // console.log("ref", ref);
+  var currentAuth = ref.getAuth().uid;  // get current user's ID
+  // console.log("currentAuth = ", currentAuth);
+  var listRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);
+  // console.log("listRef", listRef);
+  // var scanName = $firebaseArray(listRef);  // move user's watchlists into an array
+  // console.log("scanName = ", scanName);
+
+  var newScan = {
+    "price1": $scope.addPrice1,
+    "price2": $scope.addPrice2
+  };
+
+  if ($scope.scanName != undefined || null || "") {
+      scanName = $scope.scanName;  // obtain name of new scan from input field
+      listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
+      $('#addScanModal').modal('show'); // NEED TO ADD MODAL
+  } 
+  $scope.scanName = "";  // clear 'or enter new Watchlist' field
+  })
+});
 
 
   var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
@@ -1577,45 +1601,6 @@ setInterval(function () {  // a callback function after the specified time inter
   var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
   var userScanList = $firebaseArray(userScanlistRef);
   $scope.userScanList = userScanList;
-
-
-  $scope.newScan = function() {
-    var newScan = null;
-
-    console.log("inside newScan()");
-
-    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    // console.log("ref", ref);
-    var currentAuth = ref.getAuth().uid;  // get current user's ID
-    // console.log("currentAuth = ", currentAuth);
-    var listRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);
-    // console.log("listRef", listRef);
-    // var scanName = $firebaseArray(listRef);  // move user's watchlists into an array
-    // console.log("scanName = ", scanName);
-
-    var newScan = {
-      "price1": $scope.addPrice1,
-      "price2": $scope.addPrice2
-    };
-
-    if ($scope.scanName != undefined || null || "") {
-        scanName = $scope.scanName;  // obtain name of new scan from input field
-        listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
-        $('#addScanModal').modal('show'); // NEED TO ADD MODAL
-    } 
-    $scope.scanName = "";  // clear 'or enter new Watchlist' field
-};
-
-
-
-
-
-
-
-
-
-
-
 
 
 

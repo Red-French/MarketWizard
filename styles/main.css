@@ -339,7 +339,7 @@ footer {
     opacity: 2; } }
 .colorFlash {
   -webkit-animation-name: colorFlash;
-  -webkit-animation-duration: 1200ms;
+  -webkit-animation-duration: 1500ms;
   -webkit-animation-iteration-count: 1;
   -webkit-animation-timing-function: ease-in-out; }
 
