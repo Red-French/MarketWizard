@@ -55,8 +55,11 @@ ref.onAuth(authCallback);
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 // REFERENCE 'DATA' (IN FIREBASE) AND USE PROMISE TO CONFIRM IT IS LOADED
+
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+
     var dataRef = new Firebase("https://market-wizard.firebaseio.com/data"); // reference NAZ100 Historical Data
     var data = $firebaseArray(dataRef);
     var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2"); // reference NAZ100 Today's Data
@@ -98,6 +101,10 @@ ref.onAuth(authCallback);
     var tickerData = $firebaseArray(newtickerData);  // turn Firebase into Array for Angular
     $scope.tickerData = tickerData;
 
+    var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
+    var userScans = $firebaseArray(userScanlistRef);
+    $scope.userScans = userScans;
+
     data.$loaded()
       .then(function(data) {  // promise
         $scope.data = data[0];
@@ -137,6 +144,11 @@ ref.onAuth(authCallback);
         // console.log("userWatching.length", userWatching.length);
         $scope.userWatching = userWatching[0];
 })
+    userScans.$loaded()
+      .then(function(userScans) {  // promise
+      $scope.userScans = userScans[0];
+})
+
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -1534,6 +1546,12 @@ setInterval(function () {  // a callback function after the specified time inter
 
   // ++++++ USER-DEFINED SCAN FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
+    
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
+    var userScanList = $firebaseArray(userScanlistRef);
+    $scope.userScanList = userScanList;
 
   $scope.newScan = function() {
     var newScan = null;
