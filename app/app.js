@@ -45,6 +45,10 @@ app.config(['$routeProvider',  // this is like entry.js
         templateUrl: 'partials/priceChange.html',
         controller: 'masterListCtrl'
       })
+        .when('/scan', {
+        templateUrl: 'partials/userScans.html',
+        controller: 'masterListCtrl'
+      })
       // .when('/watchlist', {
       //   templateUrl: 'partials/priceChange.html',
       //   controller: 'masterListCtrl'

@@ -312,4 +312,13 @@ footer {
   position: relative;
   margin: 0 0 0 91.5%; }
 
+.addScan {
+  margin-bottom: 1em; }
+
+#scanSetup {
+  margin: 5em 0 0 5em; }
+
+.dropdowns {
+  margin: 1em auto 1em auto; }
+
 /*# sourceMappingURL=main.css.map */

@@ -840,57 +840,69 @@ addTen();
 
 // NOT USING CURRENTLY!!!!!!! --
 // PUSH TOP 10 TO FIREBASE -- 
-  function addTen () {
-      newTop10.remove();  // remove old data
-    newData.orderByChild("calculation").on("child_added", function(snapshot5) {
+//   function addTen () {
+//       newTop10.remove();  // remove old data
+//     newData.orderByChild("calculation").on("child_added", function(snapshot5) {
 
-      // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
-      console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
-      var key = snapshot5.key();  // key is the unique ID of each day's data
-      var topTenData = snapshot5.val();  // topTenData is contents of the child
-      var topTenTicker = topTenData.ticker;
-      var topTenCalc = topTenData.calculation;
+//       // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
+//       console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
+//       var key = snapshot5.key();  // key is the unique ID of each day's data
+//       var topTenData = snapshot5.val();  // topTenData is contents of the child
+//       var topTenTicker = topTenData.ticker;
+//       var topTenCalc = topTenData.calculation;
 
-      console.log("TopTen", topTenTicker, topTenCalc);
+//       console.log("TopTen", topTenTicker, topTenCalc);
 
-      top10.$add({  // add tickers/calculations to Firebase
-        ticker: topTenTicker,
-        calculation: topTenCalc
-      });
-    });
-
-
-newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
-  console.log(snapshot.key() + " was " + snapshot.val().calculation);
-});
+//       top10.$add({  // add tickers/calculations to Firebase
+//         ticker: topTenTicker,
+//         calculation: topTenCalc
+//       });
+//     });
 
 
-var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
-ref.orderByChild("height").on("child_added", function(snapshot) {
-  console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
-});
+// newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().calculation);
+// });
 
 
-  }
+// var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+// ref.orderByChild("height").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
+// });
+
+
+//   }
 
 
 // ++++++ USER WATCHLIST FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// CREATES NEW WATCHLIST FOR CURRENT USER
-  $scope.newWatchlist = function() {
-    console.log("inside newWatchlist function");
-    console.log("user 'new watchlist' input field value = ", $scope.watchName);
-      var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-      console.log("ref", ref);
-      var currentAuth = ref.getAuth().uid;  // get current user's ID
-      console.log("currentAuth = ", currentAuth);
-      var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
-      console.log("listRef", listRef);
-      var listName = $scope.watchName;
-      console.log("listName = ", listName);
-      listRef.child(listName)
-      listRef.child(listName).push("");
-      }
+  // ADDS NEW WATCHLIST UNDER USER'S FIREBASE ID
+  $scope.newWatchlist = function(addToThisList) {
+    var dropWatchlistRef = undefined;
+    var watchlistRef = undefined;
+    var newTicker = undefined;
+
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    // console.log("ref", ref);
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // console.log("currentAuth = ", currentAuth);
+    var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
+    // console.log("listRef", listRef);
+    // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
+    // console.log("watchlistRef = ", watchlistRef);
+
+    var newTicker = {
+      "ticker": $scope.addTicker
+    };
+
+    if ($scope.watchName != undefined || null || "") {
+        watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
+        listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
+        $('#addTickerModal').modal('show'); 
+    } 
+    $scope.addTicker = "";  // clear 'Add Ticker' input field
+    $scope.watchName = "";  // clear 'or enter new Watchlist' field
+};
 
 // GET CURRENT USER'S WATCHLISTS
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
@@ -974,37 +986,6 @@ ref.orderByChild("height").on("child_added", function(snapshot) {
     $scope.addToThisList = "";  // clear watchlist dropdown
     // $scope.watchName;  // clear 'or enter new Watchlist' field
 };
-
-
-// ADDS NEW WATCHLIST UNDER USER'S FIREBASE ID
-
-  $scope.newWatchlist = function(addToThisList) {
-    var dropWatchlistRef = undefined;
-    var watchlistRef = undefined;
-    var newTicker = undefined;
-
-    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    // console.log("ref", ref);
-    var currentAuth = ref.getAuth().uid;  // get current user's ID
-    // console.log("currentAuth = ", currentAuth);
-    var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
-    // console.log("listRef", listRef);
-    // var watchlistRef = $firebaseArray(listRef);  // move user's watchlists into an array
-    // console.log("watchlistRef = ", watchlistRef);
-
-    var newTicker = {
-      "ticker": $scope.addTicker
-    };
-
-    if ($scope.watchName != undefined || null || "") {
-        watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
-        listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-        $('#addTickerModal').modal('show'); 
-    } 
-    $scope.addTicker = "";  // clear 'Add Ticker' input field
-    $scope.watchName = "";  // clear 'or enter new Watchlist' field
-};
-
 
 // PUT 'STOCKS' (IN FIREBASE) ON $SCOPE
     var stocksRef = new Firebase("https://market-wizard.firebaseio.com/stocks/"); // grab data from Firebase
@@ -1395,6 +1376,7 @@ setInterval(function () {  // a callback function after the specified time inter
     var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
     var watchTicks = $firebaseArray(userListRef);
       // console.log(thing.ticker);  // log ticker
+      userListRef.$remove(thing);
 
       var tickerToDelete = thing.ticker;
 
@@ -1409,8 +1391,9 @@ setInterval(function () {  // a callback function after the specified time inter
             console.log(thing);
             console.log(snapshot.val());
             console.log(tickerKey);
-            // watchTicks.$remove();
 
+            userListRef.$remove(thing);
+            // watchTicks.$remove(thing);
 
 
             // userWatchlistRef.child(tickerKey).$remove();  // GOOD UNTIL HERE!!!! DO NOT change code above!!!!!
@@ -1527,8 +1510,79 @@ setInterval(function () {  // a callback function after the specified time inter
   }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // ++++++ USER-DEFINED SCAN FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
+
+  $scope.newScan = function() {
+    var newScan = null;
+
+    console.log("inside newScan()");
+
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    // console.log("ref", ref);
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // console.log("currentAuth = ", currentAuth);
+    var listRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);
+    // console.log("listRef", listRef);
+    // var scanName = $firebaseArray(listRef);  // move user's watchlists into an array
+    // console.log("scanName = ", scanName);
+
+    var newScan = {
+      "price1": $scope.addPrice1,
+      "price2": $scope.addPrice2
+    };
+
+    if ($scope.scanName != undefined || null || "") {
+        scanName = $scope.scanName;  // obtain name of new scan from input field
+        listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
+        $('#addScanModal').modal('show'); // NEED TO ADD MODAL
+    } 
+    $scope.scanName = "";  // clear 'or enter new Watchlist' field
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }  // END OF CONTROLLER FUNCTION -> (all functionality goes inside this function)
 ]);
+
+
+
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1560,3 +1614,5 @@ $(document).ready(function(){
         $("p").show();
     });
 });
+
+

@@ -1,6 +1,7 @@
 <div id="cntrlPanelTop">
 <div class="medium"><span id="textFlash">Live</span> Update: <span id="updateTime"></span></div>
 <div id="addTick">
+  <label>Add to Watchlist:</label>
   <input type="text" ng-model="addTicker" placeholder=" Add Ticker">
     <a><button ng-click="newTicker()">Add to</button></a>
     <select ng-model="addToThisList" ng-options="thing.$id for thing in listToWatch">
@@ -10,27 +11,34 @@
     <div><a><button ng-click="newWatchlist()">Add to</button></a><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
 </div>
 
-<div>
-  <label>WatchList:
-    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
-    <option value="">Select Watchlist</option>
-    </select>
-  </label>
-
+<div class="dropdowns">
   <label>Market:
     <select ng-model="marketList" ng-options="thing.$id for thing in marketsList" ng-change="marketView(marketList)">
     <option value="">Select Market</option>
     </select>
   </label>
+- OR - 
+  <label>WatchList:
+    <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
+    <option value="">Select Watchlist</option>
+    </select>
+  </label>
 </div>
 
-<div>  
+<div class="dropdowns">
   <label>Real-Time Market Scan:
     <select ng-model="scanners" ng-options="thing.$id for thing in scans" ng-change="calc(scanners)"><option value="">Select Scan</option>
     </select>
   </label>
-  <!-- <a><button ng-click="update()">Force Update</button></a> -->
-  <!-- <a><button ng-click="getTickerData()">Find Ticker</button></a> -->
+- OR - 
+  <label>Personal Scan:
+    <select ng-model="userScanners" ng-options="thing.$id for thing in userscans" ng-change="userCalc(userScanners)"><option value="">Select Scan</option>
+    </select>
+  </label>
+</div>
+
+<div>  
+
 </div>
 </div>
 
