@@ -35,11 +35,14 @@
     <select ng-model="userScanners" ng-options="thing.$id for thing in userScanList" ng-change="userCalc(userScanners)"><option value="">Select Scan</option>
     </select>
   </label>
+<button class="btn btn-success" ng-click="newScanModal()" data-toggle = "modal" data-target = "#newScanModal"> Write a Scan</button>
+
+<button class = "btn btn-success" data-toggle = "modal" data-target = "#newScanModal">Write Scan(r)</button>
+
 </div>
 
-<div>  
+<div>  </div>
 
-</div>
 </div>
 
 <div id="cntrlPanel">

@@ -549,7 +549,7 @@
   </div>
 </div>
 
-<!-- Modal for scan added  -->
+<!-- Modal for scan added -->
 <div class="modal fade" id="addScanModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
@@ -566,6 +566,129 @@
     </div>
   </div>
 </div>
+
+<!-- Modal to add scan -->
+<div id="writeScanModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">New Scan</h4>
+      </div>
+<!-- PRICE1 SCAN -->
+<div class="addScan">
+      <input id="price1" type="checkbox" name="Price1" value="">
+      <label>Price 1</label>
+      <select>
+      <option>Select</option>
+      <option>></option>
+      <option><</option>
+    </select>
+  <input type="text" ng-model="addPrice1" placeholder=" Price 1">
+</div>
+
+<!-- PRICE2 SCAN -->
+<div class="addScan">
+      <input id="price2" type="checkbox" name="Price2" value="">
+      <label>Price 2</label>
+      <select>
+      <option>Select</option>
+      <option>></option>
+      <option><</option>
+    </select>
+  <input type="text" ng-model="addPrice2" placeholder=" Price 2">
+</div>
+
+<!-- VOLUME SCAN -->
+<div class="addScan">
+      <input id="volume" type="checkbox" name="Volume" value="">
+      <label>Volume</label>
+      <select>
+      <option>Select</option>
+      <option>></option>
+      <option><</option>
+    </select>
+  <input type="text" ng-model="addVolume" placeholder=" Volume">
+</div>
+
+<!-- PAST # TRADING DAYS -->
+<div class="addScan">
+  <input ng-model="numPastDays" id="numPastDays" type="checkbox" name="numPastDays" value="">
+    <label>Past</label>
+      <select>
+      <option>Select</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+      <option>6</option>
+      <option>7</option>
+      <option>8</option>
+      <option>9</option>
+      <option>10</option>
+      <option>15</option>
+      <option>20</option>
+      <option>Quarter</option>
+      <option>Six Months</option>
+      <option>52 Weeks</option>
+    </select>
+  <span>trading days</span>
+</div>
+
+<div>
+<input ng-model="scanName" type="text" placeholder=" Scan name"><a><button ng-click="newScan()">Create Scan</button></a>
+</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div class = "modal fade" id = "newScanModal" tabindex = "-1" role = "dialog" 
+   aria-labelledby = "myModalLabel" aria-hidden = "true">
+   
+   <div class = "modal-dialog">
+      <div class = "modal-content">
+         
+         <div class = "modal-header">
+            <button type = "button" class = "close" data-dismiss = "modal" aria-hidden = "true">
+               ×
+            </button>
+            
+            <h4 class = "modal-title" id = "myModalLabel">
+               Modal title
+            </h4>
+         </div>
+         
+         <div class = "modal-body">
+            Click close to check functionality, dude.
+         </div>
+         
+         <div class = "modal-footer">
+            <button type = "button" class = "btn btn-default" data-dismiss = "modal">
+               Close
+            </button>
+            
+            <button type = "button" class = "btn btn-primary">
+               Submit changes
+            </button>
+         </div>
+         
+      </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+   
+</div><!-- /.modal -->
+
+
+
 
 <!-- Modal for chart -->
 <div id="myModal" class="modal fade" role="dialog">

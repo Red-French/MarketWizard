@@ -1546,12 +1546,31 @@ setInterval(function () {  // a callback function after the specified time inter
 
   // ++++++ USER-DEFINED SCAN FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
 // ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
-    
-    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    var currentAuth = ref.getAuth().uid;  // get current user's ID
-    var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
-    var userScanList = $firebaseArray(userScanlistRef);
-    $scope.userScanList = userScanList;
+  $scope.newScanModal = function() {
+    $('#writeScanModal').modal('show');
+  }
+
+
+   $(function () { $('#myModal').modal('hide')});
+
+   $(function () { $('#myModal').on('hide.bs.modal', function () {
+      alert('This one works.');})
+   });
+
+ $(function () { $('#newScanModal').modal('hide')});
+
+ $(function () { $('#newScanModal').on('hide.bs.modal', function () {
+    alert('Yes!');})
+ });
+ 
+
+
+  var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+  var currentAuth = ref.getAuth().uid;  // get current user's ID
+  var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
+  var userScanList = $firebaseArray(userScanlistRef);
+  $scope.userScanList = userScanList;
+
 
   $scope.newScan = function() {
     var newScan = null;
@@ -1579,7 +1598,6 @@ setInterval(function () {  // a callback function after the specified time inter
     } 
     $scope.scanName = "";  // clear 'or enter new Watchlist' field
 };
-
 
 
 
