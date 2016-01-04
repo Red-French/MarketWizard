@@ -321,4 +321,26 @@ footer {
 .dropdowns {
   margin: 1em auto 1em auto; }
 
+.container {
+  position: relative; }
+
+#box {
+  height: 100px;
+  width: 100px;
+  background-color: #777;
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  opacity: 0; }
+
+@-webkit-keyframes colorFlash {
+  100% {
+    background-color: Yellow;
+    opacity: 2; } }
+.colorFlash {
+  -webkit-animation-name: colorFlash;
+  -webkit-animation-duration: 1200ms;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: ease-in-out; }
+
 /*# sourceMappingURL=main.css.map */

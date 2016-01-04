@@ -670,7 +670,7 @@ ref.onAuth(authCallback);
                 //   // to access yesterday's dataset only, get number of entries with
                 //   // var length = childData.length;
                 })
-addTen();
+// addTen();
               })
             // })
           });
@@ -1227,12 +1227,19 @@ setInterval(function () {  // a callback function after the specified time inter
             var newTime = hour + ":" + minutes + ":" + seconds;
 
             $("#updateTime").html(newTime);  // Replace contents in DOM element
+                
+                // color flash when time of last update appears
+                $("#updateTime").removeClass("colorFlash");
+                setTimeout(function() {
+                    $("#updateTime").addClass("colorFlash");
+                }, 1);
+                
           } else {
             $("#updateTime").html("Market Closed <br> EOD update at 6:15 CST");  // Replace contents in DOM element
         }  //  end of 'if' statement
     })();  // end of 'timer' IIFE
   }  // end of 'if loginStatus === true'
-}, 1500000)  // end of 'setInterval'
+}, 10000)  // end of 'setInterval'
 
 
 // USER'S AT-WILL UPDATE (no longer used)
@@ -1562,7 +1569,7 @@ setInterval(function () {  // a callback function after the specified time inter
  $(function () { $('#newScanModal').on('hide.bs.modal', function () {
     alert('Yes!');})
  });
- 
+
 
 
   var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
