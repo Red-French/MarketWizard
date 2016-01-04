@@ -1395,7 +1395,6 @@ setInterval(function () {  // a callback function after the specified time inter
     var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
     var watchTicks = $firebaseArray(userListRef);
       // console.log(thing.ticker);  // log ticker
-      userListRef.$remove(thing);
 
       var tickerToDelete = thing.ticker;
 
@@ -1552,6 +1551,13 @@ setInterval(function () {  // a callback function after the specified time inter
 
 
   // ++++++ USER-DEFINED SCAN FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
+var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+var currentAuth = ref.getAuth().uid;  // get current user's ID
+var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
+var userScanList = $firebaseArray(userScanlistRef);
+$scope.userScanList = userScanList;
+
+
 // ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
   $scope.newScanModal = function() {
     $('#writeScanModal').modal('show');
@@ -1596,12 +1602,94 @@ setInterval(function () {  // a callback function after the specified time inter
 });
 
 
-  var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-  var currentAuth = ref.getAuth().uid;  // get current user's ID
-  var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
-  var userScanList = $firebaseArray(userScanlistRef);
-  $scope.userScanList = userScanList;
 
+
+// * ~~~ IN PROCESS OF BEING WRITTEN!!! (not working yet) ~~~
+
+// BEGIN 'USER-DEFINED SCAN ' FUNCTION
+$scope.userCalc = function(userScanners) {
+  console.log("Chosen Personal Scan is = ", userScanners.$id);
+      newData.remove();  // remove old data
+    //  GRAB TODAY'S DATA
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
+        // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
+          // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
+          var key = snapshot2.key();  // key is the unique ID of each day's data
+          // console.log("key", key);
+          var childData2 = snapshot2.val();  // childData2 is contents of the child
+          $scope.childData2 = childData2;
+          todaysData = $scope.childData2;
+          // console.log("childData2.length", childData2.length);
+          // console.log("date", childData2[2].serverTimestamp);
+          // console.log("childData2", childData2.lastPrice);
+          // })
+      });
+
+  // GRAB YESTERDAY'S DATA
+          marketHistoryToScan.once("value", function(snapshot) {
+            var ticker = "";
+            var lastPrice = 0;
+            var close = 0;
+            var high = 0;
+            var low = 0;
+            var volume = 0;
+            var calculation = 0;
+            var calcResult = 0;
+
+  // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+              var key = snapshot3.key();  // key is the unique ID of each day's data
+              var childData3 = snapshot3.val();  // childData is contents of the child
+              yesterdaysData = childData3;
+
+              // PERFORM CALCULATION
+              yesterdaysData.forEach(function(object2, i) {  // loop through data
+                
+                // place API data in variables
+                ticker = todaysData[i].symbol;
+                lastPrice = todaysData[i].lastPrice;
+                close = todaysData[i].close;
+                high = todaysData[i].high;
+                low = todaysData[i].low;
+                volume = todaysData[i].volume;
+
+                // find relevant stocks
+                if (todaysData[i].lastPrice < 50.00) {
+                  // if (yesterdaysData[i].volume > 1000) {
+                    if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+
+                      calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+                      calcResult = calculation.toFixed(2);  // round to nearest 100th
+                      console.log(ticker);
+                      console.log(lastPrice, close);
+                      console.log(high, low);
+                      console.log(volume);
+
+                      // push information to Firebase
+                      userData.$add({  // add tickers/information/calculations to Firebase
+                        ticker: ticker,
+                        lastPrice: lastPrice,
+                        close: close,
+                        high: high,
+                        low: low,
+                        volume: volume,
+                        calculation: calcResult
+                      });
+                    }
+                  // }
+                }
+               $location.path("/data");  // take user to this location
+                //   // to access yesterday's dataset only, get number of entries with
+                //   // var length = childData.length;
+                })
+              // })
+            })
+          });
+});
+  // END 'USER-DEFINED SCAN ' FUNCTION
+
+}
 
 
 
@@ -1642,5 +1730,3 @@ $(document).ready(function(){
         $("p").show();
     });
 });
-
-
