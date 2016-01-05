@@ -261,6 +261,179 @@ ref.onAuth(authCallback);
 // END - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
 
 
+// BEGIN '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
+    if (scanners.$id === ">25 & <50 & >1 mil shrs & advancing") {
+      console.log("inside calc via >25 & <50 & >1 MIL SHARES & ADVANCING");
+      newData.remove();  // remove old data
+    //  GRAB TODAY'S DATA
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
+        // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
+          // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
+          var key = snapshot2.key();  // key is the unique ID of each day's data
+          // console.log("key", key);
+          var childData2 = snapshot2.val();  // childData2 is contents of the child
+          $scope.childData2 = childData2;
+          todaysData = $scope.childData2;
+          // console.log("childData2.length", childData2.length);
+          // console.log("date", childData2[2].serverTimestamp);
+          // console.log("childData2", childData2.lastPrice);
+          // })
+      });
+
+  // GRAB YESTERDAY'S DATA
+          marketHistoryToScan.once("value", function(snapshot) {
+            var ticker = "";
+            var lastPrice = 0;
+            var close = 0;
+            var high = 0;
+            var low = 0;
+            var volume = 0;
+            var calculation = 0;
+            var calcResult = 0;
+
+  // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+              var key = snapshot3.key();  // key is the unique ID of each day's data
+              var childData3 = snapshot3.val();  // childData is contents of the child
+              yesterdaysData = childData3;
+
+              // PERFORM CALCULATION
+              yesterdaysData.forEach(function(object2, i) {  // loop through data
+                
+                // place API data in variables
+                ticker = todaysData[i].symbol;
+                lastPrice = todaysData[i].lastPrice;
+                close = todaysData[i].close;
+                high = todaysData[i].high;
+                low = todaysData[i].low;
+                volume = todaysData[i].volume;
+
+                // find relevant stocks
+                if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
+                  // if (todaysData[i].lastPrice < 40.00) {
+                    // if (yesterdaysData[i].volume > 1000000) {
+                      if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+
+                        calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+                        calcResult = calculation.toFixed(2);  // round to nearest 100th
+                        console.log(ticker);
+                        console.log(lastPrice, close);
+                        console.log(high, low);
+                        console.log(volume);
+
+                        // push information to Firebase
+                        userData.$add({  // add tickers/information/calculations to Firebase
+                          ticker: ticker,
+                          lastPrice: lastPrice,
+                          close: close,
+                          high: high,
+                          low: low,
+                          volume: volume,
+                          calculation: calcResult
+                        });
+                      }
+                    // }
+                  // }
+                }
+               $location.path("/data");  // take user to this location
+                //   // to access yesterday's dataset only, get number of entries with
+                //   // var length = childData.length;
+                })
+              // })
+            })
+          });
+});
+}
+  // END '> 25 & <50 & >1 MIL SHARES AND DECLINING TODAY' FUNCTION
+
+  // BEGIN '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
+    if (scanners.$id === ">25 & <50 & >1 mil shrs & declining") {
+      console.log("inside calc via >25 & <50 & >1 MIL SHARES & DECLINING");
+      newData.remove();  // remove old data
+    //  GRAB TODAY'S DATA
+      marketToScan.once("value", function(snapshot) {
+        marketToScan.orderByChild("symbol").on("child_added", function(snapshot2) {
+        // snapshot.forEach(function(childSnapshot2) {  // The callback function is called for each day's data
+          // console.log("childSnapshot2", childSnapshot2.val());  // each day's dataset is console logging
+          var key = snapshot2.key();  // key is the unique ID of each day's data
+          // console.log("key", key);
+          var childData2 = snapshot2.val();  // childData2 is contents of the child
+          $scope.childData2 = childData2;
+          todaysData = $scope.childData2;
+          // console.log("childData2.length", childData2.length);
+          // console.log("date", childData2[2].serverTimestamp);
+          // console.log("childData2", childData2.lastPrice);
+          // })
+      });
+
+  // GRAB YESTERDAY'S DATA
+          marketHistoryToScan.once("value", function(snapshot) {
+            var ticker = "";
+            var lastPrice = 0;
+            var close = 0;
+            var high = 0;
+            var low = 0;
+            var volume = 0;
+            var calculation = 0;
+            var calcResult = 0;
+
+  // * SHOULD ALWAYS BE 'LIMITTOLAST' TO COMPARE PRIOR CLOSE TO LATEST DATA
+            marketHistoryToScan.orderByChild("symbol").limitToLast(1).on("child_added", function(snapshot3) {
+              var key = snapshot3.key();  // key is the unique ID of each day's data
+              var childData3 = snapshot3.val();  // childData is contents of the child
+              yesterdaysData = childData3;
+
+              // PERFORM CALCULATION
+              yesterdaysData.forEach(function(object2, i) {  // loop through data
+                
+                // place API data in variables
+                ticker = todaysData[i].symbol;
+                lastPrice = todaysData[i].lastPrice;
+                close = todaysData[i].close;
+                high = todaysData[i].high;
+                low = todaysData[i].low;
+                volume = todaysData[i].volume;
+
+                // find relevant stocks
+                if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
+                  // if (todaysData[i].lastPrice < 40.00) {
+                    // if (yesterdaysData[i].volume > 1000000) {
+                      if (todaysData[i].lastPrice < yesterdaysData[i].close) {
+
+                        calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+                        calcResult = calculation.toFixed(2);  // round to nearest 100th
+                        console.log(ticker);
+                        console.log(lastPrice, close);
+                        console.log(high, low);
+                        console.log(volume);
+
+                        // push information to Firebase
+                        userData.$add({  // add tickers/information/calculations to Firebase
+                          ticker: ticker,
+                          lastPrice: lastPrice,
+                          close: close,
+                          high: high,
+                          low: low,
+                          volume: volume,
+                          calculation: calcResult
+                        });
+                      }
+                    // }
+                  // }
+                }
+               $location.path("/data");  // take user to this location
+                //   // to access yesterday's dataset only, get number of entries with
+                //   // var length = childData.length;
+                })
+              // })
+            })
+          });
+});
+}
+  // END '> 25 & <50 & >1 MIL SHARES AND DECLINING TODAY' FUNCTION
+
+
 // BEGIN '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
     if (scanners.$id === "<50 & >1 mil shrs & advancing") {
       console.log("inside calc via <50 & >1 MIL SHARES & ADVANCING");
