@@ -189,6 +189,19 @@ td.watchlist {
 
 }
 
+.banner_text_presentation {
+  color: silver;
+  font-weight: 900;
+  font-size: 8rem;
+  letter-spacing: -.9rem;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  top: 200px;
+  opacity: .7;
+
+}
+
 #background {
   margin-top: -220px;
   color: #B4D7FF;
@@ -442,3 +455,19 @@ footer {
     -webkit-animation-timing-function: ease-in-out;
 }  
 // END LIVE UPDATE COLOR FLASH
+
+.text_presentation {
+  color: cornsilk;
+  font-size: 3rem;
+  margin-top: 37rem;
+}
+
+.specificGoals_presentation {
+  // text-indent: 50px;
+  list-style: none;
+  margin-left: 50px;
+}
+
+#demo {
+  margin: 8rem auto 0 18rem;
+}
