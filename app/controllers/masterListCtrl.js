@@ -1,15 +1,15 @@
 // * = note regarding issue to be addressed
 
-app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$location",
-  function($scope, $http, $firebaseArray, $location) {
-   // console.log("inside masterList.Ctrl"); 
+app.controller('masterListCtrl', ["$scope", "$http", "$q", "$firebaseArray",  "$location",
+  function($scope, $http, $q, $firebaseArray, $location) {
+   // console.log("inside masterList.Ctrl");
 
   $scope.searchText = "";
 
 
 // +++++ CHECK AND LOG USER'S CURRENT AUTHENTICATION STATE +++++++++++++++++++++
   // set 'Chart' button's 'display' property to 'none' if user logged out
-  // set a authentication flag ('loginStaus') for use elsewhere
+  // set authentication flag ('loginStaus') for use elsewhere
 
 var ref = new Firebase("https://market-wizard.firebaseio.com");
 var loginStatus = false;
@@ -35,11 +35,6 @@ ref.onAuth(authCallback);
     }
   }
 
-// $(document).ready(function()
-// {
-//    // executes when HTML-Document is loaded and DOM is ready
-//    alert("(document).ready was called - document is ready!");
-// });
 
 // +++++ TEXT COLOR FLASH ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -300,7 +295,7 @@ ref.onAuth(authCallback);
 
               // PERFORM CALCULATION
               yesterdaysData.forEach(function(object2, i) {  // loop through data
-                
+
                 // place API data in variables
                 ticker = todaysData[i].symbol;
                 lastPrice = todaysData[i].lastPrice;
@@ -386,7 +381,7 @@ ref.onAuth(authCallback);
 
               // PERFORM CALCULATION
               yesterdaysData.forEach(function(object2, i) {  // loop through data
-                
+
                 // place API data in variables
                 ticker = todaysData[i].symbol;
                 lastPrice = todaysData[i].lastPrice;
@@ -473,7 +468,7 @@ ref.onAuth(authCallback);
 
               // PERFORM CALCULATION
               yesterdaysData.forEach(function(object2, i) {  // loop through data
-                
+
                 // place API data in variables
                 ticker = todaysData[i].symbol;
                 lastPrice = todaysData[i].lastPrice;
@@ -558,7 +553,7 @@ ref.onAuth(authCallback);
 
               // PERFORM CALCULATION
               yesterdaysData.forEach(function(object2, i) {  // loop through data
-                
+
                 // place API data in variables
                 ticker = todaysData[i].symbol;
                 lastPrice = todaysData[i].lastPrice;
@@ -1021,44 +1016,6 @@ ref.onAuth(authCallback);
 }  // END CALC FUNCTION
 
 
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// NOT USING CURRENTLY!!!!!!! --
-// PUSH TOP 10 TO FIREBASE -- 
-//   function addTen () {
-//       newTop10.remove();  // remove old data
-//     newData.orderByChild("calculation").on("child_added", function(snapshot5) {
-
-//       // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
-//       console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
-//       var key = snapshot5.key();  // key is the unique ID of each day's data
-//       var topTenData = snapshot5.val();  // topTenData is contents of the child
-//       var topTenTicker = topTenData.ticker;
-//       var topTenCalc = topTenData.calculation;
-
-//       console.log("TopTen", topTenTicker, topTenCalc);
-
-//       top10.$add({  // add tickers/calculations to Firebase
-//         ticker: topTenTicker,
-//         calculation: topTenCalc
-//       });
-//     });
-
-
-// newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
-//   console.log(snapshot.key() + " was " + snapshot.val().calculation);
-// });
-
-
-// var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
-// ref.orderByChild("height").on("child_added", function(snapshot) {
-//   console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
-// });
-
-
-//   }
-
-
 // ++++++ USER WATCHLIST FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   // ADDS NEW WATCHLIST UNDER USER'S FIREBASE ID
@@ -1083,8 +1040,8 @@ ref.onAuth(authCallback);
     if ($scope.watchName != undefined || null || "") {
         watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
         listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-        $('#addTickerModal').modal('show'); 
-    } 
+        $('#addTickerModal').modal('show');
+    }
     $scope.addTicker = "";  // clear 'Add Ticker' input field
     $scope.watchName = "";  // clear 'or enter new Watchlist' field
 };
@@ -1155,17 +1112,17 @@ ref.onAuth(authCallback);
     // listRef.push($scope.newTicker);
     // if (($scope.watchName != "") && ($scope.addToThisList.$id != "")) {
     //     alert("Please choose either a current or a new watchlist.")
-    // } else 
+    // } else
     if ($scope.addTicker === undefined || null || "") {
         alert("Enter ticker to be added to watchlist.");
     // }  else if ($scope.watchName != undefined || null || "") {
         // watchlistRef = $scope.watchName;  // obtain name of watchlist from input field
         // listRef.child(watchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-        // $('#addTickerModal').modal('show'); 
+        // $('#addTickerModal').modal('show');
     } else if ($scope.addToThisList.$id != undefined || null || "") {
         dropWatchlistRef = $scope.addToThisList.$id;  // obtain name of watchlist from dropdown
         listRef.child(dropWatchlistRef).push(newTicker);  // add ticker to user's chosen watchlist
-        $('#addTickerModal').modal('show'); 
+        $('#addTickerModal').modal('show');
     }
     $scope.addTicker = "";  // clear 'Add Ticker' input field
     $scope.addToThisList = "";  // clear watchlist dropdown
@@ -1260,7 +1217,7 @@ setInterval(function () {  // a callback function after the specified time inter
 
           dataRef.push(response.data.results);
         })
-        .then 
+        .then
         // UPDATE S&P-500
           // get first 100 s&p-500 tickers
           $http({
@@ -1323,7 +1280,7 @@ setInterval(function () {  // a callback function after the specified time inter
             console.log("S&P-500 api call#6 successful", response.data.results);
             var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
             dataRef.push(response.data.results);
-        }).then 
+        }).then
         // UPDATE DOW-JONES-30
           $http({
           method: 'GET',
@@ -1374,7 +1331,7 @@ setInterval(function () {  // a callback function after the specified time inter
             // console.log("successful response from update", response.data.results);
 
             var dataRef = new Firebase("https://market-wizard.firebaseio.com/data2/today");  //  make reference to database location for data to be stored
-            
+
             // var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
             // var today = new Date();
@@ -1400,7 +1357,7 @@ setInterval(function () {  // a callback function after the specified time inter
             var newTime = hour + ":" + minutes + ":" + seconds;
 
             $("#updateTime").html(newTime);  // Replace contents in DOM element
-                
+
                 // color flash when time of last update appears
                 $("#updateTime").removeClass("colorFlash");
                 setTimeout(function() {
@@ -1428,7 +1385,7 @@ setInterval(function () {  // a callback function after the specified time inter
       console.log("successful response from update", response.data.results);
 
       var dataRef = new Firebase("https://market-wizard.firebaseio.com/data2/today");  //  make reference to database location for data to be stored
-      
+
       // var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
 
       // var today = new Date();
@@ -1576,7 +1533,7 @@ setInterval(function () {  // a callback function after the specified time inter
         console.log(snapshot.key() + " of " + snapshot.val().ticker);  // log key and ticker
         var watchlistTicker = snapshot.val().ticker;
         var tickerKey = snapshot.key();
-        
+
           if (snapshot.val().ticker === tickerToDelete) {
             console.log("Found " + watchlistTicker + " and its key... " + tickerKey);
             userListRef = userListRef + tickerKey;
@@ -1591,7 +1548,7 @@ setInterval(function () {  // a callback function after the specified time inter
             // userWatchlistRef.child(tickerKey).$remove();  // GOOD UNTIL HERE!!!! DO NOT change code above!!!!!
             // userWatchlistRef.child().$remove(tickerKey);
             // userWatchlistRef.$remove(tickerKey);
-            
+
             // userWatchlistRef.child(thing).$remove();
             // userWatchlistRef.child().$remove(thing);
             // userWatchlistRef.$remove(thing);
@@ -1763,7 +1720,7 @@ setInterval(function () {  // a callback function after the specified time inter
       scanName = $scope.scanName;  // obtain name of new scan from input field
       listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
       $('#addScanModal').modal('show'); // NEED TO ADD MODAL
-  } 
+  }
   $scope.scanName = "";  // clear 'or enter new Watchlist' field
   })
 });
@@ -1776,44 +1733,5 @@ setInterval(function () {  // a callback function after the specified time inter
   $scope.userScanList = userScanList;
 
 
-
-
-
   }  // END OF CONTROLLER FUNCTION -> (all functionality goes inside this function)
 ]);
-
-
-
-
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// ++++++ DISPLAY USER'S CHOSEN WATCHLIST FROM DROPDOWN ++++++++++++++++++++++++++++++++++++++
-// * NO LONGER USED
-// * NO LONGER USED
-// * NO LONGER USED
-  // $scope.watchListView = function(watchList) {
-    // console.log(watchList);
-    // console.log(watchList.$id);
-
-  // * NEED TO LOOP THROUGH OBJECT AND MATCH TICKERS TO TICKERS IN 'DATA2' TO PULL DATA
-  
-   // $location.path("/watchlist");  // take user to this location
-  // $scope.$apply();
-  // }
-
-
-// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-// +++ CURRENTLY NOT  BEING USED ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//  SHOW/HIDE CHART
-$(document).ready(function(){
-    $("#hide").click(function(){
-        $("p").hide();
-    });
-    $("#show").click(function(){
-        $("p").show();
-    });
-});
-
-

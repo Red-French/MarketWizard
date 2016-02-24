@@ -2,7 +2,7 @@ temp code (possible later use)
 
 1. order by value
 2. get length
-3. if length>10, 
+3. if length>10,
 4. loop over length-10 and remove()
 
 
@@ -93,7 +93,7 @@ mySessionRef.update({ startedAt: Firebase.ServerValue.TIMESTAMP });
 
 
 // GRAB USER'S STOCKS (THIS FUNCTIONALITY WILL GO INSIDE 'NEWTICKER' FUNCTION ABOVE)
-// 
+//
 // brings back all stocks
 // var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
 // refy.orderByChild("symbol").on("child_added", function(snapshot) {
@@ -173,3 +173,91 @@ sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
 // }
 
 
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// $(document).ready(function()
+// {
+//    // executes when HTML-Document is loaded and DOM is ready
+//    alert("(document).ready was called - document is ready!");
+// });
+
+
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// NOT USING CURRENTLY!!!!!!! --
+// PUSH TOP 10 TO FIREBASE --
+//   function addTen () {
+//       newTop10.remove();  // remove old data
+//     newData.orderByChild("calculation").on("child_added", function(snapshot5) {
+
+//       // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
+//       console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
+//       var key = snapshot5.key();  // key is the unique ID of each day's data
+//       var topTenData = snapshot5.val();  // topTenData is contents of the child
+//       var topTenTicker = topTenData.ticker;
+//       var topTenCalc = topTenData.calculation;
+
+//       console.log("TopTen", topTenTicker, topTenCalc);
+
+//       top10.$add({  // add tickers/calculations to Firebase
+//         ticker: topTenTicker,
+//         calculation: topTenCalc
+//       });
+//     });
+
+
+// newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().calculation);
+// });
+
+
+// var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+// ref.orderByChild("height").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
+// });
+
+
+//   }
+
+
+// ++++++ USER-DEFINED SCAN FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
+
+  $scope.newScan = function(addToThisList) {
+    console.log("inside newScan()");
+    var scanName = undefined;  // for name of new scan
+
+    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    // console.log("ref", ref);
+    var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // console.log("currentAuth = ", currentAuth);
+    var listRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);
+    // console.log("listRef", listRef);
+    // var scanName = $firebaseArray(listRef);  // move user's watchlists into an array
+    // console.log("scanName = ", scanName);
+
+    var newScan = {
+      "scan": $scope.scanName
+    };
+
+    if ($scope.scanName != undefined || null || "") {
+        scanName = $scope.scanName;  // obtain name of new scan from input field
+        listRef.child(scanName).push();  // add scan name to user's list of scan names
+        $('#addScanModal').modal('show'); // NEED TO ADD MODAL
+    }
+    $scope.scanName = "";  // clear 'or enter new Watchlist' field
+};
+
+
+
+// +++ CURRENTLY NOT  BEING USED ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//  SHOW/HIDE CHART
+$(document).ready(function(){
+    $("#hide").click(function(){
+        $("p").hide();
+    });
+    $("#show").click(function(){
+        $("p").show();
+    });
+});
