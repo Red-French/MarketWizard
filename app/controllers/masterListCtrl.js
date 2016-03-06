@@ -33,7 +33,6 @@ ref.onAuth(authCallback);
       chartButton.style.display = "none"  // do not show 'Chart' button
       tickerBoard.style.display = "none"  // do not show index tickerboard
       tickerBoard2.style.display = "none" // do not show tickerBoard
-      console.log("User is logged out");
       loginStatus = false;
     }
   }
@@ -139,7 +138,6 @@ ref.onAuth(authCallback);
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   $scope.marketView = function(marketList) {
-    console.log(marketList.$id);
     $scope.marketList === marketList;
 }
 
@@ -154,15 +152,12 @@ ref.onAuth(authCallback);
     if ($scope.marketList.$id === "NASDAQ 100") {
       marketToScan = dataRef2;
       marketHistoryToScan = dataRef;
-      console.log("user wants to scan " + marketToScan);
     } else if ($scope.marketList.$id === "S&P 500") {
       marketToScan = sp500Ref;
       marketHistoryToScan = sp500HistoryRef;
-      console.log("user wants to scan " + marketToScan);
     } else if ($scope.marketList.$id === "DJ 30") {
       marketToScan = dj30Ref;
       marketHistoryToScan = dj30HistoryRef;
-      console.log("user wants to scan " + marketToScan);
     }
 // END - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
 
@@ -203,7 +198,7 @@ ref.onAuth(authCallback);
 
 // BEGIN '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
   if (scanners.$id === ">25 & <50 & >1 mil shrs & advancing") {
-    console.log("inside calc via >25 & <50 & >1 MIL SHARES & ADVANCING");
+    console.log('userOption is ', $scope.$userOption.val());
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -222,10 +217,6 @@ ref.onAuth(authCallback);
         if (todaysData[i].lastPrice > yesterdaysData[i].close) {
           calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
           calcResult = calculation.toFixed(2);  // round to nearest 100th
-          console.log(ticker);
-          console.log(lastPrice, close);
-          console.log(high, low);
-          console.log(volume);
 
           // push information to Firebase
           userData.$add({  // add tickers/information/calculations to Firebase
@@ -246,7 +237,6 @@ ref.onAuth(authCallback);
 
 // BEGIN '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
   if (scanners.$id === ">25 & <50 & >1 mil shrs & declining") {
-    console.log("inside calc via >25 & <50 & >1 MIL SHARES & DECLINING");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -265,10 +255,6 @@ ref.onAuth(authCallback);
         if (todaysData[i].lastPrice < yesterdaysData[i].close) {
           calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
           calcResult = calculation.toFixed(2);  // round to nearest 100th
-          console.log(ticker);
-          console.log(lastPrice, close);
-          console.log(high, low);
-          console.log(volume);
 
           // push information to Firebase
           userData.$add({  // add tickers/information/calculations to Firebase
@@ -289,7 +275,6 @@ ref.onAuth(authCallback);
 
 // BEGIN '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
   if (scanners.$id === "<50 & >1 mil shrs & advancing") {
-    console.log("inside calc via <50 & >1 MIL SHARES & ADVANCING");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -309,10 +294,6 @@ ref.onAuth(authCallback);
 
             calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
             calcResult = calculation.toFixed(2);  // round to nearest 100th
-            console.log(ticker);
-            console.log(lastPrice, close);
-            console.log(high, low);
-            console.log(volume);
 
             // push information to Firebase
             userData.$add({  // add tickers/information/calculations to Firebase
@@ -333,7 +314,6 @@ ref.onAuth(authCallback);
 
 // BEGIN '>50 & >750k SHARES AND DECLINING TODAY' FUNCTION
   if (scanners.$id === ">50 & >750k shrs & declining") {
-    console.log("inside calc via >50 & >750k SHARES & DECLINING");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -353,11 +333,6 @@ ref.onAuth(authCallback);
           if (todaysData[i].lastPrice < yesterdaysData[i].close) {
             calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
             calcResult = calculation.toFixed(2);  // round to nearest 100th
-            console.log("change =", calcResult);
-            console.log(ticker);
-            console.log(lastPrice, close);
-            console.log(high, low);
-            console.log(volume);
 
             // push information to Firebase
             userData.$add({  // add tickers/information/calculations to Firebase
@@ -379,7 +354,6 @@ ref.onAuth(authCallback);
 
 // BEGIN 'GAP UP' FUNCTION
   if (scanners.$id === "Gap Up") {
-    console.log("inside calc via GAP UP");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -395,10 +369,6 @@ ref.onAuth(authCallback);
 
       // find relevant stocks
       if (todaysData[i].low > yesterdaysData[i].high) {
-        console.log(ticker);
-        console.log(lastPrice, close);
-        console.log(high, low);
-        console.log(volume);
 
         // push information to Firebase
           userData.$add({  // add tickers/information/calculations to Firebase
@@ -418,7 +388,6 @@ ref.onAuth(authCallback);
 
 // BEGIN 'GAP DOWN' FUNCTION
   if (scanners.$id === "Gap Down") {
-    console.log("inside calc via GAP DOWN");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -452,7 +421,6 @@ ref.onAuth(authCallback);
 
 // BEGIN 'NET CHANGE' FUNCTION
   if (scanners.$id === "Net Change") {
-    console.log("inside calc via NET CHANGE");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -486,7 +454,6 @@ ref.onAuth(authCallback);
 
 // BEGIN 'TODAY'S ADVANCERS' FUNCTION
   if (scanners.$id === "Today's Advancers") {
-    console.log("inside calc via TODAY'S ADVANCERS");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -522,7 +489,6 @@ ref.onAuth(authCallback);
 
 // BEGIN 'TODAY'S DECLINERS' FUNCTION
   if (scanners.$id === "Today's Decliners") {
-    console.log("inside calc via TODAY'S DECLINERS");
     newData.remove();  // remove old data
 
     // PERFORM CALCULATION
@@ -927,9 +893,6 @@ setInterval(function () {  // a callback function after the specified time inter
     //  LOCATE USER'S WATCHLIST CHOICE IN FIREBASE
     for (var i = 0; i < listToWatch.length; i++) {  // loop through user's watchlists stored in Firebase
       if (listToWatch[i].$id === watchList.$id) {  // if Firebase watchlist equals dropdown choice
-        console.log("accessed Firebase watchlist is", listToWatch[i].$id); // log successful access to chosen watclist in Firebase
-        console.log("contents of", listToWatch[i].$id, "is", listToWatch[i]); // log chosen watchlist object
-        console.log("user's ticker choice =", stockTicker);
         }
       }
 
@@ -987,7 +950,6 @@ setInterval(function () {  // a callback function after the specified time inter
 
         // LOCATE IN FIREBASE, USER'S TICKER WHICH WAS CLICKED ON
         if (ticker === stockTicker) {
-          console.log(ticker + " = " + lastPrice + " = " + close + " = " + high + " = " + low + " = " + volume);
           // push information to Firebase
           tickerData.$add({  // add tickers/information/calculations to Firebase
             ticker: ticker,
@@ -1014,7 +976,6 @@ setInterval(function () {  // a callback function after the specified time inter
       var tickerToDelete = thing.ticker;
 
       userListRef.orderByChild("ticker").on("child_added", function(snapshot) {  // snapshot of user's chosen watchlist
-        console.log(snapshot.key() + " of " + snapshot.val().ticker);  // log key and ticker
         var watchlistTicker = snapshot.val().ticker;
         var tickerKey = snapshot.key();
 

@@ -25,15 +25,13 @@
       </div>
       <div id="navContents"><a href="#/login" id="logInLink">Log in /</a><a href="#/logout" id="logOutLink"> Log Out</a>
         <ul class="nav navbar-nav">
-          <!-- <li class="active"><a href="/#/songs/list">To Nothing</a></li> -->
-          <!-- <li><a href="/#/songs/form">To Nothing</a></li> -->
           <li><input ng-model="query" id="searchBox" type="text" class="form-control" placeholder="Search"></li>
         </ul>
       </div>
     </div>
   </nav>
   </div>
-  </div> 
+  </div>
 <!-- end navbar -->
 
     <div ng-view id="results"></div>
@@ -65,8 +63,8 @@
           {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
-            tr.appendChild(td);            
-            var td = document.createElement("td"); 
+            tr.appendChild(td);
+            var td = document.createElement("td");
             tr.appendChild(td);
             this.domElement = tr;
             parentDomElement.appendChild(this.domElement);
@@ -99,44 +97,42 @@
 
     // GOOG quote API deprecated in 2011, but still working
         Stock.prototype.updateViaGoogle = function() {
-        
-          var requestURL = 
-            "https://www.google.com/finance/info?q="
-            + this.exchange + ":" + this.symbol;
+
+          var requestURL = "https://www.google.com/finance/info?q=" + this.exchange + ":" + this.symbol;
           var request = new XMLHttpRequest();
-          request.open("GET", requestURL, false);
+          request.open("GET", requestURL, false);  // AJAX call for stock data
           try
           {
             request.send(null);
             var responseAsString = request.responseText;
-            responseAsString = responseAsString.substr("////".length);
-            var responseAsArray = JSON.parse(responseAsString);
+            responseAsString = responseAsString.substr("////".length);  // .substr to ignore Google's characters at beginning of JSON data
+            var responseAsArray = JSON.parse(responseAsString);  // parse response for browser
             var responseAsObject = responseAsArray[0];
-        
+
             this.priceLast = responseAsObject["l"]; // "latest"
           }
-          catch(e)
+          catch(e)  // error if data cannot be parsed
           {
             this.priceLast = "?";
           }
         }
-        
+
     // Yahoo quote API (as alternate - or for indexes)
         Stock.prototype.updateViaYahoo = function() {
-          var requestURL = 
+          var requestURL =
             "https://finance.yahoo.com/webservice/v1/symbols/" + this.symbol + "/quote?format=json";
           var request = new XMLHttpRequest();
-          request.open("GET", requestURL, false);
+          request.open("GET", requestURL, false);  // AJAX call for stock data
           try
           {
             request.send(null);
             var responseAsString = request.responseText;
-            var responseAsArray = JSON.parse(responseAsString);
+            var responseAsArray = JSON.parse(responseAsString);  // parse response for browser
             var responseAsObject = responseAsArray.list.resources[0].resource;
-        
-            this.priceLast = parseFloat(responseAsObject.fields.price);
+
+            this.priceLast = parseFloat(responseAsObject.fields.price);  // parse response for browser
           }
-          catch(e)
+          catch(e)  // error if data cannot be parsed
           {
             this.priceLast = "?";
           }
@@ -194,10 +190,10 @@
           // 'ADD' BUTTON
             var buttonSymbolAdd = document.createElement("button");
             buttonSymbolAdd.innerHTML = "Add";
-            buttonSymbolAdd.onclick = this.buttonSymbolAdd_Click.bind(this);
+            buttonSymbolAdd.onclick = this.buttonSymbolAdd_Click.bind(this);  // event handler
             divElement.appendChild(buttonSymbolAdd);
-            
-          // CREATE TABLE
+
+          // CREATE DYNAMIC TABLE
             var tableQuotes = document.createElement("table");
             tableQuotes.id = "tableQuotes";  // ID for table
             tableQuotes.border = "1px solid";
@@ -219,7 +215,7 @@
             {
               var stock = this.stocksToTrack[i];
               stock.domElementUpdate(tableQuotes);
-            }   
+            }
             divElement.appendChild(tableQuotes);
             this.domElement = divElement;
             var divMain2 = document.getElementById("divMain2");
@@ -247,10 +243,10 @@
           else
           {
             var stockToAddAsStrings = stockToAddAsString.split(":");
-            exchange = stockToAddAsStrings[0] 
+            exchange = stockToAddAsStrings[0]
             symbol = stockToAddAsStrings[1];
           }
-          
+
           var stock = new Stock
           (
             exchange, symbol
@@ -260,9 +256,9 @@
           this.liveUpdate();
         }
 
-      // 
+      //
         StockTracker.prototype.handleEventTimerTick = function() {  // called from timer
-          this.liveUpdate();  
+          this.liveUpdate();
         }
       }
       main2();
@@ -298,7 +294,7 @@
             var tr = document.createElement("tr");
             var td = document.createElement("td");
             tr.appendChild(td);
-            var td = document.createElement("td");      
+            var td = document.createElement("td");
             tr.appendChild(td);
             this.domElement = tr;
             parentDomElement.appendChild(this.domElement);
@@ -329,8 +325,8 @@
         }
       // GOOG quote API deprecated in 2011, but still working
         Stock.prototype.updateViaGoogle = function() {
-        
-          var requestURL = 
+
+          var requestURL =
             "https://www.google.com/finance/info?q="
             + this.exchange + ":" + this.symbol;
           var request = new XMLHttpRequest();
@@ -342,7 +338,7 @@
             responseAsString = responseAsString.substr("////".length);
             var responseAsArray = JSON.parse(responseAsString);
             var responseAsObject = responseAsArray[0];
-        
+
             this.priceLast = responseAsObject["l"]; // "latest"
           }
           catch(e)
@@ -350,10 +346,10 @@
             this.priceLast = "?";
           }
         }
-        
+
       // Yahoo quote API (as alternate - or for indexes)
         Stock.prototype.updateViaYahoo = function() {
-          var requestURL = 
+          var requestURL =
             "https://finance.yahoo.com/webservice/v1/symbols/" + this.symbol + "/quote?format=json";
           var request = new XMLHttpRequest();
           request.open("GET", requestURL, false);
@@ -363,7 +359,7 @@
             var responseAsString = request.responseText;
             var responseAsArray = JSON.parse(responseAsString);
             var responseAsObject = responseAsArray.list.resources[0].resource;
-        
+
             this.priceLast = parseFloat(responseAsObject.fields.price);
           }
           catch(e)
@@ -421,7 +417,7 @@
             // buttonSymbolAdd.innerHTML = "Add";
             // buttonSymbolAdd.onclick = this.buttonSymbolAdd_Click.bind(this);
             // divElement.appendChild(buttonSymbolAdd);
-            
+
           // CREATE TABLE
             var tableQuotes = document.createElement("table");
             tableQuotes.id = "tableQuotes";  // ID for 'tableQuotes'
@@ -443,7 +439,7 @@
             {
               var stock = this.stocksToTrack[i];
               stock.domElementUpdate(tableQuotes);
-            }   
+            }
             divElement.appendChild(tableQuotes);
             this.domElement = divElement;
             var divMain = document.getElementById("divMain");
@@ -470,10 +466,10 @@
           else
           {
             var stockToAddAsStrings = stockToAddAsString.split(":");
-            exchange = stockToAddAsStrings[0] 
+            exchange = stockToAddAsStrings[0]
             symbol = stockToAddAsStrings[1];
           }
-          
+
           var stock = new Stock
           (
             exchange, symbol
@@ -483,7 +479,7 @@
           this.liveUpdate();
         }
         StockTracker.prototype.handleEventTimerTick = function() {
-          this.liveUpdate();  
+          this.liveUpdate();
         }
       }
       main();
