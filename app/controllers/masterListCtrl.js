@@ -1080,7 +1080,7 @@ setInterval(function () {  // a callback function after the specified time inter
         }
 
         // * BEGIN - DELETE TICKER FROM USER'S WATCHLIST ********************
-        $scope.removeItem = function(stockTicker) {
+        $scope.removeItemTEMP = function(stockTicker) {
           // GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST
           var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
           var currentAuth = ref.getAuth().uid;  // get current user's ID
@@ -1102,7 +1102,17 @@ setInterval(function () {  // a callback function after the specified time inter
             $scope.userStocks = userStocks;
           });
 console.log('current watchlist =', $scope.watchList.$id);
-          todaysData.forEach(function(object2, i) {  // loop through data that will be referenced/matched
+console.log($scope.watchList);
+
+  // var listToRemove = $scope.watchList;
+  // listToRemove.$remove().then(function(ref) {
+  // }, function(error) {
+  //   console.log("Error:", error);
+  // });
+
+          // $scope.watchList.forEach(function(object2, i) {
+            // console.log('hello');
+          // todaysData.forEach(function(object2, i) {  // loop through data that will be referenced/matched
             // console.log('current watchlist =', $scope.watchList.$id);  // current watchlist
             // console.log('stockTicker =', stockTicker);  // ticker clicked on
             // console.log('object2 =', object2.symbol);
@@ -1110,40 +1120,41 @@ console.log('current watchlist =', $scope.watchList.$id);
             // ticker = todaysData[i].symbol;
             // symbol = object2.symbol;
             // if (ticker === symbol) {
-              // console.log('match!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
               // stockTicker.remove();
             // };
-          })
+          // })
         }
 
-
-            $scope.removeItemTEMP = function (thing) {
-            var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/BUY/");  // make reference to location of current user's watchlists
-            var watchTicks = $firebaseArray(userListRef);
+            $scope.removeItem = function (thing) {
+            var currentWatchList = $scope.watchList.$id;
+            var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/" + currentWatchList);  // make reference to location of current user's watchlists
+            var tickerToDelete = thing.ticker;
+            // console.log('currentWatchList =', $scope.watchList.$id);
+            // var watchTicks = $firebaseArray(userListRef);
               // console.log(thing.ticker);  // log ticker
-              userListRef.$remove(thing);
-
-              var tickerToDelete = thing.ticker;
+              // userListRef.$remove(thing);
 
               userListRef.orderByChild("ticker").on("child_added", function(snapshot) {  // snapshot of user's chosen watchlist
                 var watchlistTicker = snapshot.val().ticker;
                 var tickerKey = snapshot.key();
 
                   if (snapshot.val().ticker === tickerToDelete) {
-                    console.log("Found " + watchlistTicker + " and its key... " + tickerKey);
-                    userListRef = userListRef + tickerKey;
-                    console.log(thing);
-                    console.log(snapshot.val());
-                    console.log(tickerKey);
+                    console.log("Found " + watchlistTicker + ", and its key = " + tickerKey);
+                    // console.log(thing);
+                    // console.log(snapshot.val());
+                    // console.log(tickerKey);
 
-                    userListRef.$remove(thing);
+                    var TickerToRemove = userListRef + "/" + tickerKey;
+                    // var TickerToRemove = userListRef;
+                    console.log(TickerToRemove);
+                    TickerToRemove.$remove();
+
+
+                    // userListRef.$remove(thing);
                     // watchTicks.$remove(thing);
-
-
                     // userWatchlistRef.child(tickerKey).$remove();  // GOOD UNTIL HERE!!!! DO NOT change code above!!!!!
                     // userWatchlistRef.child().$remove(tickerKey);
                     // userWatchlistRef.$remove(tickerKey);
-
                     // userWatchlistRef.child(thing).$remove();
                     // userWatchlistRef.child().$remove(thing);
                     // userWatchlistRef.$remove(thing);
@@ -1152,121 +1163,15 @@ console.log('current watchlist =', $scope.watchList.$id);
             };
 
 
-          $scope.deleteTicker = function(stockTicker, watchList) {
-            // console.log("from 'deleteTicker' function", watchList);
-            console.log(stockTicker);
-            console.log("all of user's watchlists", listToWatch);  // log all of user's watchlists
-            console.log("user's dropdown choice", watchList.$id);  // log user's dropdown choice
-
-        // var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);
-        // // userWatchlistRef.on("child_added", function(snapshot) {
-        // userWatchlistRef.orderByChild("ticker").on("child_added", function(snapshot2) {
-        // var key = snapshot2.key();
-        // var childData2 = snapshot2.val();  // childData2 is contents of the child
-        // $scope.childData2 = childData2;
-        // todaysData = $scope.childData2;
-        // console.log(todaysData);
-        // })
-        // // })
-
-            for (var i = 0; i < listToWatch.length; i++) {  // loop through user's watchlists stored in Firebase
-              if (listToWatch[i].$id === watchList.$id) {  // if Firebase watchlist equals dropdown choice
-                console.log("accessed Firebase watchlist is", listToWatch[i].$id); // log successful access to chosen watclist in Firebase
-                console.log("contents of", listToWatch[i].$id, "is", listToWatch[i]); // log chosen watchlist object
-                console.log("ticker to delete is", stockTicker);
-                var tickToRemove = stockTicker;
-                // listToWatch[i].$id.remove();
-
-                  // for (var i = 0; i < 2; i++) {
-                    // console.log("inside for-loop in deleteTicker");
-                    // console.log(listToWatch[i].$id);
-                    // console.log(listToWatch[i].ticker); // returns 'undefined'
-                    // watchListID.$id.$remove(stockTicker);
-                    // $scope.listToWatch.$remove(stockTicker.ticker);
-                  // }
-                }
-              }
-
-            //       for (var i = 0; i < listToWatch.length; i++) {
-            //   if (listToWatch[i] === watchList.$id) {
-            //     console.log("chosen watchlist is", listToWatch[i]);
-            //     // watchList[i].$remove();
-            //   }
-            // }
-            // console.log("from 'deleteTicker' function", watchList.$id);
-            // console.log("stock.ticker", stock.ticker);
-            // console.log(stock.ticker, " to be deleted");
-
-            angular.forEach(watchList, function(element, i) {  // loop over Firebase list
-              console.log(i);
-              console.log(watchList[i].ticker);
-              if (watchList[i].ticker === stockTicker) {
-                console.log("guess what? Found", stockTicker);
-                console.log(watchList[i]);
-                tickerChosen = watchList[i].ticker;
-                console.log("chosen ticker =", tickerChosen);
-                // watchList[i].remove();
-              }
-
-              // console.log(data2);
-
-            // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
-            //   console.log(i);
-            //   console.log(watchList[i].ticker);
-            //   if (watchList[i].ticker === stockTicker) {
-            //     console.log("guess what? Found", stockTicker);
-            //     console.log(watchList[i]);
-            //     tickerChosen = watchList[i].ticker;
-            //     console.log("chosen ticker =", tickerChosen);
-            //   }
-
-            })
-
-
-            // angular.forEach(data2, function(element, i) {  // loop over Firebase list
-            //   console.log("x times");
-            //   console.log(data2[i].symbol);
-            //   if (data2[i].symbol === stockTicker) {
-            //     console.log("guess what? Found", stockTicker);
-            //     watchList[i].remove();
-            //   }
-
-            // })
-          }
-
-
-          // // LOCATE USER'S TICKER CHOICE
-          // angular.forEach(watchList, function(element, key) {  // loop over Firebase list
-          //   console.log(key);
-          //   console.log(watchList[key].ticker);
-          //   if (watchList[key].ticker === stockTicker) {
-          //     console.log("guess what? Found", stockTicker);
-          //     console.log(watchList[key]);
-          //     tickerChosen = watchList[key].ticker;
-          //     console.log("chosen ticker and its key=", tickerChosen + " " + key);
-          //     // watchList[i].remove();
-          //     return;
-          //   }
-          // });
-
-          // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
-          //   console.log(i);
-          //   console.log(watchList[i].ticker);
-          //   if (watchList[i].ticker === stockTicker) {
-          //     console.log("guess what? Found", stockTicker);
-          //     console.log(watchList[i]);
-          //     tickerChosen = watchList[i].ticker;
-          //     console.log("chosen ticker =", tickerChosen);
-          //   }
-          //
-          // })
-
-
-
-
         // * END - DELETE TICKER FROM USER'S WATCHLIST ********************
 
+          $scope.deleteWatchlist = function (thing) {
+            console.log('delete this watchlist');
+          }
 
+          $scope.deleteScan = function (thing) {
+            console.log('delete this scan');
+          }
 
 }  // END OF APP.CONTROLLER FUNCTION -> (all functionality goes inside this function)
 ]);
