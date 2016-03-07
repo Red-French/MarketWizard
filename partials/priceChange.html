@@ -22,7 +22,7 @@
     <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
     <option value="">Select Watchlist</option>
     </select>
-  </label>
+  </label><button class="btn btn-success" ng-click="deleteWatchlist()" data-toggle = "modal" data-target = "#newScanModal"> Delete Watchlist</button>
 </div>
 
 <div class="dropdowns">
@@ -36,6 +36,7 @@
     </select>
   </label>
 <button class="btn btn-success" ng-click="newScanModal()" data-toggle = "modal" data-target = "#newScanModal"> Write a Scan</button>
+<button class="btn btn-success" ng-click="deleteScan()" data-toggle = "modal" data-target = "#newScanModal"> Delete Scan</button>
 </div>
 
 <div>  </div>
@@ -98,7 +99,6 @@
       <td class="watchlist">
         <table class="list2">
           <tr ng-repeat="thing in watchList">
-          <td class="watchlist"></td>
             <td class="watchlist"><a ng-click="getTickerData(thing.ticker, watchList)">{{thing.ticker}}</a><a ng-click="removeItem(thing)" class="delete_x">[x]</a></td>
           </tr>
         </table>
