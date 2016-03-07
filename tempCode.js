@@ -2,7 +2,7 @@ temp code (possible later use)
 
 1. order by value
 2. get length
-3. if length>10, 
+3. if length>10,
 4. loop over length-10 and remove()
 
 
@@ -93,7 +93,7 @@ mySessionRef.update({ startedAt: Firebase.ServerValue.TIMESTAMP });
 
 
 // GRAB USER'S STOCKS (THIS FUNCTIONALITY WILL GO INSIDE 'NEWTICKER' FUNCTION ABOVE)
-// 
+//
 // brings back all stocks
 // var refy = new Firebase("https://market-wizard.firebaseio.com/stocks/naz100");
 // refy.orderByChild("symbol").on("child_added", function(snapshot) {
@@ -151,6 +151,135 @@ refy.orderByChild("symbol").equalTo(tempTick).on("child_added", function(snapsho
 //   console.log("The blog post titled '" + deletedPost.title + "' has been deleted");
 // });
 
+// * removes ticker from DOM but NOT from Firebase
+  document.querySelector("body").addEventListener("click", function(event) {  // list for click events
+    // console.log(event);
+    if (event.target.className === "deleteButton") {  // if click is on a 'delete' button
+      // console.log("You clicked on 'Delete'");
+      console.log(event.target.parentElement);  // log html to be removed
+      event.target.parentElement.remove();  // remove chosen ticker from DOM
+    }
+  });
+
+
+
+  $scope.deleteTicker = function(stockTicker, watchList) {
+    // console.log("from 'deleteTicker' function", watchList);
+    console.log(stockTicker);
+    console.log("all of user's watchlists", listToWatch);  // log all of user's watchlists
+    console.log("user's dropdown choice", watchList.$id);  // log user's dropdown choice
+
+// var userWatchlistRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/"  + currentAuth);
+// // userWatchlistRef.on("child_added", function(snapshot) {
+// userWatchlistRef.orderByChild("ticker").on("child_added", function(snapshot2) {
+// var key = snapshot2.key();
+// var childData2 = snapshot2.val();  // childData2 is contents of the child
+// $scope.childData2 = childData2;
+// todaysData = $scope.childData2;
+// console.log(todaysData);
+// })
+// // })
+
+    for (var i = 0; i < listToWatch.length; i++) {  // loop through user's watchlists stored in Firebase
+      if (listToWatch[i].$id === watchList.$id) {  // if Firebase watchlist equals dropdown choice
+        console.log("accessed Firebase watchlist is", listToWatch[i].$id); // log successful access to chosen watclist in Firebase
+        console.log("contents of", listToWatch[i].$id, "is", listToWatch[i]); // log chosen watchlist object
+        console.log("ticker to delete is", stockTicker);
+        var tickToRemove = stockTicker;
+        // listToWatch[i].$id.remove();
+
+          // for (var i = 0; i < 2; i++) {
+            // console.log("inside for-loop in deleteTicker");
+            // console.log(listToWatch[i].$id);
+            // console.log(listToWatch[i].ticker); // returns 'undefined'
+            // watchListID.$id.$remove(stockTicker);
+            // $scope.listToWatch.$remove(stockTicker.ticker);
+          // }
+        }
+      }
+
+    //       for (var i = 0; i < listToWatch.length; i++) {
+    //   if (listToWatch[i] === watchList.$id) {
+    //     console.log("chosen watchlist is", listToWatch[i]);
+    //     // watchList[i].$remove();
+    //   }
+    // }
+    // console.log("from 'deleteTicker' function", watchList.$id);
+    // console.log("stock.ticker", stock.ticker);
+    // console.log(stock.ticker, " to be deleted");
+
+    angular.forEach(watchList, function(element, i) {  // loop over Firebase list
+      console.log(i);
+      console.log(watchList[i].ticker);
+      if (watchList[i].ticker === stockTicker) {
+        console.log("guess what? Found", stockTicker);
+        console.log(watchList[i]);
+        tickerChosen = watchList[i].ticker;
+        console.log("chosen ticker =", tickerChosen);
+        // watchList[i].remove();
+      }
+
+      // console.log(data2);
+
+    // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
+    //   console.log(i);
+    //   console.log(watchList[i].ticker);
+    //   if (watchList[i].ticker === stockTicker) {
+    //     console.log("guess what? Found", stockTicker);
+    //     console.log(watchList[i]);
+    //     tickerChosen = watchList[i].ticker;
+    //     console.log("chosen ticker =", tickerChosen);
+    //   }
+
+    })
+
+
+    // angular.forEach(data2, function(element, i) {  // loop over Firebase list
+    //   console.log("x times");
+    //   console.log(data2[i].symbol);
+    //   if (data2[i].symbol === stockTicker) {
+    //     console.log("guess what? Found", stockTicker);
+    //     watchList[i].remove();
+    //   }
+
+    // })
+  }
+
+
+  // // LOCATE USER'S TICKER CHOICE
+  // angular.forEach(watchList, function(element, key) {  // loop over Firebase list
+  //   console.log(key);
+  //   console.log(watchList[key].ticker);
+  //   if (watchList[key].ticker === stockTicker) {
+  //     console.log("guess what? Found", stockTicker);
+  //     console.log(watchList[key]);
+  //     tickerChosen = watchList[key].ticker;
+  //     console.log("chosen ticker and its key=", tickerChosen + " " + key);
+  //     // watchList[i].remove();
+  //     return;
+  //   }
+  // });
+
+  // angular.forEach(watchList, function(element, i) {  // loop over Firebase list
+  //   console.log(i);
+  //   console.log(watchList[i].ticker);
+  //   if (watchList[i].ticker === stockTicker) {
+  //     console.log("guess what? Found", stockTicker);
+  //     console.log(watchList[i]);
+  //     tickerChosen = watchList[i].ticker;
+  //     console.log("chosen ticker =", tickerChosen);
+  //   }
+  //
+  // })
+
+
+
+
+
+
+
+
+
 // SORT DATA
 var sortData = new Firebase("https://market-wizard.firebaseio.com/data2/");
 sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
@@ -173,3 +302,38 @@ sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
 // }
 
 
+
+// NOT USING CURRENTLY!!!!!!! --
+// PUSH TOP 10 TO FIREBASE --
+//   function addTen () {
+//       newTop10.remove();  // remove old data
+//     newData.orderByChild("calculation").on("child_added", function(snapshot5) {
+
+//       // snapshot.forEach(function(childSnapshot4) {  // The callback function is called for each day's data
+//       console.log("snapshot", snapshot5.val());  // log each stock (# limited above by limitToLast)
+//       var key = snapshot5.key();  // key is the unique ID of each day's data
+//       var topTenData = snapshot5.val();  // topTenData is contents of the child
+//       var topTenTicker = topTenData.ticker;
+//       var topTenCalc = topTenData.calculation;
+
+//       console.log("TopTen", topTenTicker, topTenCalc);
+
+//       top10.$add({  // add tickers/calculations to Firebase
+//         ticker: topTenTicker,
+//         calculation: topTenCalc
+//       });
+//     });
+
+
+// newTop10.orderByChild("calculation").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().calculation);
+// });
+
+
+// var ref = new Firebase("https://dinosaur-facts.firebaseio.com/dinosaurs");
+// ref.orderByChild("height").on("child_added", function(snapshot) {
+//   console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
+// });
+
+
+//   }
