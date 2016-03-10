@@ -229,11 +229,12 @@ ref.onAuth(authCallback);
         }
       }
      $location.path("/data");  // take user to this location
+     $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
    })  // END 'PERFORM CALCULATION'
-  }  // END '> 25 & <50 & >1 MIL SHARES AND DECLINING TODAY' FUNCTION
+ }  // END '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
 
 
-// BEGIN '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
+// BEGIN '> 25 & <50 & >1 MIL SHARES AND DECLINING TODAY' FUNCTION
   if (scanners.$id === ">25 & <50 & >1 mil shrs & declining") {
     obtainData();
     newData.remove();  // remove old data
@@ -268,6 +269,7 @@ ref.onAuth(authCallback);
         }
       }
      $location.path("/data");  // take user to this location
+     $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END '> 25 & <50 & >1 MIL SHARES AND DECLINING TODAY' FUNCTION
 
@@ -308,6 +310,7 @@ ref.onAuth(authCallback);
           }
       }
       $location.path("/data");  // take user to this location
+      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
 
@@ -349,6 +352,7 @@ ref.onAuth(authCallback);
         }
       }
       $location.path("/data");  // take user to this location
+      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END '>50 & >750k SHARES AND DECLINING TODAY' FUNCTION
 
@@ -384,6 +388,7 @@ ref.onAuth(authCallback);
           });
         }
       $location.path("/data");  // take user to this location
+      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'GAP UP' FUNCTION
 
@@ -418,6 +423,7 @@ ref.onAuth(authCallback);
         });
       }
       $location.path("/data");  // take user to this location
+      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'GAP DOWN' FUNCTION
 
@@ -452,6 +458,7 @@ ref.onAuth(authCallback);
           calculation: calcResult
         });
       $location.path("/data");  // take user to this location
+      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'NET CHANGE' FUNCTION
 
@@ -488,6 +495,7 @@ ref.onAuth(authCallback);
         });
       }
      $location.path("/data");  // take user to this location
+     $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
    })  // END 'PERFORM CALCULATION'
  }  // END 'TODAY'S ADVANCERS' FUNCTION
 
@@ -525,6 +533,7 @@ ref.onAuth(authCallback);
         });
       }
      $location.path("/data");  // take user to this location
+     $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'TODAY'S DECLINERS' FUNCTION
 }  // END CALC FUNCTION
@@ -1124,35 +1133,37 @@ console.log($scope.watchList);
             // };
           // })
         }
+          	$scope.watchTicks = [];
 
             $scope.removeItem = function (thing) {
-            var currentWatchList = $scope.watchList.$id;
-            var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/" + currentWatchList);  // make reference to location of current user's watchlists
-            var tickerToDelete = thing.ticker;
-            // console.log('currentWatchList =', $scope.watchList.$id);
-            // var watchTicks = $firebaseArray(userListRef);
+              var currentWatchList = $scope.watchList.$id;
+              var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/" + currentWatchList);  // make reference to location of current user's watchlists
+              var tickerToDelete = thing.ticker;
+              // console.log('currentWatchList =', $scope.watchList.$id);
+              $scope.watchTicks = $firebaseArray(userListRef);
+              console.log($scope.watchTicks);
+              console.log(thing);
               // console.log(thing.ticker);  // log ticker
-              // userListRef.$remove(thing);
+              // $scope.watchTicks.$remove(thing.ticker);
 
               userListRef.orderByChild("ticker").on("child_added", function(snapshot) {  // snapshot of user's chosen watchlist
                 var watchlistTicker = snapshot.val().ticker;
                 var tickerKey = snapshot.key();
 
                   if (snapshot.val().ticker === tickerToDelete) {
-                    console.log("Found " + watchlistTicker + ", and its key = " + tickerKey);
-                    // console.log(thing);
+                    console.log(watchlistTicker + "          " + tickerKey);
                     // console.log(snapshot.val());
                     // console.log(tickerKey);
+                    // console.log(TickerToRemove);
+                    $scope.watchTicks.$remove(tickerKey);
+                    // TickerToRemove.$remove(tickerKey);
+                    // $scope.watchTicks.$remove(tickerKey);
 
-                    var TickerToRemove = userListRef + "/" + tickerKey;
-                    // var TickerToRemove = userListRef;
-                    console.log(TickerToRemove);
-                    TickerToRemove.$remove();
+                    // var ticker = thing.ticker;
+                    // console.log('ticker is', ticker);
+                    // $scope.watchTicks.$remove(ticker);
 
-
-                    // userListRef.$remove(thing);
-                    // watchTicks.$remove(thing);
-                    // userWatchlistRef.child(tickerKey).$remove();  // GOOD UNTIL HERE!!!! DO NOT change code above!!!!!
+                    // userWatchlistRef.child(tickerKey).$remove();
                     // userWatchlistRef.child().$remove(tickerKey);
                     // userWatchlistRef.$remove(tickerKey);
                     // userWatchlistRef.child(thing).$remove();
