@@ -1073,45 +1073,20 @@ setInterval(function () {  // a callback function after the specified time inter
           $scope.watchTicks.forEach(function(object) {
               if (object.ticker === thing.ticker) {
                 $scope.watchTicks.$remove(object);
+                $('#deleteTickerModal').modal('show');
               }
           });
         })
       };
-  // * END - DELETE TICKER FROM USER'S WATCHLIST ********************
 
 
   //  DELETE WATCHLIST FROM FIREBASE
   $scope.deleteWatchlist = function (thing) {
-    console.log('delete this watchlist');
-    console.log($scope.userWatchlistRef);
-    console.log('thing is', thing.$id);
-  // $scope.listToWatch.forEach(function(object) {
-  // for (var i = 0; i < listToWatch.length; i++) {  // loop through user's watchlists stored in Firebase
-  //   if (listToWatch[i].$id === watchList.$id) {  // if Firebase watchlist equals dropdown choice
-  //     console.log(watchList.$id);
-  //     }
-  //   }
-
-
-// var listToRemove = $scope.watchList;
-// listToRemove.$remove().then(function(ref) {
-// }, function(error) {
-//   console.log("Error:", error);
-// });
-
-      // $scope.watchList.forEach(function(object2, i) {
-        // console.log('hello');
-      // todaysData.forEach(function(object2, i) {  // loop through data that will be referenced/matched
-        // console.log('current watchlist =', $scope.watchList.$id);  // current watchlist
-        // console.log('stockTicker =', stockTicker);  // ticker clicked on
-        // console.log('object2 =', object2.symbol);
-        // PLACE API DATA IN VARIABLES
-        // ticker = todaysData[i].symbol;
-        // symbol = object2.symbol;
-        // if (ticker === symbol) {
-          // stockTicker.remove();
-        // };
-      // })
+    $scope.userWatchlistRef.forEach(function(object) {
+      if (object.$id === thing.$id) {
+      $scope.userWatchlistRef.$remove(object);
+      }
+    })
   }
 // ++++ END - DELETE FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
