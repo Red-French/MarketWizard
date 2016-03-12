@@ -22,7 +22,7 @@
     <select ng-model="watchList" ng-options="thing.$id for thing in listToWatch">
     <option value="">Select Watchlist</option>
     </select>
-  </label><button class="btn btn-success" ng-click="deleteWatchlist()" data-toggle = "modal" data-target = "#newScanModal"> Delete Watchlist</button>
+  </label><button class="btn btn-success" ng-click="deleteWatchlist(watchList)" data-toggle = "modal" data-target = "#newScanModal"> Delete Watchlist</button>
 </div>
 
 <div class="dropdowns">
