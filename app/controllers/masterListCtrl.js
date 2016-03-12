@@ -98,7 +98,7 @@ ref.onAuth(authCallback);
 
     var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
     var userScans = $firebaseArray(userScanlistRef);
-    $scope.userScans = userScans;
+    $scope.allUserScans = userScans;
 
     data.$loaded()
       .then(function(data) {  // promise
@@ -1016,47 +1016,49 @@ setInterval(function () {  // a callback function after the specified time inter
 
 
   // ++++ CALCULATION FUNCTIONALITY FOR USER-DEFINED SCANS ++++++++++++++++++++++++++++++++++
-  $scope.userCalc = function(userScanners) {
+  $scope.userCalc = function(usersScan) {
+    console.log('hello from userCalc()');
+    console.log('usersScan is', usersScan.$id);
     var marketToScan = null;
     var marketHistoryToScan = null;
 
     // BEGIN USER-DEFINED SCAN
-    if (userScanners.$id !== null) {
-      obtainData();
+    // if (userScanners.$id !== null) {
+    //   obtainData();
       // newData.remove();  // remove old data
 
       // PERFORM CALCULATION
-      yesterdaysData.forEach(function(object2, i) {  // loop through data
-
-        // place API data in variables
-        ticker = todaysData[i].symbol;
-        lastPrice = todaysData[i].lastPrice;
-        close = todaysData[i].close;
-        high = todaysData[i].high;
-        low = todaysData[i].low;
-        volume = todaysData[i].volume;
+      // yesterdaysData.forEach(function(object2, i) {  // loop through data
+      //
+      //   // place API data in variables
+      //   ticker = todaysData[i].symbol;
+      //   lastPrice = todaysData[i].lastPrice;
+      //   close = todaysData[i].close;
+      //   high = todaysData[i].high;
+      //   low = todaysData[i].low;
+      //   volume = todaysData[i].volume;
 
         // find relevant stocks
-        if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
-          if (todaysData[i].lastPrice > yesterdaysData[i].close) {
-            calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-            calcResult = calculation.toFixed(2);  // round to nearest 100th
-
-            // push information to Firebase
-            userData.$add({  // add tickers/information/calculations to Firebase
-              ticker: ticker,
-              lastPrice: lastPrice,
-              close: close,
-              high: high,
-              low: low,
-              volume: volume,
-              calculation: calcResult
-            });
-          }
-        }
-        $location.path("/data");  // take user to this location
-      })  // END 'PERFORM CALCULATION'
-    }  // END USER-DEFINED SCAN
+        // if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
+        //   if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+        //     calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+        //     calcResult = calculation.toFixed(2);  // round to nearest 100th
+        //
+        //     // push information to Firebase
+        //     userData.$add({  // add tickers/information/calculations to Firebase
+        //       ticker: ticker,
+        //       lastPrice: lastPrice,
+        //       close: close,
+        //       high: high,
+        //       low: low,
+        //       volume: volume,
+        //       calculation: calcResult
+        //     });
+        //   }
+        // }
+        // $location.path("/data");  // take user to this location
+      // })  // END 'PERFORM CALCULATION'
+    // }  // END USER-DEFINED SCAN
   }  // END USERCALC FUNCTION
 
 
@@ -1069,11 +1071,12 @@ setInterval(function () {  // a callback function after the specified time inter
         var userListRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth + "/" + currentWatchList);  // make reference to location of current user's watchlists
         var tickerToDelete = thing.ticker;
         $scope.watchTicks = $firebaseArray(userListRef);
-        $scope.watchTicks.$loaded().then(function() {
+        $scope.watchTicks.$loaded().then(function() {  // promise
           $scope.watchTicks.forEach(function(object) {
               if (object.ticker === thing.ticker) {
-                $scope.watchTicks.$remove(object);
-                $('#deleteTickerModal').modal('show');
+                $scope.watchTicks.$remove(object).then(function() {  // promise
+                  $('#deleteTickerModal').modal('show');
+                })
               }
           });
         })
@@ -1081,30 +1084,30 @@ setInterval(function () {  // a callback function after the specified time inter
 
 
   //  DELETE WATCHLIST FROM FIREBASE
-  $scope.deleteWatchlist = function (thing) {
-    $scope.userWatchlistRef.forEach(function(object) {
-      if (object.$id === thing.$id) {
-      $scope.userWatchlistRef.$remove(object);
-      $('#deleteWatchlistModal').modal('show');
+  $scope.deleteWatchlist = function (usersWatchlist) {
+    $scope.userWatchlistRef.forEach(function(thisList) {
+      if (thisList.$id === usersWatchlist.$id) {
+        $scope.userWatchlistRef.$remove(thisList).then(function() {  // promise
+          $('#deleteWatchlistModal').modal('show');
+        })
       }
     })
   }
+
+
+  //  DELETE SCAN FROM FIREBASE
+  $scope.deleteScan = function (usersScan) {
+    $scope.allUserScans.forEach(function(thisScan) {
+      if (thisScan.$id === usersScan.$id) {
+        $scope.allUserScans.$remove(thisScan).then(function() {  // promise
+          $('#deleteScanModal').modal('show');
+        })
+      }
+    })
+  }
+
 // ++++ END - DELETE FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// #
-// #
-// #
-// #
-// #
-// #
-// #
-// #
-
-  // (~~~~~~~~~~~ ALL BELOW IS functionality not yet finished ~~~~~~~~~~~)
-
-          $scope.deleteScan = function (thing) {
-            console.log('delete this scan');
-          }
 
 }  // END OF APP.CONTROLLER FUNCTION -> (all functionality goes inside this function)
 ]);
