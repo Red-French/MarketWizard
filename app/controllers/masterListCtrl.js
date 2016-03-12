@@ -1085,6 +1085,7 @@ setInterval(function () {  // a callback function after the specified time inter
     $scope.userWatchlistRef.forEach(function(object) {
       if (object.$id === thing.$id) {
       $scope.userWatchlistRef.$remove(object);
+      $('#deleteWatchlistModal').modal('show');
       }
     })
   }
