@@ -1,11 +1,13 @@
 <div id="cntrlPanelTop">
+  <div id="chartButton"><button type="button" class="myButton" data-toggle="modal" data-target="#myModal">Chart</button>
+  </div>
 <div class="medium"><span id="textFlash">Live</span> Update: <span id="updateTime"></span></div>
 <div id="addTick">
   <label>Add to Watchlist:</label>
   <input type="text" ng-model="addTicker" placeholder=" Add Ticker">
     <a><button ng-click="newTicker()">Add to</button></a>
     <select ng-model="addToThisList" ng-options="thing.$id for thing in listToWatch">
-      <option></option>
+      <option value="">Select Watchlist</option>
     </select>
 
     <div><a><button ng-click="newWatchlist()">Add to</button></a><input ng-model="watchName" type="text" placeholder=" or enter new Watchlist"></div>
