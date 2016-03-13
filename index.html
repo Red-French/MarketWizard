@@ -233,6 +233,7 @@
         StockTracker.prototype.buttonSymbolAdd_Click = function(e) {
           var inputSymbolToAdd = document.getElementById("inputSymbolToAdd");
           var stockToAddAsString = inputSymbolToAdd.value;
+          stockToAddAsString = stockToAddAsString.toUpperCase();
           var exchange;
           var symbol;
           if (stockToAddAsString.indexOf(":") == -1)
