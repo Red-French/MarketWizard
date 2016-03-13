@@ -635,6 +635,7 @@ ref.onAuth(authCallback);
     });
 
 
+
 // * END - STOCKS FUNCTIONALITY *********************************************
 
 
@@ -1000,93 +1001,6 @@ setInterval(function () {  // a callback function after the specified time inter
   // END - ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
 
 
-  // ++++ CALCULATION FUNCTIONALITY FOR USER-DEFINED SCANS ++++++++++++++++++++++++++++++++++
-  var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-  var currentAuth = ref.getAuth().uid;  // get current user's ID
-  var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
-  var userScanList = $firebaseArray(userScanlistRef);
-  $scope.userScanList = userScanList;
-
-  $scope.userCalc = function(usersScan) {
-    var scanChoice = usersScan.$id; // obtain name of scan from dropdown list
-    console.log('I chose', scanChoice);
-    // console.log('user scans =', userScanlistRef.child(scanChoice));
-
-
-      $scope.userScanList.forEach(function(thisScan, i) {
-        console.log('thisScan data:', thisScan);
-        console.log('thisScan.$id', thisScan.$id);
-        if (thisScan.$id === scanChoice) {
-          console.log(thisScan.$id  + ' is a match!');
-          console.log(thisScan.$id);
-        }
-      //
-        // if (thisScan.$id === usersScan.$id) {
-        //   $scope.allUserScans.$remove(thisScan).then(function() {  // promise
-        //     console.log('hello there');
-        //   })
-        // }
-      //   userScanList.$loaded()
-      //   .then(function(userScan) {  // promise
-      //     $scope.userScan = userScan;
-      //   });
-      //     console.log(i + ". " + userScanList[i].$id);
-      })
-
-      //  GRAB SCAN DATA
-      userScanlistRef.once("value", function(snapshot) {
-        userScanlistRef.orderByChild("id").on("child_added", function(snapshot2) {
-          var key = snapshot2.key();  // key is the unique ID of each scan data
-          var childData2 = snapshot2.val();  // childData2 is contents of the child
-          $scope.childData2 = childData2;
-          scanData = $scope.childData2;
-          console.log('scanData:', scanData);
-          console.log('key:', key);
-          // console.log('scanData', scanData.$id);
-        })
-      })
-
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-      obtainData();
-      newData.remove();  // remove old data
-
-      // PERFORM CALCULATION
-      yesterdaysData.forEach(function(object2, i) {  // loop through data
-
-        // place API data in variables
-        ticker = todaysData[i].symbol;
-        lastPrice = todaysData[i].lastPrice;
-        close = todaysData[i].close;
-        high = todaysData[i].high;
-        low = todaysData[i].low;
-        volume = todaysData[i].volume;
-
-        // find relevant stocks
-        if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
-          if (todaysData[i].lastPrice > yesterdaysData[i].close) {
-            calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-            calcResult = calculation.toFixed(2);  // round to nearest 100th
-
-            // push information to Firebase
-            userData.$add({  // add tickers/information/calculations to Firebase
-              ticker: ticker,
-              lastPrice: lastPrice,
-              close: close,
-              high: high,
-              low: low,
-              volume: volume,
-              calculation: calcResult
-            });
-          }
-        }
-        $location.path("/data");  // take user to this location
-      })  // END 'PERFORM CALCULATION'
-    // }  // END USER-DEFINED SCAN
-  }  // END USERCALC FUNCTION
-
-
 // ++++ BEGIN - DELETE FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   //  * BEGIN - DELETE TICKER FROM USER'S WATCHLIST ********************
@@ -1132,6 +1046,129 @@ setInterval(function () {  // a callback function after the specified time inter
   }
 
 // ++++ END - DELETE FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+  // ++++ CALCULATION FUNCTIONALITY FOR USER-DEFINED SCANS ++++++++++++++++++++++++++++++++++
+  var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+  var currentAuth = ref.getAuth().uid;  // get current user's ID
+  var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
+  var userScanList = $firebaseArray(userScanlistRef);
+  $scope.userScanList = userScanList;
+
+  $scope.userCalc = function(usersScan) {
+    var scanChoice = usersScan.$id; // obtain name of scan from dropdown list
+    // console.log('I chose', scanChoice);
+
+    var currentScan = userScanList.$getRecord(scanChoice);
+    console.log('currentScan', currentScan);
+    console.log('currentScan', currentScan.$id);
+    console.log('currentScan', currentScan.price1);
+
+
+      $scope.userScanList.forEach(function(thisScan, i) {
+        console.log('thisScan data:', thisScan);
+        console.log('thisScan.$id', thisScan.$id);
+        if (thisScan.$id === scanChoice) {
+          console.log(thisScan.$id  + ' is a match!');
+          console.log(thisScan.$id);
+        }
+      })
+
+      //  GRAB SCAN DATA
+      userScanlistRef.once("value", function(snapshot) {
+        userScanlistRef.orderByChild("id").on("child_added", function(snapshot2) {
+          var key = snapshot2.key();  // key is the unique ID of each scan data
+          var childData2 = snapshot2.val();  // childData2 is contents of the child
+          $scope.childData2 = childData2;
+          scanData = $scope.childData2;
+          console.log('scanData:', scanData);
+          console.log('key:', key);
+          // console.log('scanData', scanData.$id);
+        })
+      })
+
+      userScanList.$loaded()
+      .then(function(userScanList) {  // promise
+        $scope.userScanList = userScanList;
+      });
+      userScanList.forEach(function(object, i) {  // loop through data
+        console.log(object.$id);
+      })
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      obtainData();
+      newData.remove();  // remove old data
+
+      // PERFORM CALCULATION
+      yesterdaysData.forEach(function(object2, i) {  // loop through data
+
+        // place API data in variables
+        ticker = todaysData[i].symbol;
+        lastPrice = todaysData[i].lastPrice;
+        close = todaysData[i].close;
+        high = todaysData[i].high;
+        low = todaysData[i].low;
+        volume = todaysData[i].volume;
+
+        // find relevant stocks
+        if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
+          if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+            calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+            calcResult = calculation.toFixed(2);  // round to nearest 100th
+
+            // push information to Firebase
+            userData.$add({  // add tickers/information/calculations to Firebase
+              ticker: ticker,
+              lastPrice: lastPrice,
+              close: close,
+              high: high,
+              low: low,
+              volume: volume,
+              calculation: calcResult
+            });
+          }
+        }
+        $location.path("/data");  // take user to this location
+      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
+        // angular.forEach($scope.userScanList, function(element, i) {  // loop over Firebase list
+        //   console.log(i);
+        //   console.log($scope.userScanList[i].$id);
+        //   if ($scope.userScanList[i].$id === usersScan.$id) {
+        //     console.log("guess what? Found", $scope.userScanList[i].$id);
+        //     console.log($scope.userScanList[i]);
+        //     scanChosen = $scope.userScanList[i].$id;
+        //     console.log("chosen scan =", scanChosen);
+        //     // watchList[i].remove();
+        //   }
+        // })
+
+
+      })  // END 'PERFORM CALCULATION'
+    // }  // END USER-DEFINED SCAN
+  }  // END USERCALC FUNCTION
 
 
 }  // END OF APP.CONTROLLER FUNCTION -> (all functionality goes inside this function)
