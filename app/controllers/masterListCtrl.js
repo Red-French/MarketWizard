@@ -1,6 +1,3 @@
-// SEARCH FOR 'NEED TO ADD MODAL'
-// SEARCH FOR 'functionality not yet finished'
-
 app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$location",
   function($scope, $http, $firebaseArray, $location) {
 
@@ -553,9 +550,9 @@ ref.onAuth(authCallback);
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // reference database
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
-
+    var cappedTicker = $scope.addTicker.toUpperCase();
     var newTicker = {
-      "ticker": $scope.addTicker
+      "ticker": cappedTicker
     };
 
     if ($scope.watchName != undefined || null || "") {
@@ -605,9 +602,9 @@ ref.onAuth(authCallback);
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
     var currentAuth = ref.getAuth().uid;  // get current user's ID
     var listRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);
-
+    var cappedTicker = $scope.addTicker.toUpperCase();
     var newTicker = {
-      "ticker": $scope.addTicker
+      "ticker": cappedTicker
     };
 
     if ($scope.addTicker === undefined || null || "") {
@@ -636,17 +633,6 @@ ref.onAuth(authCallback);
     .then(function(userStocks) {  // promise
       $scope.userStocks = userStocks;
     });
-
-
-
-
-
-
-
-
-
-
-
 
 
 // * END - STOCKS FUNCTIONALITY *********************************************
@@ -857,17 +843,16 @@ setInterval(function () {  // a callback function after the specified time inter
                 }, 1);
 
           } else {
-            $("#updateTime").html("Market Closed <br> EOD update at 6:15 CST");  // Replace contents in DOM element
+            $("#updateTime").html("<span class='userMsg'><span class='boldIt'>Market Closed</span><br><span class='smallFont'>(EOD auto-update at 6:15 CST)</span></span>");  // Replace contents in DOM element
         }  //  end of 'if' statement
     })();  // end of 'timer' IIFE
   }  // end of 'if loginStatus === true'
 }, 10000)  // end of 'setInterval'
 
 
-// USER'S AT-WILL UPDATE (no longer used)
+// USER'S AT-WILL UPDATE (no longer used - changed to live-update functionality)
 // ++++++ UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE' ++++++++++++++++++++++++++++++
   $scope.update = function() {
-    console.log("inside update function");
     $http({
     method: 'GET',
     url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
@@ -901,22 +886,22 @@ setInterval(function () {  // a callback function after the specified time inter
 // * END - DATA UPDATES ***************************************************
 
 
-// * BEGIN - 'FIND MATCHING TICKER DATA' (results from click on ticker in user's watchlist) ******************************
+// * BEGIN - 'FIND MATCHING TICKER DATA' (when user clicks on ticker in user's watchlist) ******************************
   newtickerData.remove();  // remove old data on page load so it doesn't display until user clicks a ticker
 
   $scope.getTickerData = function(stockTicker, watchList) {
     newtickerData.remove();  // remove old data from DOM
 
     // GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST
-    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    var currentAuth = ref.getAuth().uid;  // get current user's ID
-    var stocksRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);  // make reference to location of current user's watchlists
-    var userStocks = $firebaseArray(stocksRef);
-
-    userStocks.$loaded()  // load user's watchlists/stocks
-    .then(function(userStocks) {  // promise
-      $scope.userStocks = userStocks;
-    });
+    // var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+    // var currentAuth = ref.getAuth().uid;  // get current user's ID
+    // var stocksRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);  // make reference to location of current user's watchlists
+    // var userStocks = $firebaseArray(stocksRef);
+    //
+    // userStocks.$loaded()  // load user's watchlists/stocks
+    // .then(function(userStocks) {  // promise
+    //   $scope.userStocks = userStocks;
+    // });
 
     //  GRAB TODAY'S DATA
     dataRef2.once("value", function(snapshot) {
@@ -987,7 +972,7 @@ setInterval(function () {  // a callback function after the specified time inter
   $scope.newScanModal = function() {
     $('#writeScanModal').modal('show');
   }
-
+  // NEW-SCAN MODAL
   $(function () { $('#writeScanModal').on('hide.bs.modal', function () {
     var newScan = null;
     var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
@@ -996,68 +981,108 @@ setInterval(function () {  // a callback function after the specified time inter
 
     var newScan = {
       "price1": $scope.addPrice1,
-      "price2": $scope.addPrice2
+      "price2": $scope.addPrice2,
+      "volume": $scope.addVolume
     };
 
     if ($scope.scanName != undefined || null || "") {
         scanName = $scope.scanName;  // obtain name of new scan from input field
         listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
-        $('#addScanModal').modal('show'); // NEED TO ADD MODAL
+        $('#addScanModal').modal('show');
     }
+    $scope.price1 = "";  // clear 'Add Ticker' input field
+    $scope.price2 = "";  // clear 'Add Ticker' input field
+    $scope.volume = "";  // clear 'Add Ticker' input field
+    $scope.numPastDays = "";  // clear 'Add Ticker' input field
     $scope.scanName = "";  // clear 'or enter new Watchlist' field
     })
   });
+  // END - ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
 
+
+  // ++++ CALCULATION FUNCTIONALITY FOR USER-DEFINED SCANS ++++++++++++++++++++++++++++++++++
   var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
   var currentAuth = ref.getAuth().uid;  // get current user's ID
   var userScanlistRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);  // make reference to location of current user's scans
   var userScanList = $firebaseArray(userScanlistRef);
   $scope.userScanList = userScanList;
 
-
-  // ++++ CALCULATION FUNCTIONALITY FOR USER-DEFINED SCANS ++++++++++++++++++++++++++++++++++
   $scope.userCalc = function(usersScan) {
-    console.log('hello from userCalc()');
-    console.log('usersScan is', usersScan.$id);
-    var marketToScan = null;
-    var marketHistoryToScan = null;
+    var scanChoice = usersScan.$id; // obtain name of scan from dropdown list
+    console.log('I chose', scanChoice);
+    // console.log('user scans =', userScanlistRef.child(scanChoice));
 
-    // BEGIN USER-DEFINED SCAN
-    // if (userScanners.$id !== null) {
-    //   obtainData();
-      // newData.remove();  // remove old data
+
+      $scope.userScanList.forEach(function(thisScan, i) {
+        console.log('thisScan data:', thisScan);
+        console.log('thisScan.$id', thisScan.$id);
+        if (thisScan.$id === scanChoice) {
+          console.log(thisScan.$id  + ' is a match!');
+          console.log(thisScan.$id);
+        }
+      //
+        // if (thisScan.$id === usersScan.$id) {
+        //   $scope.allUserScans.$remove(thisScan).then(function() {  // promise
+        //     console.log('hello there');
+        //   })
+        // }
+      //   userScanList.$loaded()
+      //   .then(function(userScan) {  // promise
+      //     $scope.userScan = userScan;
+      //   });
+      //     console.log(i + ". " + userScanList[i].$id);
+      })
+
+      //  GRAB SCAN DATA
+      userScanlistRef.once("value", function(snapshot) {
+        userScanlistRef.orderByChild("id").on("child_added", function(snapshot2) {
+          var key = snapshot2.key();  // key is the unique ID of each scan data
+          var childData2 = snapshot2.val();  // childData2 is contents of the child
+          $scope.childData2 = childData2;
+          scanData = $scope.childData2;
+          console.log('scanData:', scanData);
+          console.log('key:', key);
+          // console.log('scanData', scanData.$id);
+        })
+      })
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      obtainData();
+      newData.remove();  // remove old data
 
       // PERFORM CALCULATION
-      // yesterdaysData.forEach(function(object2, i) {  // loop through data
-      //
-      //   // place API data in variables
-      //   ticker = todaysData[i].symbol;
-      //   lastPrice = todaysData[i].lastPrice;
-      //   close = todaysData[i].close;
-      //   high = todaysData[i].high;
-      //   low = todaysData[i].low;
-      //   volume = todaysData[i].volume;
+      yesterdaysData.forEach(function(object2, i) {  // loop through data
+
+        // place API data in variables
+        ticker = todaysData[i].symbol;
+        lastPrice = todaysData[i].lastPrice;
+        close = todaysData[i].close;
+        high = todaysData[i].high;
+        low = todaysData[i].low;
+        volume = todaysData[i].volume;
 
         // find relevant stocks
-        // if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
-        //   if (todaysData[i].lastPrice > yesterdaysData[i].close) {
-        //     calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-        //     calcResult = calculation.toFixed(2);  // round to nearest 100th
-        //
-        //     // push information to Firebase
-        //     userData.$add({  // add tickers/information/calculations to Firebase
-        //       ticker: ticker,
-        //       lastPrice: lastPrice,
-        //       close: close,
-        //       high: high,
-        //       low: low,
-        //       volume: volume,
-        //       calculation: calcResult
-        //     });
-        //   }
-        // }
-        // $location.path("/data");  // take user to this location
-      // })  // END 'PERFORM CALCULATION'
+        if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
+          if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+            calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+            calcResult = calculation.toFixed(2);  // round to nearest 100th
+
+            // push information to Firebase
+            userData.$add({  // add tickers/information/calculations to Firebase
+              ticker: ticker,
+              lastPrice: lastPrice,
+              close: close,
+              high: high,
+              low: low,
+              volume: volume,
+              calculation: calcResult
+            });
+          }
+        }
+        $location.path("/data");  // take user to this location
+      })  // END 'PERFORM CALCULATION'
     // }  // END USER-DEFINED SCAN
   }  // END USERCALC FUNCTION
 
