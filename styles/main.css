@@ -96,7 +96,7 @@ td.watchlist {
   text-align: center; }
 
 #chartButton {
-  margin: -1.5em 0 0 4%;
+  margin: -2em 0 0 69%;
   position: absolute; }
 
 #tickerBoardChartTable {
@@ -368,20 +368,20 @@ footer {
 .btn {
   margin-left: 20px; }
 
-.wordStandout {
-  color: blue;
-}
+  .wordStandout {
+    color: blue;
+  }
 
-.userMsg {
-  color: red;
-}
+  .userMsg {
+    color: red;
+  }
 
-.boldIt {
-  font-weight: 700;
-}
+  .boldIt {
+    font-weight: 700;
+  }
 
-.smallFont {
-  font-size: .8em;
-}
+  .smallFont {
+    font-size: .8em;
+  }
 
 /*# sourceMappingURL=main.css.map */
