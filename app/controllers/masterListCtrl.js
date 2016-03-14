@@ -798,7 +798,7 @@ setInterval(function () {  // a callback function after the specified time inter
       var minutes = date.getMinutes();
       var seconds = date.getSeconds();
 
-        if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && (hour > 8)) {
+        if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && (hour > 8) && (hour < 16)) {  // catches 1/2 hour of premarket and 1 hour of postmarket CST
           console.log("inside update function");
           // UPDATE NASDAQ-100
           $http({
