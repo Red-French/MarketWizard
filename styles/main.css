@@ -384,4 +384,16 @@ footer {
     font-size: .8em;
   }
 
+  #register-button {
+    color: #6495ED;
+  }
+
+  #login-button {
+    color: #0000FF
+  }
+
+  #alert-title {
+    color: red;
+  }
+
 /*# sourceMappingURL=main.css.map */
