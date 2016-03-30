@@ -302,7 +302,6 @@ sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
 // }
 
 
-
 // NOT USING CURRENTLY!!!!!!! --
 // PUSH TOP 10 TO FIREBASE --
 //   function addTen () {
@@ -334,6 +333,5 @@ sortData.orderByValue().limitToLast(3).on("value", function(snapshot) {
 // ref.orderByChild("height").on("child_added", function(snapshot) {
 //   console.log(snapshot.key() + " was " + snapshot.val().height + " meters tall");
 // });
-
 
 //   }

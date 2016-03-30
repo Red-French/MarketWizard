@@ -1,5 +1,5 @@
-app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$location",
-  function($scope, $http, $firebaseArray, $location) {
+app.controller('masterListCtrl', ["$scope", "$http", "$q", "$firebaseArray",  "$location",
+  function($scope, $http, $q, $firebaseArray, $location) {
 
   $scope.searchText = "";
 
@@ -209,23 +209,24 @@ ref.onAuth(authCallback);
 
       // find relevant stocks
       if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
-        if (todaysData[i].lastPrice > yesterdaysData[i].close) {
-          calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-          calcResult = calculation.toFixed(2);  // round to nearest 100th
+        if (yesterdaysData[i].volume > 1000000) {
+          if (todaysData[i].lastPrice > yesterdaysData[i].close) {
+            calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+            calcResult = calculation.toFixed(2);  // round to nearest 100th
 
-          // push information to Firebase
-          userData.$add({  // add tickers/information/calculations to Firebase
-            ticker: ticker,
-            lastPrice: lastPrice,
-            close: close,
-            high: high,
-            low: low,
-            volume: volume,
-            calculation: calcResult
-          });
+            // push information to Firebase
+            userData.$add({  // add tickers/information/calculations to Firebase
+              ticker: ticker,
+              lastPrice: lastPrice,
+              close: close,
+              high: high,
+              low: low,
+              volume: volume,
+              calculation: calcResult
+            });
+          }
         }
       }
-     $location.path("/data");  // take user to this location
      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
    })  // END 'PERFORM CALCULATION'
  }  // END '> 25 & <50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
@@ -249,23 +250,24 @@ ref.onAuth(authCallback);
 
       // find relevant stocks
       if (todaysData[i].lastPrice > 25.00 && todaysData[i].lastPrice < 50.00) {
-        if (todaysData[i].lastPrice < yesterdaysData[i].close) {
-          calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
-          calcResult = calculation.toFixed(2);  // round to nearest 100th
+        if (yesterdaysData[i].volume > 1000000) {
+          if (todaysData[i].lastPrice < yesterdaysData[i].close) {
+            calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
+            calcResult = calculation.toFixed(2);  // round to nearest 100th
 
-          // push information to Firebase
-          userData.$add({  // add tickers/information/calculations to Firebase
-            ticker: ticker,
-            lastPrice: lastPrice,
-            close: close,
-            high: high,
-            low: low,
-            volume: volume,
-            calculation: calcResult
-          });
+            // push information to Firebase
+            userData.$add({  // add tickers/information/calculations to Firebase
+              ticker: ticker,
+              lastPrice: lastPrice,
+              close: close,
+              high: high,
+              low: low,
+              volume: volume,
+              calculation: calcResult
+            });
+          }
         }
       }
-     $location.path("/data");  // take user to this location
      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END '> 25 & <50 & >1 MIL SHARES AND DECLINING TODAY' FUNCTION
@@ -289,6 +291,7 @@ ref.onAuth(authCallback);
 
       // find relevant stocks
       if (todaysData[i].lastPrice < 50.00) {
+        if (yesterdaysData[i].volume > 1000000) {
           if (todaysData[i].lastPrice > yesterdaysData[i].close) {
 
             calculation = todaysData[i].lastPrice - yesterdaysData[i].close;
@@ -305,8 +308,8 @@ ref.onAuth(authCallback);
               calculation: calcResult
             });
           }
+        }
       }
-      $location.path("/data");  // take user to this location
       $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END '<50 & >1 MIL SHARES AND ADVANCING TODAY' FUNCTION
@@ -348,7 +351,6 @@ ref.onAuth(authCallback);
           }
         }
       }
-      $location.path("/data");  // take user to this location
       $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END '>50 & >750k SHARES AND DECLINING TODAY' FUNCTION
@@ -384,7 +386,6 @@ ref.onAuth(authCallback);
             calculation: calcResult
           });
         }
-      $location.path("/data");  // take user to this location
       $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'GAP UP' FUNCTION
@@ -419,7 +420,6 @@ ref.onAuth(authCallback);
           calculation: calcResult
         });
       }
-      $location.path("/data");  // take user to this location
       $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'GAP DOWN' FUNCTION
@@ -454,7 +454,6 @@ ref.onAuth(authCallback);
           volume: volume,
           calculation: calcResult
         });
-      $location.path("/data");  // take user to this location
       $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'NET CHANGE' FUNCTION
@@ -478,7 +477,8 @@ ref.onAuth(authCallback);
       ticker = todaysData[i].symbol;
       if (todaysData[i].lastPrice > yesterdaysData[i].close) {
         var calculation = (todaysData[i].lastPrice / yesterdaysData[i].close) -1;
-        calcResult = calculation.toFixed(3) + "%";  // round to nearest 1000th
+        calculation = calculation * 100;
+        calcResult = calculation.toFixed(2) + "%";  // round to nearest 1000th
 
         // push information to Firebase
         userData.$add({  // add tickers/information/calculations to Firebase
@@ -491,7 +491,6 @@ ref.onAuth(authCallback);
           calculation: calcResult
         });
       }
-     $location.path("/data");  // take user to this location
      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
    })  // END 'PERFORM CALCULATION'
  }  // END 'TODAY'S ADVANCERS' FUNCTION
@@ -516,7 +515,8 @@ ref.onAuth(authCallback);
       if (todaysData[i].lastPrice < yesterdaysData[i].close) {
         ticker = todaysData[i].symbol;
         var calculation = ((todaysData[i].lastPrice / yesterdaysData[i].close) -1);
-        calcResult = calculation.toFixed(3) + "%";  // round to nearest 1000th
+        calculation = calculation * 100;
+        calcResult = calculation.toFixed(2) + "%";  // round to nearest 1000th
 
         // push information to Firebase
         userData.$add({  // add tickers/information/calculations to Firebase
@@ -529,7 +529,6 @@ ref.onAuth(authCallback);
           calculation: calcResult
         });
       }
-     $location.path("/data");  // take user to this location
      $('#cntrlPanel').hide().show(0);  // force re-render (due to Chrome not rendering correctly at times)
     })  // END 'PERFORM CALCULATION'
   }  // END 'TODAY'S DECLINERS' FUNCTION
