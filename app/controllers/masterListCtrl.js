@@ -3,7 +3,6 @@ app.controller('masterListCtrl', ["$scope", "$http", "$firebaseArray",  "$locati
 
   $scope.searchText = "";
 
-
 // +++++ CHECK AND LOG USER'S CURRENT AUTHENTICATION STATE +++++++++++++++++++++
   // set 'Chart' button's 'display' property to 'none' if user logged out
   // set a authentication flag ('loginStaus') for use elsewhere
@@ -59,10 +58,10 @@ ref.onAuth(authCallback);
     var dataRef3 = dataRef2.child("today");  // reference NAZ100 Today's Data
     var data3 = $firebaseArray(dataRef3);
 
-    var sp500HistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP500_Historical"); // reference S&P-500 Historical Data
-    var sp500History = $firebaseArray(sp500HistoryRef);
-    var sp500Ref = new Firebase("https://market-wizard.firebaseio.com/sp500"); // reference S&P-500 Today's Data
-    var sp500 = $firebaseArray(sp500Ref);
+    var sp100HistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP100_Historical"); // reference S&P-100 Historical Data
+    var sp100History = $firebaseArray(sp100HistoryRef);
+    var sp100Ref = new Firebase("https://market-wizard.firebaseio.com/sp100"); // reference S&P-100 Today's Data
+    var sp100 = $firebaseArray(sp100Ref);
 
     var dj30HistoryRef = new Firebase("https://market-wizard.firebaseio.com/DJ_Historical"); // reference DJ-30 Historical Data
     var dj30History = $firebaseArray(dj30HistoryRef);
@@ -112,9 +111,9 @@ ref.onAuth(authCallback);
       .then(function(markets) {  // promise
         $scope.markets = markets[0];
     })
-    sp500.$loaded()
-      .then(function(sp500) {  // promise
-        $scope.sp500 = sp500[0];
+    sp100.$loaded()
+      .then(function(sp100) {  // promise
+        $scope.sp100 = sp100[0];
     })
     dj30.$loaded()
       .then(function(dj30) {  // promise
@@ -144,12 +143,12 @@ ref.onAuth(authCallback);
     var marketHistoryToScan = null;
 
     // * // BEGIN - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
-    if ($scope.marketList.$id === "NASDAQ 100") {
+    if ($scope.marketList.$id === "NASDAQ 100 ~live data~") {
       marketToScan = dataRef2;
       marketHistoryToScan = dataRef;
-    } else if ($scope.marketList.$id === "S&P 500") {
-      marketToScan = sp500Ref;
-      marketHistoryToScan = sp500HistoryRef;
+    } else if ($scope.marketList.$id === "S&P 100") {
+      marketToScan = sp100Ref;
+      marketHistoryToScan = sp100HistoryRef;
     } else if ($scope.marketList.$id === "DJ 30") {
       marketToScan = dj30Ref;
       marketHistoryToScan = dj30HistoryRef;
@@ -640,43 +639,8 @@ ref.onAuth(authCallback);
 
 
 // * BEGIN - DATA UPDATES ***************************************************
-
-// AUTOMATICALLY RETRIEVE NASDAQ-100 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
-// setInterval(function () {  // a callback function after the specified time interval
-//   var timer = ( function() {
-//       var date = new Date();
-//       var day = date.getDay();
-//       var hour = date.getHours();
-//       var minutes = date.getMinutes();
-//       // console.log("Date", date);
-//       // console.log("day of week is", day);
-//       // console.log("hour is", hour);
-//       // console.log("minutes is", minutes);
-
-//   if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
-//     console.log("inside update function");
-//     $http({
-//     method: 'GET',
-//     url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
-//   }).then(function successCallback(response) {
-//       // this callback will be called asynchronously
-//       // when the response is available
-//       console.log("successful response from update", response.data.results);
-
-//       var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
-
-//       dataRef.push(response.data.results);
-//       alert("Today's EOD market data successfully imported.");
-//     }, function errorCallback(response) {  // called asynchronously if an error occurs
-//                                           // or server returns response with an error status.
-//     });
-//   }
-//     })();
-// }, 60000)
-
-
-// EOD UPDATE FOR ALL MARKETS!!
-// AUTOMATICALLY RETRIEVE NASDAQ-100, S&P-500, AND DJ-30 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
+// EOD UPDATE FOR ALL MARKETS
+// AUTOMATICALLY RETRIEVE NASDAQ-100, S&P-100, AND DJ-30 MARKET EOD DATA AT 6:15 P.M MONDAY-FRIDAY AND ALERT USER OF SUCCESSFUL UPDATE
 setInterval(function () {  // a callback function after the specified time interval
   // if (loginStatus === true) {  // if user is logged in
 
@@ -691,80 +655,26 @@ setInterval(function () {  // a callback function after the specified time inter
         // UPDATE NASDAQ-100
         $http({
         method: 'GET',
-        url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
+        url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHTR,COST,CSCO,CSX,CTRP,CTSH,CTXS,DISH,DLTR,EA,EBAY,ENDP,ESRX,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GOOG,GOOGL,ILMN,INCY,INTC,INTU,ISRG,JD,KHC,LLTC,LMCA,LMCK,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MXIM,MYL,NCLH,NFLX,NTAP,NTES,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SRCL,STX,SWKS,SYMC,TMUS,TRIP,TSCO,TSLA,TXN,ULTA,VIAB,VOD,VRSK,VRTX,WBA,WDC,WFM,XLNX,YHOO'
         }).then(function successCallback(response) {
           // this callback will be called asynchronously
           // when the response is available
           console.log("NASDAQ-100 successfully updated", response.data.results);
-
           var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
-
           dataRef.push(response.data.results);
         })
         .then
-        // UPDATE S&P-500
-          // get first 100 s&p-500 tickers
+        // UPDATE S&P-100
           $http({
           method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=A,AA,AAL,AAP,AAPL,ABBV,ABC,ABT,ACE,ACN,ADBE,ADI,ADM,ADP,ADS,ADSK,ADT,AEE,AEP,AES,AET,AFL,AGN,AIG,AIV,AIZ,AKAM,ALL,ALLE,ALTR,ALXN,AMAT,AME,AMG,AMGN,AMP,AMT,AMZN,AN,ANTM,AON,APA,APC,APD,APH,ARG,ATVI,AVB,AVGO,AVY,AXP,AZO,BA,BAC,BAX,BBBY,BBT,BBY,BCR,BDX,BEN,BF.B,BHI,BIIB,BK,BLK,BLL,BMY,BRCM,BRK.B,BSX,BWA,BXLT,BXP,C,CA,CAG,CAH,CAM,CAT,CB,CBG,CBS,CCE,CCI,CCL,CELG,CERN,CF,CHK,CHRW,CI,CINF,CL,CLX,CMA,CMCSA,CMCSK,CME,CMG'
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAPL,ABBV,ABT,ACN,AIG,ALL,AMGN,AMZN,APA,NEE,AXP,BA,BAC,BAX,BIIB,BK,BLK,BMY,BRK.B,C,CAT,CL,CMCSA,COF,COP,COST,CSCO,CVS,CVX,DD,DIS,DOW,DVN,EBAY,EMC,EMR,EXC,F,FB,FCX,FDX,FOXA,GD,GE,GILD,GM,GOOG,GS,HAL,HD,HON,IBM,INTC,JNJ,JPM,KO,LLY,LMT,LOW,MA,MCD,MDLZ,MDT,MET,MMM,MO,MON,MRK,MS,MSFT,NKE,NOV,NSC,ORCL,OXY,PEP,PFE,PG,PM,QCOM,RTN,SBUX,SLB,SO,SPG,T,TGT,TWX,TXN,UNH,UNP,UPS,USB,UTX,V,VZ,WBA,WFC,WMT,XOM'
         }).then(function successCallback(response) {
             // this callback will be called asynchronously
             // when the response is available
-            console.log("S&P-500 api call#1 successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
+            console.log("S&P-100 api call successful", response.data.results);
+            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp100");  //  make reference to database location for data to be stored
             dataRef.push(response.data.results);
-          })
-        .then // get next 100 s&p-500 tickers (101-200)
-          $http({
-          method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=CMI,CMS,CNP,CNX,COF,COG,COH,COL,COP,COST,CPB,CPGX,CRM,CSC,CSCO,CSRA,CSX,CTAS,CTL,CTSH,CTXS,CVC,CVS,CVX,D,DAL,DD,DE,DFS,DG,DGX,DHI,DHR,DIS,DISCA,DISCK,DLPH,DLTR,DNB,DO,DOV,DOW,DPS,DRI,DTE,DUK,DVA,DVN,EA,EBAY,ECL,ED,EFX,EIX,EL,EMC,EMN,EMR,ENDP,EOG,EQIX,EQR,EQT,ES,ESRX,ESS,ESV,ETFC,ETN,ETR,EW,EXC,EXPD,EXPE,F,FAST,FB,FCX,FDX,FE,FFIV,FIS,FISV,FITB,FLIR,FLR,FLS,FMC,FOSL,FOX,FOXA,FSLR,FTI,FTR,GAS,GD,GE,GGP,GILD,GIS'
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.log("S&P-500 api call#2 successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
-        }).then // get next 100 s&p-500 tickers (201-300)
-          $http({
-          method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=GLW,GM,GMCR,GME,GOOG,GOOGL,GPC,GPS,GRMN,GS,GT,GWW,HAL,HAR,HAS,HBAN,HBI,HCA,HCN,HCP,HD,HES,HIG,HOG,HON,HOT,HP,HPE,HPQ,HRB,HRL,HRS,HSIC,HST,HSY,HUM,IBM,ICE,IFF,ILMN,INTC,INTU,IP,IPG,IR,IRM,ISRG,ITW,IVZ,JBHT,JCI,JEC,JNJ,JNPR,JPM,JWN,K,KEY,KHC,KIM,KLAC,KMB,KMI,KMX,KO,KORS,KR,KSS,KSU,L,LB,LEG,LEN,LH,LLL,LLTC,LLY,LM,LMT,LNC,LOW,LRCX,LUK,LUV,LVLT,LYB,M,MA,MAC,MAR,MAS,MAT,MCD,MCHP,MCK,MCO,MDLZ,MDT,MET,MHFI'
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.log("S&P-500 api call#3 successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
-        }).then // get next 100 s&p-500 tickers (301-400)
-          $http({
-          method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=MHK,MJN,MKC,MLM,MMC,MMM,MNK,MNST,MO,MON,MOS,MPC,MRK,MRO,MS,MSFT,MSI,MTB,MU,MUR,MYL,NAVI,NBL,NDAQ,NEE,NEM,NFLX,NFX,NI,NKE,NLSN,NOC,NOV,NRG,NSC,NTAP,NTRS,NUE,NVDA,NWL,NWS,NWSA,O,OI,OKE,OMC,ORCL,ORLY,OXY,PAYX,PBCT,PBI,PCAR,PCG,PCL,PCLN,PCP,PDCO,PEG,PEP,PFE,PFG,PG,PGR,PH,PHM,PKI,PLD,PM,PNC,PNR,PNW,POM,PPG,PPL,PRGO,PRU,PSA,PSX,PVH,PWR,PX,PXD,PYPL,QCOM,QRVO,R,RAI,RCL,REGN,RF,RHI,RHT,RIG,RL,ROK,ROP,ROST,RRC,RSG'
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.log("S&P-500 api call#4 successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
-        }).then // get next 100 s&p-500 tickers (401-500)
-          $http({
-          method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=RTN,SBUX,SCG,SCHW,SE,SEE,SHW,SIG,SJM,SLB,SLG,SNA,SNDK,SNI,SO,SPG,SPLS,SRCL,SRE,STI,STJ,STT,STX,STZ,SWK,SWKS,SWN,SYF,SYK,SYMC,SYY,T,TAP,TDC,TE,TEL,TGNA,TGT,THC,TIF,TJX,TMK,TMO,TRIP,TROW,TRV,TSCO,TSN,TSO,TSS,TWC,TWX,TXN,TXT,TYC,UA,UAL,UHS,UNH,UNM,UNP,UPS,URBN,URI,USB,UTX,V,VAR,VFC,VIAB,VLO,VMC,VNO,VRSK,VRSN,VRTX,VTR,VZ,WAT,WBA,WDC,WEC,WFC,WFM,WHR,WM,WMB,WMT,WRK,WU,WY,WYN,WYNN,XEC,XEL,XL,XLNX,XOM,XRAY,XRX'
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.log("S&P-500 api call#5 successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
-        }).then // get any remaining s&p-500 tickers (often a few more than 500 in index)
-          $http({
-          method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=XYL,YHOO,YUM,ZBH,ZION,ZTS'
-        }).then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            console.log("S&P-500 api call#6 successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp500");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
-        }).then
+          }).then
         // UPDATE DOW-JONES-30
           $http({
           method: 'GET',
@@ -787,7 +697,7 @@ setInterval(function () {  // a callback function after the specified time inter
 
 
 // LIVE UPDATE!!
-// ---> AUTOMATICALLY RETRIEVE NASDAQ-100 DATA EVERY 15 SECONDS DURING TRADING HOURS
+// ---> AUTOMATICALLY RETRIEVE NASDAQ-100 DATA EVERY 10 SECONDS DURING TRADING HOURS
 setInterval(function () {  // a callback function after the specified time interval
   if (loginStatus === true) {  // if user is logged in
 
@@ -803,7 +713,7 @@ setInterval(function () {  // a callback function after the specified time inter
           // UPDATE NASDAQ-100
           $http({
           method: 'GET',
-          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
+          url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHTR,COST,CSCO,CSX,CTRP,CTSH,CTXS,DISH,DLTR,EA,EBAY,ENDP,ESRX,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GOOG,GOOGL,ILMN,INCY,INTC,INTU,ISRG,JD,KHC,LLTC,LMCA,LMCK,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MXIM,MYL,NCLH,NFLX,NTAP,NTES,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SRCL,STX,SWKS,SYMC,TMUS,TRIP,TSCO,TSLA,TXN,ULTA,VIAB,VOD,VRSK,VRTX,WBA,WDC,WFM,XLNX,YHOO'
         }).then(function successCallback(response) {
             // this callback will be called asynchronously
             // when the response is available
@@ -850,40 +760,6 @@ setInterval(function () {  // a callback function after the specified time inter
   }  // end of 'if loginStatus === true'
 }, 10000)  // end of 'setInterval'
 
-
-// USER'S AT-WILL UPDATE (no longer used - changed to live-update functionality)
-// ++++++ UPDATE DATA VIA AN API CALL ON USER CLICK OF 'UPDATE' ++++++++++++++++++++++++++++++
-  $scope.update = function() {
-    $http({
-    method: 'GET',
-    url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
-  }).then(function successCallback(response) {
-      // this callback will be called asynchronously
-      // when the response is available
-      console.log("successful response from update", response.data.results);
-
-      var dataRef = new Firebase("https://market-wizard.firebaseio.com/data2/today");  //  make reference to database location for data to be stored
-
-      // var monthArray = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
-
-      // var today = new Date();
-      // var dayNum = today.getDay().toString();
-      // var month = monthArray[today.getMonth()];
-      // var year = today.getFullYear();
-
-      // var full = month + dayNum + year;
-
-      // dataRef.child(full).push(
-      //   response.data.results
-      // );
-
-      dataRef.set(response.data.results);
-      $('#userDataUpdateModal').modal('show');
-    }, function errorCallback(response) {  // called asynchronously if an error occurs
-                                          // or server returns response with an error status.
-    });
-  }
-
 // * END - DATA UPDATES ***************************************************
 
 
@@ -892,17 +768,6 @@ setInterval(function () {  // a callback function after the specified time inter
 
   $scope.getTickerData = function(stockTicker, watchList) {
     newtickerData.remove();  // remove old data from DOM
-
-    // GET CURRENT USER'S STOCKS FROM CHOSEN WATCHLIST
-    // var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    // var currentAuth = ref.getAuth().uid;  // get current user's ID
-    // var stocksRef = new Firebase("https://market-wizard.firebaseio.com/watchlists/" + currentAuth);  // make reference to location of current user's watchlists
-    // var userStocks = $firebaseArray(stocksRef);
-    //
-    // userStocks.$loaded()  // load user's watchlists/stocks
-    // .then(function(userStocks) {  // promise
-    //   $scope.userStocks = userStocks;
-    // });
 
     //  GRAB TODAY'S DATA
     dataRef2.once("value", function(snapshot) {
@@ -948,56 +813,34 @@ setInterval(function () {  // a callback function after the specified time inter
 // * END - 'FIND MATCHING TICKER DATA' ******************************
 
 
-//  TEMPORARY FUNCTION TO LOAD 'STOCKS' IN FIREBASE FROM 'POPULATE STOCK LIST' BUTTON
-  $scope.populateStocks = function() {
-    console.log("inside populateStocks function");
-    $http({
-    method: 'GET',
-    url: 'http://marketdata.websol.barchart.com/getQuote.json?key=c9babb86c20c5590c36e517422ff237c&symbols=AAL,AAPL,ADBE,ADI,ADP,ADSK,AKAM,ALXN,AMAT,AMGN,AMZN,ATVI,AVGO,BBBY,BIDU,BIIB,BMRN,CA,CELG,CERN,CHKP,CHRW,CHTR,CMCSA,CMCSK,COST,CSCO,CTSH,CTXS,DISCA,DISCK,DISH,DLR,EA,EBAY,ESRX,EXPD,EXPE,FAST,FB,FISV,FOX,FOXA,GILD,GMCR,GOOG,GOOGL,GRMN,HSIC,INCY,INTC,INTU,ILMN,ISRG,JD,KLAC,KHC,LBTYA,LBTYK,LILA,LILAK,LLTC,LMCA,LRCX,LVNTA,MAR,MAT,MDLZ,MNST,MSFT,MU,MYL,NFLX,NTAP,NVDA,NXPI,ORLY,PAYX,PCAR,PCLN,PYPL,QCOM,QVCA,REGN,ROST,SBAC,SBUX,SIRI,SNDK,SPLS,SRCL,STX,SWKS,SYMC,TSCO,TSLA,TRIP,TXN,VIAB,VIP,VOD,VRSK,VRTX,WBA,WDC,WFM,WYNN,XLNX,YHOO'
-  }).then(function successCallback(response) {
-      console.log("successful response from populateStocks", response.data.results);
-
-      var dataRefB = new Firebase("https://market-wizard.firebaseio.com/stocks");  //  make reference to database location for data to be stored
-      dataRefB.push(response.data.results);
-
-    }, function errorCallback(response) {  // called asynchronously if an error occurs
-                                          // or server returns response with an error status.
-    });
-  }
-
-
-
 //++++++ USER-DEFINED SCAN FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   // ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
   $scope.newScanModal = function() {
     $('#writeScanModal').modal('show');
   }
-  // NEW-SCAN MODAL
-  $(function () { $('#writeScanModal').on('hide.bs.modal', function () {
-    var newScan = null;
-    var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
-    var currentAuth = ref.getAuth().uid;  // get current user's ID
-    var listRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);
-
-    var newScan = {
-      "price1": $scope.addPrice1,
-      "price2": $scope.addPrice2,
-      "volume": $scope.addVolume
-    };
-
-    if ($scope.scanName != undefined || null || "") {
-        scanName = $scope.scanName;  // obtain name of new scan from input field
-        listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
-        $('#addScanModal').modal('show');
-    }
-    $scope.price1 = "";  // clear 'Add Ticker' input field
-    $scope.price2 = "";  // clear 'Add Ticker' input field
-    $scope.volume = "";  // clear 'Add Ticker' input field
-    $scope.numPastDays = "";  // clear 'Add Ticker' input field
-    $scope.scanName = "";  // clear 'or enter new Watchlist' field
-    })
-  });
+  // NEW-SCAN MODAL  *** FOR VERSION 2.0
+  // $(function () { $('#writeScanModal').on('hide.bs.modal', function () {
+  //   var newScan = null;
+  //   var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
+  //   var currentAuth = ref.getAuth().uid;  // get current user's ID
+  //   var listRef = new Firebase("https://market-wizard.firebaseio.com/userScans/" + currentAuth);
+  //
+  //   var newScan = {
+  //     "price1": $scope.addPrice1,
+  //     "price2": $scope.addPrice2
+  //   };
+  //
+  //   if ($scope.scanName != undefined || null || "") {
+  //       scanName = $scope.scanName;  // obtain name of new scan from input field
+  //       listRef.child(scanName).push(newScan);  // add scan name to user's list of scan names
+  //       $('#addScanModal').modal('show');
+  //   }
+  //   $scope.price1 = "";  // clear 'Add Ticker' input field
+  //   $scope.price2 = "";  // clear 'Add Ticker' input field
+  //   $scope.scanName = "";  // clear 'or enter new Watchlist' field
+  //   })
+  // });
   // END - ADDS NEW SCAN NAME UNDER USER'S FIREBASE ID
 
 
@@ -1056,21 +899,6 @@ setInterval(function () {  // a callback function after the specified time inter
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
   // ++++ CALCULATION FUNCTIONALITY FOR USER-DEFINED SCANS ++++++++++++++++++++++++++++++++++
   var ref = new Firebase("https://market-wizard.firebaseio.com/");  // make reference to database
   var currentAuth = ref.getAuth().uid;  // get current user's ID
@@ -1080,20 +908,12 @@ setInterval(function () {  // a callback function after the specified time inter
 
   $scope.userCalc = function(usersScan) {
     var scanChoice = usersScan.$id; // obtain name of scan from dropdown list
-    // console.log('I chose', scanChoice);
 
     var currentScan = userScanList.$getRecord(scanChoice);
-    console.log('currentScan', currentScan);
-    console.log('currentScan', currentScan.$id);
-    console.log('currentScan', currentScan.price1);
-
 
       $scope.userScanList.forEach(function(thisScan, i) {
-        console.log('thisScan data:', thisScan);
-        console.log('thisScan.$id', thisScan.$id);
         if (thisScan.$id === scanChoice) {
           console.log(thisScan.$id  + ' is a match!');
-          console.log(thisScan.$id);
         }
       })
 
@@ -1104,9 +924,6 @@ setInterval(function () {  // a callback function after the specified time inter
           var childData2 = snapshot2.val();  // childData2 is contents of the child
           $scope.childData2 = childData2;
           scanData = $scope.childData2;
-          console.log('scanData:', scanData);
-          console.log('key:', key);
-          // console.log('scanData', scanData.$id);
         })
       })
 
@@ -1117,8 +934,7 @@ setInterval(function () {  // a callback function after the specified time inter
       userScanList.forEach(function(object, i) {  // loop through data
         console.log(object.$id);
       })
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       obtainData();
       newData.remove();  // remove old data
 
