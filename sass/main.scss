@@ -28,7 +28,6 @@ body {
   -moz-border-radius:6px;
   -webkit-border-radius:6px;
   border-radius:6px;
-  // border:1px solid #dcdcdc;
   display:inline-block;
   cursor:pointer;
   color:#777777;
@@ -216,7 +215,7 @@ td.watchlist {
   // opacity: .7;
 
   height: 100%;
-  background-image: url("./img/wall_st_bull_0.jpg");
+  background-image: url("/img/wall_st_bull.jpg");
   background-size: cover;
   /*background-attachment :fixed;*/
 }
@@ -234,7 +233,7 @@ td.watchlist {
   // opacity: .7;
 
   height: 100%;
-  background-image: url("./img/wall_st_bull_0.jpg");
+  background-image: url("/img/wall_st_bull.jpg");
   background-size: cover;
   // background-attachment :fixed;
 }
@@ -317,18 +316,6 @@ p {
   margin-bottom: 7%;
   visibility: hidden;
 }
-
-/*#my-header > .navigation {
-}*/
-
-/* target first div child */
-/*#my-header + div {
-}*/
-
-/* target all div siblings */
-/*#my-header ~ div {
-  color: white;
-}*/
 
 .delete_x {
   color: red;
