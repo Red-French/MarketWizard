@@ -7,10 +7,6 @@ app.config(['$routeProvider',
         templateUrl: 'partials/splash.html',
         controller: 'masterListCtrl'
       })
-   .when('/instruct', {
-       templateUrl: 'partials/instruct.html',
-       controller: 'masterListCtrl'
-     })
     .when('/login', {
       templateUrl: 'partials/login.html',
       controller: 'logIn'
@@ -21,10 +17,6 @@ app.config(['$routeProvider',
     })
     .when('/data', {
       templateUrl: 'partials/priceChange.html',
-      controller: 'masterListCtrl'
-    })
-      .when('/scan', {
-      templateUrl: 'partials/userScans.html',
       controller: 'masterListCtrl'
     })
    .otherwise('/main');
