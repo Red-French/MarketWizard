@@ -167,7 +167,7 @@ td.watchlist {
   text-align: center;
   top: 200px;
   height: 100%;
-  background-image: url("/img/wall_st_bull.jpg");
+  background-image: url("../img/wall_st_bull.jpg");
   background-size: cover;
   /*background-attachment :fixed;*/ }
 
@@ -181,7 +181,7 @@ td.watchlist {
   text-align: center;
   top: 200px;
   height: 100%;
-  background-image: url("/img/wall_st_bull.jpg");
+  background-image: url("../img/wall_st_bull.jpg");
   background-size: cover; }
 
 #login-container {
