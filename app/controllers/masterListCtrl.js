@@ -649,7 +649,7 @@ setInterval(function () {  // a callback function after the specified time inter
       var hour = date.getHours();
       var minutes = date.getMinutes();
 
-      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
+      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 23 && minutes === 53) {
         console.log("inside update function");
         // UPDATE NASDAQ-100
         $http({
@@ -661,6 +661,8 @@ setInterval(function () {  // a callback function after the specified time inter
           console.log("NASDAQ-100 successfully updated", response.data.results);
           var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
           dataRef.push(response.data.results);
+          }, function errorCallback(response) {  // called asynchronously if an error occurs
+                                                // or server returns response with an error status.
         })
         .then
         // UPDATE S&P-100
@@ -671,8 +673,19 @@ setInterval(function () {  // a callback function after the specified time inter
             // this callback will be called asynchronously
             // when the response is available
             console.log("S&P-100 api call successful", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/sp100");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
+
+            //  GRAB TODAY'S SP-100 DATA
+              sp100Ref.orderByChild("symbol").on("child_added", function(snapshot) {
+                var key = snapshot.key();  // key is the unique ID of each day's data
+                var childData = snapshot.val();  // childData2 is contents of the child
+                $scope.childData = childData;
+                todaysData = $scope.childData;
+              });
+            // MOVE TODAY'S SP-100 DATA TO 'SP100_HISTORICAL' DATA IN FIREBASE
+              sp100HistoryRef.push(todaysData);
+              sp100Ref.push(response.data.results);
+            }, function errorCallback(response) {  // called asynchronously if an error occurs
+                                                  // or server returns response with an error status.
           }).then
         // UPDATE DOW-JONES-30
           $http({
@@ -682,9 +695,17 @@ setInterval(function () {  // a callback function after the specified time inter
             // this callback will be called asynchronously
             // when the response is available
             console.log("DJ-30 successfully updated", response.data.results);
-            var dataRef = new Firebase("https://market-wizard.firebaseio.com/dj30");  //  make reference to database location for data to be stored
-            dataRef.push(response.data.results);
-            // alert("Today's EOD market data successfully imported.");
+
+          //  GRAB TODAY'S DJ-30 DATA
+            dj30Ref.orderByChild("symbol").on("child_added", function(snapshot) {
+              var key = snapshot.key();  // key is the unique ID of each day's data
+              var childData = snapshot.val();  // childData2 is contents of the child
+              $scope.childData = childData;
+              todaysData = $scope.childData;
+            });
+          // MOVE TODAY'S DJ-30 DATA TO 'DJ_HISTORICAL' DATA IN FIREBASE
+            dj30HistoryRef.push(todaysData);
+            dj30Ref.push(response.data.results);
             $('#nightlyUpdateModal').modal('show');
           }, function errorCallback(response) {  // called asynchronously if an error occurs
                                                 // or server returns response with an error status.
