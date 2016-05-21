@@ -652,7 +652,7 @@ setInterval(function () {  // a callback function after the specified time inter
       var hour = date.getHours();
       var minutes = date.getMinutes();
 
-      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 19 && minutes === 56) {
+      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
         console.log("inside update function");
         // UPDATE NASDAQ-100
         $http({
