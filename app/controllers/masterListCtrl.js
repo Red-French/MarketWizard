@@ -146,13 +146,20 @@ ref.onAuth(authCallback);
     var day = date.getDay();
     var hour = date.getHours();
     var minutes = date.getMinutes();
-    
+
+    var now = new Date();
+    var openTime = new Date();
+    var closeTime = new Date();
+    openTime.setHours(8); openTime.setMinutes(29);  // 1 minute before market open
+    closeTime.setHours(18); closeTime.setMinutes(14);  // 1 minute before nightly auto-update
+    // console.log(now, closeTime, now.getTime() >= closeTime.getTime());
+
     var marketToScan = null;
     var marketHistoryToScan = null;
 
     // * // BEGIN - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
     if ($scope.marketList.$id === "NASDAQ 100 ~live data~") {  // scan NASDAQ-100
-      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && ((hour > 8 && minutes > 29) && (hour < 15))) {  // if regular market hours
+      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && ((now.getTime() > openTime.getTime()) && (now.getTime() < closeTime.getTime()))) {  // if regular market hours
         marketToScan = dataRef2;  // scan NASDAQ-100
         marketHistoryToScan = dataRef;  // vs yesterday's closing data
       } else {  // else it is after regular market hours
