@@ -142,19 +142,29 @@ ref.onAuth(authCallback);
 
 // * // BEGIN - GRAB DATA FOR CALCULATIONS
   function obtainData() {
+    var date = new Date();
+    var day = date.getDay();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    
     var marketToScan = null;
     var marketHistoryToScan = null;
 
     // * // BEGIN - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
-    if ($scope.marketList.$id === "NASDAQ 100 ~live data~") {
-      marketToScan = dataRef2;
-      marketHistoryToScan = dataRef;
+    if ($scope.marketList.$id === "NASDAQ 100 ~live data~") {  // scan NASDAQ-100
+      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && ((hour > 8 && minutes > 29) && (hour < 15))) {  // if regular market hours
+        marketToScan = dataRef2;  // scan NASDAQ-100
+        marketHistoryToScan = dataRef;  // vs yesterday's closing data
+      } else {  // else it is after regular market hours
+        marketToScan = dataRef2;  // scan NASDAQ-100
+        marketHistoryToScan = naz100HistoryRef;  // vs yesterday's closing data
+      }
     } else if ($scope.marketList.$id === "S&P 100") {
-      marketToScan = sp100Ref;
-      marketHistoryToScan = sp100HistoryRef;
+        marketToScan = sp100Ref;  // scan S&P-100
+        marketHistoryToScan = sp100HistoryRef;  // vs yesterday's closing data
     } else if ($scope.marketList.$id === "DJ 30") {
-      marketToScan = dj30Ref;
-      marketHistoryToScan = dj30HistoryRef;
+        marketToScan = dj30Ref;  // scan DJ-30
+        marketHistoryToScan = dj30HistoryRef;  // vs yesterday's closing data
     }
     // END - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
 
