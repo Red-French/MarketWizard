@@ -58,6 +58,9 @@ ref.onAuth(authCallback);
     var dataRef3 = dataRef2.child("today");  // reference NAZ100 Today's Data
     var data3 = $firebaseArray(dataRef3);
 
+    var naz100HistoryRef = new Firebase("https://market-wizard.firebaseio.com/NAZ100_Historical"); // reference S&P-100 Historical Data
+    var naz100History = $firebaseArray(naz100HistoryRef);
+
     var sp100HistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP100_Historical"); // reference S&P-100 Historical Data
     var sp100History = $firebaseArray(sp100HistoryRef);
     var sp100Ref = new Firebase("https://market-wizard.firebaseio.com/sp100"); // reference S&P-100 Today's Data
@@ -649,7 +652,7 @@ setInterval(function () {  // a callback function after the specified time inter
       var hour = date.getHours();
       var minutes = date.getMinutes();
 
-      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
+      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 19 && minutes === 56) {
         console.log("inside update function");
         // UPDATE NASDAQ-100
         $http({
@@ -660,7 +663,19 @@ setInterval(function () {  // a callback function after the specified time inter
           // when the response is available
           console.log("NASDAQ-100 successfully updated", response.data.results);
           var dataRef = new Firebase("https://market-wizard.firebaseio.com/data");  //  make reference to database location for data to be stored
-          dataRef.push(response.data.results);
+          var dataRef2 = new Firebase("https://market-wizard.firebaseio.com/data2/today");  //  make reference to database location for data to be stored
+
+          //  GRAB YESTERDAY'S NAZ-100 DATA
+          dataRef.orderByChild("symbol").on("child_added", function(snapshot) {
+            var key = snapshot.key();  // key is the unique ID of each day's data
+            var childData = snapshot.val();  // childData2 is contents of the child
+            $scope.childData = childData;
+            yesterdaysData = $scope.childData;
+          });
+
+          naz100HistoryRef.push(yesterdaysData);  // move yesterday's NAZ-100 data to 'NAZ100_Historical' in Firebase
+          dataRef.push(response.data.results);  // push today's EOD data to dataRef to hold for push to naz100HistoryRef tomorrow
+          dataRef2.set(response.data.results);  // grab today's EOD data (for after-hours comparison - during market hours, dataRef2 holds 'live' data)
           }, function errorCallback(response) {  // called asynchronously if an error occurs
                                                 // or server returns response with an error status.
         })
@@ -674,16 +689,15 @@ setInterval(function () {  // a callback function after the specified time inter
             // when the response is available
             console.log("S&P-100 api call successful", response.data.results);
 
-            //  GRAB TODAY'S SP-100 DATA
+            //  GRAB YESTERDAY'S SP-100 DATA
               sp100Ref.orderByChild("symbol").on("child_added", function(snapshot) {
                 var key = snapshot.key();  // key is the unique ID of each day's data
                 var childData = snapshot.val();  // childData2 is contents of the child
                 $scope.childData = childData;
-                todaysData = $scope.childData;
+                yesterdaysData = $scope.childData;
               });
-            // MOVE TODAY'S SP-100 DATA TO 'SP100_HISTORICAL' DATA IN FIREBASE
-              sp100HistoryRef.push(todaysData);
-              sp100Ref.push(response.data.results);
+              sp100HistoryRef.push(yesterdaysData);  // move yesterday's SP-100 data to 'SP100_Historical' in Firebase
+              sp100Ref.push(response.data.results);  // grab today's EOD SP-100 data and push to Firebase
             }, function errorCallback(response) {  // called asynchronously if an error occurs
                                                   // or server returns response with an error status.
           }).then
@@ -701,11 +715,10 @@ setInterval(function () {  // a callback function after the specified time inter
               var key = snapshot.key();  // key is the unique ID of each day's data
               var childData = snapshot.val();  // childData2 is contents of the child
               $scope.childData = childData;
-              todaysData = $scope.childData;
+              yesterdaysData = $scope.childData;
             });
-          // MOVE TODAY'S DJ-30 DATA TO 'DJ_HISTORICAL' DATA IN FIREBASE
-            dj30HistoryRef.push(todaysData);
-            dj30Ref.push(response.data.results);
+            dj30HistoryRef.push(yesterdaysData);  // move yesterday's DJ-30 data to 'DJ_Historical' in Firebase
+            dj30Ref.push(response.data.results);  // grab today's EOD DJ-30 data and push to Firebase
             $('#nightlyUpdateModal').modal('show');
           }, function errorCallback(response) {  // called asynchronously if an error occurs
                                                 // or server returns response with an error status.
