@@ -58,7 +58,7 @@ ref.onAuth(authCallback);
     var dataRef3 = dataRef2.child("today");  // reference NAZ100 Today's Data
     var data3 = $firebaseArray(dataRef3);
 
-    var naz100HistoryRef = new Firebase("https://market-wizard.firebaseio.com/NAZ100_Historical"); // reference S&P-100 Historical Data
+    var naz100HistoryRef = new Firebase("https://market-wizard.firebaseio.com/NAZ100_Historical"); // reference NAZ-100 Historical Data
     var naz100History = $firebaseArray(naz100HistoryRef);
 
     var sp100HistoryRef = new Firebase("https://market-wizard.firebaseio.com/SP100_Historical"); // reference S&P-100 Historical Data
@@ -133,23 +133,33 @@ ref.onAuth(authCallback);
 
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
+// Global 'marketList' (which market user chooses to scan)
   $scope.marketView = function(marketList) {
     $scope.marketList === marketList;
 }
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Global variables
+  var date = null;
+  var day = null;
+  var hour = null;
+  var minutes = null;
+  var now = null;
+  var openTime = null;
+  var closeTime = null;
+
 
 // ++++ CALCULATION FUNCTIONALITY ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 // * // BEGIN - GRAB DATA FOR CALCULATIONS
   function obtainData() {
-    var date = new Date();
-    var day = date.getDay();
-    var hour = date.getHours();
-    var minutes = date.getMinutes();
+    date = new Date();
+    day = date.getDay();
+    hour = date.getHours();
+    minutes = date.getMinutes();
 
-    var now = new Date();
-    var openTime = new Date();
-    var closeTime = new Date();
+    now = new Date();
+    openTime = new Date();
+    closeTime = new Date();
     openTime.setHours(8); openTime.setMinutes(29);  // 1 minute before market open
     closeTime.setHours(18); closeTime.setMinutes(14);  // 1 minute before nightly auto-update
     // console.log(now, closeTime, now.getTime() >= closeTime.getTime());
@@ -159,13 +169,13 @@ ref.onAuth(authCallback);
 
     // * // BEGIN - DETERMINE WHICH MARKET THE USER WANTS TO SCAN
     if ($scope.marketList.$id === "NASDAQ 100 ~live data~") {  // scan NASDAQ-100
-      if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && ((now.getTime() > openTime.getTime()) && (now.getTime() < closeTime.getTime()))) {  // if regular market hours
-        marketToScan = dataRef2;  // scan NASDAQ-100
-        marketHistoryToScan = dataRef;  // vs yesterday's closing data
-      } else {  // else it is after regular market hours
+      // if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && ((now.getTime() > openTime.getTime()) && (now.getTime() < closeTime.getTime()))) {  // if regular market hours
+      //   marketToScan = dataRef2;  // scan NASDAQ-100
+      //   marketHistoryToScan = dataRef;  // vs yesterday's closing data
+      // } else {  // else it is after regular market hours
         marketToScan = dataRef2;  // scan NASDAQ-100
         marketHistoryToScan = naz100HistoryRef;  // vs yesterday's closing data
-      }
+      // }
     } else if ($scope.marketList.$id === "S&P 100") {
         marketToScan = sp100Ref;  // scan S&P-100
         marketHistoryToScan = sp100HistoryRef;  // vs yesterday's closing data
@@ -664,10 +674,10 @@ setInterval(function () {  // a callback function after the specified time inter
   // if (loginStatus === true) {  // if user is logged in
 
     var timer = ( function() {
-      var date = new Date();
-      var day = date.getDay();
-      var hour = date.getHours();
-      var minutes = date.getMinutes();
+      date = new Date();
+      day = date.getDay();
+      hour = date.getHours();
+      minutes = date.getMinutes();
 
       if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && hour === 18 && minutes === 15) {
         console.log("inside update function");
@@ -752,13 +762,19 @@ setInterval(function () {  // a callback function after the specified time inter
   if (loginStatus === true) {  // if user is logged in
 
     var timer = ( function() {
-      var date = new Date();
-      var day = date.getDay();
-      var hour = date.getHours();
-      var minutes = date.getMinutes();
-      var seconds = date.getSeconds();
+      date = new Date();
+      day = date.getDay();
+      hour = date.getHours();
+      minutes = date.getMinutes();
+      seconds = date.getSeconds();
 
-        if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && (hour > 8) && (hour < 16)) {  // catches 1/2 hour of premarket and 1 hour of postmarket CST
+      now = new Date();
+      openTime = new Date();
+      closeTime = new Date();
+      openTime.setHours(8); openTime.setMinutes(30); openTime.setSeconds(0); // 1 minute before market open
+      closeTime.setHours(15); closeTime.setMinutes(0); closeTime.setSeconds(0) // 1 minute before nightly auto-update
+
+        if ((day === 1 || day === 2 || day === 3 || day === 4 || day === 5) && (now >= openTime.getTime()) && (now <= closeTime.getTime())) {  // catches 1/2 hour of premarket and 1 hour of postmarket CST
           console.log("inside update function");
           // UPDATE NASDAQ-100
           $http({
@@ -787,7 +803,7 @@ setInterval(function () {  // a callback function after the specified time inter
             dataRef.set(response.data.results);
             // $('#userDataUpdateModal').modal('show');
           }, function errorCallback(response) {  // called asynchronously if an error occurs
-                                                // or server returns response with an error status.
+                console.log(response);           // or server returns response with an error status.
           });
             // clock that updates DOM to show time of last real-time update
             hour = ((hour + 11) % 12 + 1);  // convert military time to 12-hour time
